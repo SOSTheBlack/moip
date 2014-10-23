@@ -8,7 +8,7 @@ require 'phpQuery/phpQuery.php';
  * @package MoIP
  */
 
-class MoIPStatus
+class Status
 {
     private $url_login = "https://www.moip.com.br/j_acegi_security_check";
 

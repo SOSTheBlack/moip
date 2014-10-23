@@ -12,13 +12,15 @@
  * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
 
+use SimpleXmlElement;
+
 /**
  * Moip's API abstraction class
  *
  * Class to use for all abstraction of Moip's API
  * @package Moip
  */
-class Moip {
+class Api {
 
 	/**
 	 * Encoding of the page
@@ -726,7 +728,7 @@ class Moip {
         $this->validate();
 
         if ($client == null)
-            $client = new MoipClient();
+            $client = new Client();
 
         $url = $this->environment->base_url . '/ws/alpha/EnviarInstrucao/Unica';
 
@@ -779,7 +781,7 @@ class Moip {
             $this->setError("You must specify the credentials (token / key) and enriroment");
 
 
-        $client = new MoipClient();
+        $client = new Client();
 
         $url = $this->environment->base_url . "/ws/alpha/ChecarValoresParcelamento/$login/$maxParcel/$rate/$simulatedValue";
         $credential = $this->credential['token'] . ':' . $this->credential['key'];

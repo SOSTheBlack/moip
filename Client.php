@@ -8,7 +8,7 @@
  * @version 0.0.2
  * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
-class MoIPClient {
+class Client {
 
     /**
      * Method send()
