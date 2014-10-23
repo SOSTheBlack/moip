@@ -1,5 +1,4 @@
-<?php
-require 'phpQuery/phpQuery.php';
+<?php namespace LaraRespect\Moip;
 
 /**
  * Verificação de status da conta do MoIP. Atualmente somente com suporte à verificação de saldo e ultimas transações.

@@ -1,4 +1,4 @@
-<?php
+<?php namespace LaraRespect\Moip;
 
 /**
  * Library to help PHP users of Moip's API
@@ -43,7 +43,7 @@ class Api {
     /**
      * The application's environment
      *
-     * @var MoipEnvironment
+     * @var Environment
      */
     protected $environment = null;
     /**
@@ -121,7 +121,7 @@ class Api {
     /**
      * Server's answer
      *
-     * @var MoipResponse
+     * @var Response
      */
     public $answer;
     /**
@@ -249,7 +249,7 @@ class Api {
     public function setEnvironment($testing = false) {
 		if (empty($this->environment))
 		{
-			$this->environment = new MoipEnvironment();
+			$this->environment = new Environment();
 		}
 
         if ($testing) {
@@ -721,7 +721,7 @@ class Api {
      * Send the request to the server
      *
      * @param object $client The server's connection
-     * @return MoipResponse
+     * @return Response
      * @access public
      */
     public function send($client=null) {
@@ -742,7 +742,7 @@ class Api {
      *
      * Gets the server's answer
      * @param boolean $return_xml_as_string Return the answer XMl string
-     * @return MoipResponse|string
+     * @return Response|string
      * @access public
      */
     public function getAnswer($return_xml_as_string = false) {
@@ -753,7 +753,7 @@ class Api {
 
             $xml = new SimpleXmlElement($this->answer->xml);
 
-            return new MoipResponse(array(
+            return new Response(array(
 				'response' => $xml->Resposta->Status == 'Sucesso' ? true : false,
     			'error' => $xml->Resposta->Status == 'Falha' ? $this->convert_encoding((string)$xml->Resposta->Erro) : false,
     			'token' => (string) $xml->Resposta->Token,
@@ -810,15 +810,4 @@ class Api {
 		return $answer;
     }
 
-}
-
-class MoipEnvironment {
-	public $base_url;
-	public $name;
-
-	function __construct($base_url = '', $name = '')
-	{
-		$this->base_url = $base_url;
-		$this->name = $name;
-	}
 }

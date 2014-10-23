@@ -1,4 +1,4 @@
-<?php
+<?php namespace LaraRespect\Moip;
 
 /**
  * MoIP's API connection class
@@ -20,7 +20,7 @@ class Client {
      * @param string $url The server's URL
      * @param string $method Method used to send the request
 	 * @throws Exception
-	 * @return MoipResponse
+	 * @return Response
      */
     public function send($credentials, $xml, $url='https://desenvolvedor.moip.com.br/sandbox/ws/alpha/EnviarInstrucao/Unica', $method='POST') {
         $header[] = "Authorization: Basic " . base64_encode($credentials);
@@ -42,7 +42,7 @@ class Client {
         $err = curl_error($curl);
         curl_close($curl);
 
-        return new MoipResponse(array('resposta' => $ret, 'erro' => $err));
+        return new Response(array('resposta' => $ret, 'erro' => $err));
     }
 
     /**
@@ -50,7 +50,7 @@ class Client {
 	 * @param string $xml url request
 	 * @param string $url url request
 	 * @param string $error errors
-	 * @return MoipResponse
+	 * @return Response
      */
     function curlPost($credentials, $xml, $url, $error=null) {
 
@@ -76,15 +76,15 @@ class Client {
 
 
             if ($info['http_code'] == "200")
-                return new MoipResponse(array('response' => true, 'error' => null, 'xml' => $ret));
+                return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
             else if ($info['http_code'] == "500")
-                return new MoipResponse(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
+                return new Response(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
             else if ($info['http_code'] == "401")
-                return new MoipResponse(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
+                return new Response(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
             else
-                return new MoipResponse(array('response' => false, 'error' => $err, 'xml' => null));
+                return new Response(array('response' => false, 'error' => $err, 'xml' => null));
         } else {
-            return new MoipResponse(array('response' => false, 'error' => $error, 'xml' => null));
+            return new Response(array('response' => false, 'error' => $error, 'xml' => null));
         }
     }
 
@@ -93,7 +93,7 @@ class Client {
      * @param string $credentials token / key authentication Moip
      * @param string $url url request
      * @param string $error errors
-     * @return MoipResponse
+     * @return Response
      */
     function curlGet($credentials, $url, $error=null) {
 
@@ -116,42 +116,16 @@ class Client {
 
 
             if ($info['http_code'] == "200")
-                return new MoipResponse(array('response' => true, 'error' => null, 'xml' => $ret));
+                return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
             else if ($info['http_code'] == "500")
-                return new MoipResponse(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
+                return new Response(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
             else if ($info['http_code'] == "401")
-                return new MoipResponse(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
+                return new Response(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
             else
-                return new MoipResponse(array('response' => false, 'error' => $err, 'xml' => null));
+                return new Response(array('response' => false, 'error' => $err, 'xml' => null));
         } else {
-            return new MoipResponse(array('response' => false, 'error' => $error, 'xml' => null));
+            return new Response(array('response' => false, 'error' => $error, 'xml' => null));
         }
     }
 
-}
-
-/**
- * Read-only response
- * @property boolean|string $response
- * @property string $error
- * @property string $xml
- * @property string $payment_url
- * @property string $token
- */
-class MoipResponse {
-	private $response;
-
-	function __construct(array $response)
-	{
-		$this->response = $response;
-	}
-
-	function __get($name)
-	{
-		if (isset($this->response[$name]))
-		{
-			return $this->response[$name];
-		}
-		return null;
-	}
 }
