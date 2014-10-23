@@ -1,5 +1,7 @@
 <?php namespace LaraRespect\Moip;
 
+use SimpleXmlElement;
+
 /**
  * Library to help PHP users of Moip's API
  *
@@ -11,8 +13,6 @@
  * @version 1.6.2
  * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
-
-use SimpleXmlElement;
 
 /**
  * Moip's API abstraction class
