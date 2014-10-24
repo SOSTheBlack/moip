@@ -11,22 +11,59 @@ class Moip extends Validator
 	 **/
 	private $config;
 
+	/**
+	 * undocumented class variable
+	 *
+	 * @var string
+	 **/
+	private $moip;
+
+	/**
+	 * undocumented class variable
+	 *
+	 * @var string
+	 **/
+	private $validator;
+
 	function __construct() {
-		$this->setConfig(Config::get('moips'));
+		$this->initialize();
 	}
 
 	private function initialize()
 	{
-		$this->setConfig(Config::get('moips'));
+		$this->config = (object) $this->validatorConfig(Config::get('moip'));
+		$this->moip = new Api;
+		$this->validator = new Validator;
+		$this->getEnvironment();
+		$this->authentication();
+		$this->moip->validate($this->config->validate);
+		$this->getValidate();
+
+		
 	}
 
-	private function getConfig()
+	public function sendMoip($data)
 	{
-		return $this->config;
+		$this->initialize();
+		$this->authentication();
 	}
 
-	private function setConfig(array $config)
+	private function authentication()
 	{
-		return $this->config($config);
+		return $this->moip->setCredential($this->validatorCredential($this->config));
+	}
+
+	private function getValidate()
+	{
+		return $this->validatorValidade($this->config->validate);	
+	}
+
+	private function getEnvironment()
+	{
+		if ($this->config->environment === true) {
+			return $this->moip->setEnvironment(true);
+		} else {
+			return false;
+		}
 	}
 }
