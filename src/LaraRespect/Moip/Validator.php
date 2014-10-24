@@ -3,14 +3,14 @@
 use InvalidArgumentException;
 use LengthException;
 
-class Validator 
+class Validator extends Api
 {
 	protected function validatorConfig($config)
 	{
 		if (empty($config)) {
 			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
 		} else {
-			return $config;
+			return (object) $config;
 		}
 	}
 

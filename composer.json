@@ -1,0 +1,22 @@
+{
+    "name": "lararespect/moip",
+    "description": "",
+    "keywords": ["moip", "gateway", "payment", "laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean C. Garcia",
+            "email": "jeancesargarcia@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.*",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "LaraRespect\\Moip\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
