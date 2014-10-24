@@ -36,16 +36,12 @@ class Moip extends Validator
 		$this->validator = new Validator;
 		$this->getEnvironment();
 		$this->authentication();
-		$this->moip->validate($this->config->validate);
-		$this->getValidate();
-
-		
+		$this->getValidate();	
 	}
 
 	public function sendMoip($data)
 	{
 		$this->initialize();
-		$this->authentication();
 	}
 
 	private function authentication()
@@ -55,7 +51,7 @@ class Moip extends Validator
 
 	private function getValidate()
 	{
-		return $this->validatorValidade($this->config->validate);	
+		return $this->moip->validate($this->validatorValidade($this->config->validate));	
 	}
 
 	private function getEnvironment()

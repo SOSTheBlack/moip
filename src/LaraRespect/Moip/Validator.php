@@ -1,8 +1,9 @@
 <?php namespace LaraRespect\Moip;
 
 use InvalidArgumentException;
+use LengthException;
 
-class Validator
+class Validator 
 {
 	protected function validatorConfig($config)
 	{
@@ -25,14 +26,32 @@ class Validator
 	protected function validatorCredential($credential)
 	{
 		if (! isset($credential->token)) {
-			throw new Exception("Error Processing Request", 1);
-		} else {
-			$this->validatorToken($credential->token);
+			throw new InvalidArgumentException("Falha na Autenticação: Não existe a chave token no arquivo do configuração do moip", 1);
+		} elseif (! isset($credential->key)) {
+			throw new InvalidArgumentException("Falha na Autenticação: Não existe a chave key no arquivo do configuração do moip", 1);
 		}
+
+		return $this->validatorToken($credential->token) && $this->validatorKey($credential->key);
 	}
 
 	private function validatorToken($token)
 	{
-		
+		if (empty($token)) {
+			throw new InvalidArgumentException("Falha na Autenticação: Token não pode estar vazio", 1);
+		} elseif (strlen($token) != 32) {
+			throw new LengthException("Falha na Autenticação: Tamanho do token não pode ser diferente de 32", 1);
+		}
+		return true;
+	}
+
+	private function validatorKey($key)
+	{
+		if (empty($key)) {
+			throw new InvalidArgumentException("Falha na Autenticação: Key não pode estar vazio", 1);
+		} elseif (strlen($key) != 40) {
+			throw new LengthException("Falha na Autenticação: Tamanho de key não pode ser diferente 40", 1);
+		} else {
+			return true;
+		}
 	}
 }
