@@ -19,10 +19,8 @@ class Validator
 			} elseif (! is_float($data->value)) {
 				throw new UnexpectedValueException("Valor da compra deve ser do tipo float", 1);
 			} elseif (! isset($data->reason)) {
-				$this->getReason($config);
+				$data->reason = $this->getReason($config);
 			}
-		} else {
-			# code...
 		}
 	}
 
@@ -30,15 +28,10 @@ class Validator
 	{
 		if (! isset($config->reason)) {
 			throw new InvalidArgumentException("Configuração reason em moip não foi encontrado", 1);	
-		} else {
-			return $data->reason = $config->reason;
 		}
+		return $config->reason;
 	}
 
-	private function getUniqueId($unique_id)
-	{
-		# code...
-	}
 	protected function validatorConfig($config)
 	{
 		if (empty($config)) {
