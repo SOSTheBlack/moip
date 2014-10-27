@@ -44,18 +44,17 @@ Copy the configuration file config/moip.php to app/config / folder. Law making t
 
 Now you are ready to go:
 
-Simply do
+    // Simply do
     Moip::sendMoip([
         'unique_id' => $sale_id,
         'value'     => $final_price,
         'reason'    => 'Virtual store, promoçao Children\'s Day',
     ]);
-
-Or
+    // Or
     Moip::sendMoip([
         'value'     => $final_price
     ]);
-or even try block
+    // or even try block
     try {
         Moip::sendMoip($data);
     } catch (Exception $e) {
@@ -65,17 +64,17 @@ or even try block
 ### Method of response
 
     //token payment
+    Moip::sendMoip($data)->token; //or
     Moip::response()->token;
-    Moip::sendMoip($data)->token;
 
     //payment url
+    Moip::sendMoip($data)->payment_url; //or
     Moip::response()->payment_url;
-    Moip::sendMoip($data)->payment_url;
 
     //xml sent
+    Moip::sendMoip($data)->xmlSend; //or
     Moip::response()->xmlSend;
-    Moip::sendMoip($data)->xmlSend;
 
     //xml return
+    Moip::sendMoip($data)->xmlGet; //or
     Moip::response()->xmlGet;
-    Moip::sendMoip($data)->xmlGet;
