@@ -3,33 +3,42 @@
 use Config;
 use StdClass;
 
-class Moip extends Validator 
+/**
+ * Moip's API abstraction class
+ *
+ * Class to use for all abstraction of Moip's API
+ */
+class Moipp extends Validator 
 {
 	/**
-	 * undocumented class variable
+	 * Use for all abstraction of Moip's API
 	 *
-	 * @var string
+	 * @var new Api 
 	 **/
 	private $moip;
 
 	/**
-	 * undocumented class variable
+	 * Settings required for integration
 	 *
-	 * @var string
+	 * @var object
 	 **/
 	private $config;
 
 	/**
-	 * undocumented class variable
+	 * Response
 	 *
-	 * @var string
+	 * @var object
 	 **/
 	private $response;
 
+	/**
+	 * Method that sends data to Moip and creates op chekout
+	 * @param array or object $data 
+	 * @return response moip
+	 */
 	public function sendMoip($data)
 	{
 		$this->initialize();
-		$data = (object) $data;
 		$this->validatorData($data, $this->config);
 		
 		if ($this->validatorValidate($this->config->validate) === 'Basic') {
@@ -42,6 +51,13 @@ class Moip extends Validator
 		return $this->response($this->moip->send());
 	}
 
+	/**
+	 * Method that returns an object with the token request, 
+	 * link, sending XML and XML return
+	 * @param  object $send Return of sendMoip method
+	 * @return object token request, link, sending XML 
+	 * and XML return
+	 */
 	public function response($send = '')
 	{
 		if (! empty($send)) {
@@ -52,10 +68,14 @@ class Moip extends Validator
 			$this->response->xmlSend = $this->moip->getXML();
 			$this->response->xmlGet  = $send->xml;
 		}
-
 		return $this->response;
-
 	}
+
+	/**
+	 * Method required to start integration. 
+	 * Authentication and environment that the request will be sent
+	 * @return null
+	 */
 	private function initialize()
 	{
 		$this->moip = new Api;
@@ -64,6 +84,10 @@ class Moip extends Validator
 		$this->authentication();
 	}
 
+	/**
+	 * Authentication credentials and key token
+	 * @return $this
+	 */
 	private function authentication()
 	{
 		if ($this->validatorCredential($this->config) === true) {
@@ -75,12 +99,22 @@ class Moip extends Validator
 		return $this;
 	}
 
+	/**
+	 * Validation to determine whether the data sent will be basic, 
+	 * or for identifying user
+	 * @return $this
+	 */
 	private function getValidate()
 	{
 		$this->moip->validate($this->validatorValidate($this->config->validate));
 		return $this;
 	}
 
+	/**
+	 * Which validation environment for the requisition is sent MOIP
+	 * Development environment and Production environment
+	 * @return $this
+	 */
 	private function getEnvironment()
 	{
 		return $this->moip->setEnvironment($this->config->environment);;

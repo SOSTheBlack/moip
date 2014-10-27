@@ -5,10 +5,23 @@ use UnexpectedValueException;
 use LengthException;
 use LogicException;
 
+/**
+ * Class to validate all data Moip
+ */
 class Validator
 {
+	/**
+	 * Validates the data sent by the user
+	 * @param  object $data   user data
+	 * @param  object $config config Moip
+	 * @return void         
+	 */
 	protected function validatorData($data, $config)
 	{
+		if (! is_object($data)) {
+			$data = (object) $data;
+		}
+
 		if (! isset($data->unique_id)) {
 			$data->unique_id = false;
 		}
@@ -24,6 +37,11 @@ class Validator
 		}
 	}
 
+	/**
+	 * Search result of buying in the configuration file MOIP
+	 * @param  object $config configuration file Moip
+	 * @return string         reason of purchase
+	 */
 	private function getReason($config)
 	{
 		if (! isset($config->reason)) {
@@ -32,6 +50,11 @@ class Validator
 		return $config->reason;
 	}
 
+	/**
+	 * Verifies the existence of the configuration file Moip
+	 * @param  array $config Moip the configuration
+	 * @return object        Moip the configuration
+	 */
 	protected function validatorConfig($config)
 	{
 		if (empty($config)) {
@@ -41,6 +64,11 @@ class Validator
 		}
 	}
 
+	/**
+	 * Validation environment that is sent data 
+	 * @param  string $validate Environment
+	 * @return string 			Environment          
+	 */
 	protected function validatorValidate($validate)
 	{
 		if ($validate === 'Basic' || $validate === 'Identification') {
@@ -50,6 +78,11 @@ class Validator
 		}
 	}
 
+	/**
+	 * Authentication of token and key
+	 * @param  object $credential token and key
+	 * @return boolean            
+	 */
 	protected function validatorCredential($credential)
 	{
 		if (! isset($credential->token)) {
@@ -61,6 +94,11 @@ class Validator
 		return $this->validatorToken($credential->token) && $this->validatorKey($credential->key);
 	}
 
+	/**
+	 * Validate token
+	 * @param  string $token 
+	 * @return boolean       true
+	 */
 	private function validatorToken($token)
 	{
 		if (empty($token)) {
@@ -71,6 +109,11 @@ class Validator
 		return true;
 	}
 
+	/**
+	 * Validate key
+	 * @param  string $key
+	 * @return boolean     true
+	 */
 	private function validatorKey($key)
 	{
 		if (empty($key)) {
