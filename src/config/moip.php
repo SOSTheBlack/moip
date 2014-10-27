@@ -1,52 +1,66 @@
 <?php 
 
 return [
-
+	
 	/*
-	|----------------------------------------------------------------------------------------------
-	| Environment
-	|----------------------------------------------------------------------------------------------
+	|--------------------------------------------------------------------------
+	| Defining application environment
+	|--------------------------------------------------------------------------
 	|
-	| Configuration that defines the environment in which the request will be processed. 
-	| true to define what is in the test environment, MoIP Sandbox
-	| false to define that the request should be processed in real environment, production MoIP.
-	|
-	| Important: to set the environment make sure you are using the corresponding 
-	| authentication when environment in MoIP each environment has its own API keys authentication.
+	| Configuration that defines the environment in which the request will 
+	| be processed
+	| The existing integration with MoIP environments are: development 
+	| (Sandbox) and production 
+	| If it is true, will be sent to the Development Environment 
+	| If it is false, is sent to the production environment
 	|
 	*/
 
 	'environment' => true,
 
 	/*
-	|----------------------------------------------------------------------------------------------
+	|--------------------------------------------------------------------------
 	| Credentials
-	|----------------------------------------------------------------------------------------------
+	|--------------------------------------------------------------------------
 	|
-	| MoIP requires you to authenticate to be able to process requests in their API for it before 
-	| making any request you must inform the MoIP credentials API formed by a TOKEN and a KEY.
+	| MoIP requires you to authenticate to be able to process requests in its 
+	| API for it before making any request you must inform the MoIP credentials 
+	| API formed by a TOKEN and a KEY.
+	| Se você ainda não possui estes dados, veja como obtê-las através em sua 
+	| conta Sandbox.
 	|
 	*/
 
-	'key' => '4IJLTMUNZL4DZRDGW1GB5E36GMQCAAFXYEUOBARD',
-	'token' => 'FPOQZTQL36BQSLLZKMLQS8J7RKLHLBR3',
+	'key' 	=> '4IJLTMUNZL4DZRDGW1GB5E36GMQCAAFXYEUOBARD',
+
+	'token'	=> 'FPOQZTQL36BQSLLZKMLQS8J7RKLHLBR3',
 
 	/*
-	|----------------------------------------------------------------------------------------------
-	| Validate
-	|----------------------------------------------------------------------------------------------
+	|--------------------------------------------------------------------------
+	| Validate Identification
+	|--------------------------------------------------------------------------
 	|
-	| The validate configuration will perform validation of data required for the type of 
-	| instruction that you want to process, you can choose one of two levels of validation 
-	| available the 'Basic' and 'Identification'.
-	| Basic: Will perform validation on the minimum data for an XML request to MoIP.
-	| Identification: It will validate the data needed to process an XML with identification MoIP 
-	| generally used to redirect the client in the second step of the payment page
-	| at checkout MoIP or use MoIP Transaparente.
+	| The validate() method will perform the validation required for the type 
+	| of statement you want to process data, you can choose one of two levels 
+	| of validation visible the 'Basic' and 'Identification'.
+	|
+	| Basic: Will perform validation on the minimum data for an XML request to 
+	| MoIP. 
+	| Identification: It will validate the data needed to process an XML 
+	| identifying MoIP generally used to redirect the client in the second 
+	| step of the payment page at checkout MoIP or use MoIP Transaparente.
 	|
 	*/
 
 	'validate' => 'Basic',
 
-	
+	/*
+	|--------------------------------------------------------------------------
+	| Reaon
+	|--------------------------------------------------------------------------
+	|
+	| Responsible for defining the reason for the payment.
+	| 
+	*/
+	'reason' => 'Shopping',
 ];
