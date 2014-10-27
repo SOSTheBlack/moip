@@ -1,10 +1,44 @@
 <?php namespace LaraRespect\Moip;
 
 use InvalidArgumentException;
+use UnexpectedValueException;
 use LengthException;
+use LogicException;
 
-class Validator extends Api
+class Validator
 {
+	protected function validatorData($data, $config)
+	{
+		if (! isset($data->unique_id)) {
+			$data->unique_id = false;
+		}
+
+		if ($this->validatorValidate($config->validate) === 'Basic') {
+			if (! isset($data->value)) {
+				throw new LogicException("Não foi informado o valor da compra", 1);
+			} elseif (! is_float($data->value)) {
+				throw new UnexpectedValueException("Valor da compra deve ser do tipo float", 1);
+			} elseif (! isset($data->reason)) {
+				$this->getReason($config);
+			}
+		} else {
+			# code...
+		}
+	}
+
+	private function getReason($config)
+	{
+		if (! isset($config->reason)) {
+			throw new InvalidArgumentException("Configuração reason em moip não foi encontrado", 1);	
+		} else {
+			return $data->reason = $config->reason;
+		}
+	}
+
+	private function getUniqueId($unique_id)
+	{
+		# code...
+	}
 	protected function validatorConfig($config)
 	{
 		if (empty($config)) {
@@ -14,7 +48,7 @@ class Validator extends Api
 		}
 	}
 
-	protected function validatorValidade($validate)
+	protected function validatorValidate($validate)
 	{
 		if ($validate === 'Basic' || $validate === 'Identification') {
 			return $validate;
