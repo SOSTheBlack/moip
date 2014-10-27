@@ -3,6 +3,7 @@
     "description": "",
     "keywords": ["moip", "gateway", "payment", "laravel"],
     "license": "MIT",
+    "type": "project",
     "authors": [
         {
             "name": "Jean C. Garcia",
@@ -18,5 +19,5 @@
             "LaraRespect\\Moip\\": "src/"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
