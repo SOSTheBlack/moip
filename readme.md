@@ -64,18 +64,18 @@ or even try block
 
 ### Method of response
 
-token payment
+    //token payment
     Moip::response()->token;
     Moip::sendMoip($data)->token;
 
-payment url
+    //payment url
     Moip::response()->payment_url;
     Moip::sendMoip($data)->payment_url;
 
-xml sent
+    //xml sent
     Moip::response()->xmlSend;
     Moip::sendMoip($data)->xmlSend;
 
-xml return
+    //xml return
     Moip::response()->xmlGet;
     Moip::sendMoip($data)->xmlGet;
