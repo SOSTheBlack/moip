@@ -1,6 +1,8 @@
 # Moip (Laravel Package)
-
 ----------------------
+
+[![Latest Stable Version](https://poser.pugx.org/lararespect/moip/v/stable.svg)](https://packagist.org/packages/lararespect/moip) [![Total Downloads](https://poser.pugx.org/lararespect/moip/downloads.svg)](https://packagist.org/packages/lararespect/moip) [![Latest Unstable Version](https://poser.pugx.org/lararespect/moip/v/unstable.svg)](https://packagist.org/packages/lararespect/moip) [![License](https://poser.pugx.org/lararespect/moip/license.svg)](https://packagist.org/packages/lararespect/moip)
+
 This is a package of a payment intermediary called MOIP. 
 Version 1.0 supports only the basic requirements and the necessary authentication to create the checkout
 
