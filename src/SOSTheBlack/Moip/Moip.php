@@ -1,4 +1,4 @@
-<?php namespace LaraRespect\Moip;
+<?php namespace SOSTheBlack\Moip;
 
 use Config;
 use StdClass;
@@ -8,7 +8,7 @@ use StdClass;
  *
  * Class to use for all abstraction of Moip's API
  */
-class Moipp extends Validator 
+class Moip extends Validator 
 {
 	/**
 	 * Use for all abstraction of Moip's API
@@ -38,6 +38,10 @@ class Moipp extends Validator
 	 */
 	public function sendMoip($data)
 	{
+		if (! is_object($data)) {
+			$data = (object) $data;
+		}
+		
 		$this->initialize();
 		$this->validatorData($data, $this->config);
 		

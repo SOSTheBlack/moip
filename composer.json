@@ -1,9 +1,9 @@
 {
-    "name": "lararespect/moip",
+    "name": "sostheblack/moip",
     "description": "",
     "keywords": ["moip", "gateway", "payment", "laravel", "checkout"],
     "license": "MIT",
-    "type": "librarie",
+    "type": "libraries",
     "authors": [
         {
             "name": "Jean C. Garcia",
@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-0": {
-            "LaraRespect\\Moip\\": "src/"
+            "SOSTheBlack\\Moip\\": "src/"
         }
     },
     "minimum-stability": "stable"

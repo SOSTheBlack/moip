@@ -1,4 +1,4 @@
-<?php namespace LaraRespect\Moip;
+<?php namespace SOSTheBlack\Moip;
 
 class Environment {
 	public $base_url;

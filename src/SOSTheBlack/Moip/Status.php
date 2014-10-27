@@ -1,4 +1,4 @@
-<?php namespace LaraRespect\Moip;
+<?php namespace SOSTheBlack\Moip;
 
 /**
  * Verificação de status da conta do MoIP. Atualmente somente com suporte à verificação de saldo e ultimas transações.

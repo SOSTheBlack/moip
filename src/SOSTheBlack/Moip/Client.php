@@ -1,4 +1,4 @@
-<?php namespace LaraRespect\Moip;
+<?php namespace SOSTheBlack\Moip;
 
 /**
  * MoIP's API connection class

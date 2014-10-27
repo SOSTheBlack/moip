@@ -1,4 +1,4 @@
-<?php namespace LaraRespect\Moip;
+<?php namespace SOSTheBlack\Moip;
 
 use InvalidArgumentException;
 use UnexpectedValueException;
@@ -18,10 +18,6 @@ class Validator
 	 */
 	protected function validatorData($data, $config)
 	{
-		if (! is_object($data)) {
-			$data = (object) $data;
-		}
-
 		if (! isset($data->unique_id)) {
 			$data->unique_id = false;
 		}
