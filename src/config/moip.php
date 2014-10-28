@@ -31,9 +31,9 @@ return [
 	|
 	*/
 
-	'key' 	=> '4IJLTMUNZL4DZRDGW1GB5E36GMQCAAFXYEUOBARD',
+	'key' 	=> 'ABABABABABABABABABABABABABABABABABABABAB',
 
-	'token'	=> 'FPOQZTQL36BQSLLZKMLQS8J7RKLHLBR3',
+	'token'	=> '01010101010101010101010101010101',
 
 	/*
 	|--------------------------------------------------------------------------
