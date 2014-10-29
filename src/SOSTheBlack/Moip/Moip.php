@@ -38,12 +38,48 @@ class Moip extends Validator
 	 */
 	public function sendMoip($data)
 	{
-		if (! is_object($data)) {
-			$data = (object) $data;
-		}
+		$data = $this->validatorData($data);
 		
 		$this->initialize();
-		$this->validatorData($data, $this->config);
+		$this->validatorSend($data, $this->config);
+
+		// // Razão
+		// $this->moip->setReason($data->reason);
+
+		// // Value
+		// $this->moip->setValue($data->value);
+		// $this->moip->setAdds();
+		// $this->moip->setDeduct();
+
+		// $this->moip->setUniqueID($data->unique_id);
+
+		// // Parcel
+		// $this->moip->addParcel($min, $max, $am, $transfer);
+
+		// // Comission 
+		// $this->moip->addComission($reason, $receiver, $value, $percentageValue, $ratePayer);
+
+		// // Receiver
+		// $this->moip->setReceiver($receiver);
+
+		// // Payer - Array ('name','email','payerId','identity', 'phone','billingAddress' =>
+		// // 	Array('address','number','complement','city','neighborhood','state','country','zipCode','phone'))
+		// $this->moip->setPayer($array);
+
+		// // Payment - 'billet','financing','debit','creditCard','debitCard'
+		// $moip->addPaymentWay('creditCard');
+
+		// // Boleto
+		// $this->moip->setBilletConf($expiration, $workingDays, $instructions, $uriLogo);
+		// $this->moip->addMessage($msg);
+		
+		// // URL de retorno do pagado
+		// $this->moip->setReturnURL($url);
+
+		// // URL de envio do NASP
+		// $this->moip->setNotificationURL($url);
+
+
 		
 		if ($this->validatorValidate($this->config->validate) === 'Basic') {
 			$this->moip->setUniqueID($data->unique_id);

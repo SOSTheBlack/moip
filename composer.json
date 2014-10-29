@@ -16,12 +16,18 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.3.*",
-        "barryvdh/laravel-debugbar": "1.7-dev"
+        "barryvdh/laravel-debugbar": "1.7-dev",
+        "mockery/mockery: ~0.9"
     },
     "autoload": {
         "psr-0": {
             "SOSTheBlack\\Moip\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "v1.1-dev"
+        }
+    },
+    "minimum-stability": "dev"
 }

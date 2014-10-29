@@ -1,6 +1,5 @@
 <?php namespace SOSTheBlack\Moip;
 
-use InvalidArgumentException;
 use UnexpectedValueException;
 use LengthException;
 use LogicException;
@@ -11,12 +10,41 @@ use LogicException;
 class Validator
 {
 	/**
+	 * Validate the data for using in class Moip
+	 * @param  array or data $data data for new checkout
+	 * @return object data
+	 */
+	protected function validatorData($data)
+	{
+		$data = $this->toObject($data);
+		$data->values = $this->toObject($data, 'values', true);
+		return $data;
+	}
+
+	private function toObject($data, $value = '', $required = false)
+	{
+		if (empty($value)) {
+			if (! is_array($data) && ! is_object($data)) {
+				throw new UnexpecteddataException("Parametro passado é do tipo ". gettype($data) . ", esperava-se array ou object");
+			} elseif(is_array($data)) {
+				return (object) $data;
+			}
+		} else {
+			if (! isset($data->$value) && $required === true) {
+				throw new LogicException("É necessário enviar os dados da compra", 1);
+			} else {
+				return (object) $data->$value;
+			}
+		}
+	}
+
+	/**
 	 * Validates the data sent by the user
 	 * @param  object $data   user data
 	 * @param  object $config config Moip
 	 * @return void         
 	 */
-	protected function validatorData($data, $config)
+	protected function validatorSend($data, $config)
 	{
 		if (! isset($data->unique_id)) {
 			$data->unique_id = false;
@@ -26,7 +54,7 @@ class Validator
 			if (! isset($data->value)) {
 				throw new LogicException("Não foi informado o valor da compra", 1);
 			} elseif (! is_float($data->value)) {
-				throw new UnexpectedValueException("Valor da compra deve ser do tipo float", 1);
+				throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($value) . ", esperava-se float", 1);
 			} elseif (! isset($data->reason)) {
 				$data->reason = $this->getReason($config);
 			}
