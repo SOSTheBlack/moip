@@ -8,12 +8,12 @@ use StdClass;
  *
  * Class to use for all abstraction of Moip's API
  */
-class Moip extends Validator 
+class Moip extends Validator
 {
 	/**
 	 * Use for all abstraction of Moip's API
 	 *
-	 * @var new Api 
+	 * @var new Api
 	 **/
 	private $moip;
 
@@ -32,35 +32,40 @@ class Moip extends Validator
 	private $response;
 
 	/**
+	 * undocumented class variable
+	 *
+	 * @var string
+	 **/
+	private $data;
+
+	/**
 	 * Method that sends data to Moip and creates op chekout
-	 * @param array or object $data 
+	 * @param array or object $data
 	 * @return response moip
 	 */
 	public function sendMoip($data)
 	{
-		$data = $this->validatorData($data);
-		
-		$this->initialize();
+		$data = $this->initialize($data);
 		$this->validatorSend($data, $this->config);
 
-		// // Razão
-		// $this->moip->setReason($data->reason);
+		// Razão
+		$this->moip->setReason($data->reason);
 
 		// // Value
-		// $this->moip->setValue($data->value);
-		// $this->moip->setAdds();
-		// $this->moip->setDeduct();
+		$this->moip->setValue($data->values->value);
+		$this->moip->setAdds($data->values->adds);
+		$this->moip->setDeduct($data->values->deduct);
 
-		// $this->moip->setUniqueID($data->unique_id);
+		$this->moip->setUniqueID($data->unique_id);
 
 		// // Parcel
 		// $this->moip->addParcel($min, $max, $am, $transfer);
 
-		// // Comission 
+		// // Comission
 		// $this->moip->addComission($reason, $receiver, $value, $percentageValue, $ratePayer);
 
 		// // Receiver
-		// $this->moip->setReceiver($receiver);
+		$this->moip->setReceiver($data->receiver);
 
 		// // Payer - Array ('name','email','payerId','identity', 'phone','billingAddress' =>
 		// // 	Array('address','number','complement','city','neighborhood','state','country','zipCode','phone'))
@@ -72,30 +77,22 @@ class Moip extends Validator
 		// // Boleto
 		// $this->moip->setBilletConf($expiration, $workingDays, $instructions, $uriLogo);
 		// $this->moip->addMessage($msg);
-		
+
 		// // URL de retorno do pagado
 		// $this->moip->setReturnURL($url);
 
 		// // URL de envio do NASP
 		// $this->moip->setNotificationURL($url);
 
-
-		
-		if ($this->validatorValidate($this->config->validate) === 'Basic') {
-			$this->moip->setUniqueID($data->unique_id);
-			$this->moip->setValue($data->value);
-			$this->moip->setReason($data->reason);
-		}
-
 		$this->getValidate();
 		return $this->response($this->moip->send());
 	}
 
 	/**
-	 * Method that returns an object with the token request, 
+	 * Method that returns an object with the token request,
 	 * link, sending XML and XML return
 	 * @param  object $send Return of sendMoip method
-	 * @return object token request, link, sending XML 
+	 * @return object token request, link, sending XML
 	 * and XML return
 	 */
 	public function response($send = '')
@@ -103,25 +100,29 @@ class Moip extends Validator
 		if (! empty($send)) {
 			$answer = $this->moip->getAnswer();
 			$this->response = new StdClass;
-			$this->response->token = $answer->token;
+			$this->response->response 	 = $answer->response;
+			$this->response->error 		 = $answer->error;
+			$this->response->token 		 = $answer->token;
 			$this->response->payment_url = $answer->payment_url;
-			$this->response->xmlSend = $this->moip->getXML();
-			$this->response->xmlGet  = $send->xml;
+			$this->response->xmlSend 	 = $this->moip->getXML();
+			$this->response->xmlGet  	 = $send->xml;
 		}
+
 		return $this->response;
 	}
 
 	/**
-	 * Method required to start integration. 
+	 * Method required to start integration.
 	 * Authentication and environment that the request will be sent
-	 * @return null
+	 * @return object \SOSTheBlack\Moip\Validator
 	 */
-	private function initialize()
+	private function initialize($data)
 	{
 		$this->moip = new Api;
 		$this->config = $this->validatorConfig(Config::get('moip'));
 		$this->getEnvironment();
 		$this->authentication();
+		return $this->validatorData($data);
 	}
 
 	/**
@@ -140,7 +141,7 @@ class Moip extends Validator
 	}
 
 	/**
-	 * Validation to determine whether the data sent will be basic, 
+	 * Validation to determine whether the data sent will be basic,
 	 * or for identifying user
 	 * @return $this
 	 */
