@@ -43,7 +43,8 @@ Copy the configuration file config/moip.php to app/config folder. Law making tha
 
 Now you are ready to go:
 
-    // Riding array
+Riding array:
+    
     $data = [
         'unique_id' => $id_buy,
         'reason'    => 'Promotion of rule markup 01',
@@ -51,7 +52,8 @@ Now you are ready to go:
         'receiver'  => 'jeancesargarcia@gmail.com'
     ];
 
-    // Creating the checkout page
+Creating the checkout page:
+
     try {
         $moip = Moip::sendMoip($data);
     } catch (Exception $e) {
@@ -60,20 +62,11 @@ Now you are ready to go:
 
 ### Data Response
 
-    // Error: false or error message
-    $moip->error;
-
-    // Response: true or false
-    $moip->response;
-
-    // token request
-    $moip->token;
-
-    // payment url
-    $moip->payment_url;
-
-    // xml sent
-    $moip->xmlSend;
-
-    // xml reponse
-    $moip->xmlGet;
+Method | Response
+-------|---------
+$moip->error | false or error message
+$moip->response | true or false
+$moip->token | token request
+$moip->payment_url | payment url
+$moip->xmlSend | xml sent
+$moip->xmlGet | xml reponse
