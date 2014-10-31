@@ -32,7 +32,7 @@ class Moip extends Validator
 	private $response;
 
 	/**
-	 * undocumented class variable
+	 * Data wil be sent to MoIP
 	 *
 	 * @var string
 	 **/
@@ -112,6 +112,11 @@ class Moip extends Validator
 		return $this->response;
 	}
 
+	/**
+	 * Checks if the recipient sends login MoIP
+	 * @param  object $data 
+	 * @return $this
+	 */
 	private function getReceiver($data)
 	{
 		if (! empty($data->receiver)) {

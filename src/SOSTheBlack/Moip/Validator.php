@@ -26,9 +26,9 @@ class Validator
 	/**
 	 * Convert array to object
 	 * @param array $data 
-	 * @param type $value 
-	 * @param type $required 
-	 * @return type
+	 * @param string $value 
+	 * @param boolean $required 
+	 * @return object $data
 	 */
 	private function toObject($data, $value = '', $required = false)
 	{
@@ -90,6 +90,12 @@ class Validator
 		}
 	}
 
+	/**
+	 * Validator Basic
+	 * @param  object $data   
+	 * @param  object $config 
+	 * @return void
+	 */
 	private function validatorBasic($data, $config)
 	{
 		if (! isset($data->values->value)) {
@@ -101,6 +107,11 @@ class Validator
 		}
 	}
 
+	/**
+	 * Error who returned from API
+	 * @param  string or boelan $error Error returned from API
+	 * @return void
+	 */
 	protected function validatorResponseError($error)
 	{
 		if ($error !== false) {
@@ -108,6 +119,12 @@ class Validator
 		}
 	}
 
+	/**
+	 * validator Identification
+	 * @param object $data 
+	 * @param object $config 
+	 * @return void
+	 */
 	private function validatorIdentification($data, $config)
 	{
 		$this->validatorBasic($data, $config);
