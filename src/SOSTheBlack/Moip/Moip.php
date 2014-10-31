@@ -50,7 +50,7 @@ class Moip extends Validator
 		$this->moip->setReason($data->reason);
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
-		$this->moip->setDeduct($data->values->deduc
+		$this->moip->setDeduct($data->values->deduct);
 		$this->moip->setUniqueID($data->unique_id);
 		$this->getReceiver($data);
 		$this->getValidate();
