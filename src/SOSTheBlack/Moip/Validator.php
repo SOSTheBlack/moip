@@ -1,9 +1,10 @@
 <?php namespace SOSTheBlack\Moip;
 
-use InvalidArgumentException;
 use UnexpectedValueException;
+use InvalidArgumentException;
 use LengthException;
 use LogicException;
+use Exception;
 
 /**
  * Class to validate all data Moip
@@ -11,26 +12,122 @@ use LogicException;
 class Validator
 {
 	/**
+	 * Validate the data for using in class Moip
+	 * @param  array or data $data data for new checkout
+	 * @return object data
+	 */
+	protected function validatorData($data)
+	{
+		$data = $this->toObject($data);
+		$data->values = $this->toObject($data, 'values', true);
+		return $data;
+	}
+
+	/**
+	 * Convert array to object
+	 * @param array $data 
+	 * @param string $value 
+	 * @param boolean $required 
+	 * @return object $data
+	 */
+	private function toObject($data, $value = '', $required = false)
+	{
+		if (empty($value) && is_array($data)) {
+			return (object) $data;
+		} else {
+			if (! isset($data->$value) && $required === true) {
+				throw new LogicException("É necessário enviar os valores da compra", 1);
+			} else {
+				return (object) $data->$value;
+			}
+		}
+	}
+
+	/**
 	 * Validates the data sent by the user
 	 * @param  object $data   user data
 	 * @param  object $config config Moip
-	 * @return void         
+	 * @return void
 	 */
-	protected function validatorData($data, $config)
+	protected function validatorSend($data, $config)
 	{
-		if (! isset($data->unique_id)) {
+		if ($this->validatorValidate($config->validate) === 'Identification') {
+			$this->validatorIdentification($data, $config);
+		} else {
+			$this->validatorBasic($data, $config);
+		}
+
+		if (isset($data->unique_id)) {
+			if (! ctype_alnum($data->unique_id) && ! is_bool($data->unique_id) ) {
+				throw new UnexpectedValueException("reason deve ser alfanumárico");
+			}
+		} else {
 			$data->unique_id = false;
 		}
 
-		if ($this->validatorValidate($config->validate) === 'Basic') {
-			if (! isset($data->value)) {
-				throw new LogicException("Não foi informado o valor da compra", 1);
-			} elseif (! is_float($data->value)) {
-				throw new UnexpectedValueException("Valor da compra deve ser do tipo float", 1);
-			} elseif (! isset($data->reason)) {
-				$data->reason = $this->getReason($config);
+		if (! isset($data->values->adds)) {
+			$data->values->adds = 0.0;
+		} elseif (! is_float($data->values->adds) || ! is_double($data->values->adds)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->deduct) . ", esperava-se float");
+		}
+
+		if (! isset($data->values->deduct)) {
+			$data->values->deduct = 0.0;
+		} elseif (! is_float($data->values->deduct) || ! is_double($data->values->deduct) ) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->deduct) . ", esperava-se float");
+		}
+
+		if (! isset($data->receiver)) {
+			if (! isset($config->receiver)) {
+				throw new InvalidArgumentException("Não foi encontrado o parametro receiver no arquivo de configuração moip.php");
+			} else {
+				$data->receiver = $config->receiver;
 			}
 		}
+
+		if (strlen($data->receiver) > 65) {
+			throw new LengthException("receiver não pode conter mais de 65 caracteres");
+		}
+	}
+
+	/**
+	 * Validator Basic
+	 * @param  object $data   
+	 * @param  object $config 
+	 * @return void
+	 */
+	private function validatorBasic($data, $config)
+	{
+		if (! isset($data->values->value)) {
+			throw new LogicException("Não foi informado o valor da compra", 1);
+		} elseif (! is_float($data->values->value)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->value) . ", esperava-se float", 1);
+		} elseif (! isset($data->reason)) {
+			$data->reason = $this->getReason($config);
+		}
+	}
+
+	/**
+	 * Error who returned from API
+	 * @param  string or boelan $error Error returned from API
+	 * @return void
+	 */
+	protected function validatorResponseError($error)
+	{
+		if ($error !== false) {
+			throw new Exception($error);
+		}
+	}
+
+	/**
+	 * validator Identification
+	 * @param object $data 
+	 * @param object $config 
+	 * @return void
+	 */
+	private function validatorIdentification($data, $config)
+	{
+		$this->validatorBasic($data, $config);
 	}
 
 	/**
@@ -41,9 +138,12 @@ class Validator
 	private function getReason($config)
 	{
 		if (! isset($config->reason)) {
-			throw new InvalidArgumentException("Configuração reason em moip não foi encontrado", 1);	
+			throw new InvalidArgumentException("Configuração reason em moip não foi encontrado", 1);
+		} elseif (! ctype_alnum($config->reason)) {
+				throw new UnexpectedValueException("Reason deve ser alfanumárico");
+		} else {
+			return $config->reason;
 		}
-		return $config->reason;
 	}
 
 	/**
@@ -61,23 +161,23 @@ class Validator
 	}
 
 	/**
-	 * Validation environment that is sent data 
+	 * Validation environment that is sent data
 	 * @param  string $validate Environment
-	 * @return string 			Environment          
+	 * @return string 			Environment
 	 */
 	protected function validatorValidate($validate)
 	{
 		if ($validate === 'Basic' || $validate === 'Identification') {
 			return $validate;
 		} else {
-			throw new InvalidArgumentException("Configuração validade do moip aceita apenas 'Basic' e 'Identification'", 1);	
+			throw new InvalidArgumentException("Configuração validade do moip aceita apenas 'Basic' e 'Identification'", 1);
 		}
 	}
 
 	/**
 	 * Authentication of token and key
 	 * @param  object $credential token and key
-	 * @return boolean            
+	 * @return boolean
 	 */
 	protected function validatorCredential($credential)
 	{
@@ -92,7 +192,7 @@ class Validator
 
 	/**
 	 * Validate token
-	 * @param  string $token 
+	 * @param  string $token
 	 * @return boolean       true
 	 */
 	private function validatorToken($token)

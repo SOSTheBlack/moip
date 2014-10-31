@@ -62,5 +62,17 @@ return [
 	| Responsible for defining the reason for the payment.
 	| 
 	*/
+
 	'reason' => 'Shopping',
+
+	/*
+	|--------------------------------------------------------------------------
+	| User MoIP
+	|--------------------------------------------------------------------------
+	|
+	| Identifies the MoIP user who will receive payment in MoIP
+	|
+	*/
+
+	'receiver' => ''
 ];

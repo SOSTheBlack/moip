@@ -1,10 +1,9 @@
-# Moip (Laravel Package)
+# MoIP (Laravel Package)
 ----------------------
 
 [![Latest Stable Version](https://poser.pugx.org/SOSTheBlack/moip/v/stable.svg)](https://packagist.org/packages/SOSTheBlack/moip) [![Total Downloads](https://poser.pugx.org/SOSTheBlack/moip/downloads.svg)](https://packagist.org/packages/SOSTheBlack/moip) [![Latest Unstable Version](https://poser.pugx.org/SOSTheBlack/moip/v/unstable.svg)](https://packagist.org/packages/SOSTheBlack/moip) [![License](https://poser.pugx.org/SOSTheBlack/moip/license.svg)](https://packagist.org/packages/SOSTheBlack/moip)
 
-This is a package of a payment intermediary called MOIP. 
-Version 1.0 supports only the basic requirements and the necessary authentication to create the checkout
+This is a package of a payment intermediary called MOIP.
 
 ### Required setup
 
@@ -38,43 +37,43 @@ Then at the end of `config/app.php` add `'Moip'    => 'SOSTheBlack\Moip\Facade'`
 
     ),
 
-Copy the configuration file config/moip.php to app/config / folder. Law making that file changes it deems necessary.
+Copy the configuration file config/moip.php to app/config folder. Law making that file changes it deems necessary.
 
-### Method of delivery
+### sending data for create chackout page
 
 Now you are ready to go:
 
-    // Simply do
-    Moip::sendMoip([
-        'unique_id' => $sale_id,
-        'value'     => $final_price,
-        'reason'    => 'Virtual store, promoçao Children\'s Day',
-    ]);
-    // Or
-    Moip::sendMoip([
-        'value'     => $final_price
-    ]);
-    // or even try block
+    // Riding array
+    $data = [
+        'unique_id' => $id_buy,
+        'reason'    => 'Promotion of rule markup 01',
+        'values'    => ['value' => $full_price_products , 'adds' => $freight, 'deduct'=> $discount],
+        'receiver'  => 'jeancesargarcia@gmail.com'
+    ];
+
+    // Creating the checkout page
     try {
-        Moip::sendMoip($data);
+        $moip = Moip::sendMoip($data);
     } catch (Exception $e) {
         echo $e->getMessage();
     }
 
-### Method of response
+### Data Response
 
-    //token payment
-    Moip::sendMoip($data)->token; //or
-    Moip::response()->token;
+    // Error: false or error message
+    $moip->error;
 
-    //payment url
-    Moip::sendMoip($data)->payment_url; //or
-    Moip::response()->payment_url;
+    // Response: true or false
+    $moip->response;
 
-    //xml sent
-    Moip::sendMoip($data)->xmlSend; //or
-    Moip::response()->xmlSend;
+    // token request
+    $moip->token;
 
-    //xml return
-    Moip::sendMoip($data)->xmlGet; //or
-    Moip::response()->xmlGet;
+    // payment url
+    $moip->payment_url;
+
+    // xml sent
+    $moip->xmlSend;
+
+    // xml reponse
+    $moip->xmlGet;
