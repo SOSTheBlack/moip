@@ -1,5 +1,6 @@
 <?php namespace SOSTheBlack\Moip;
 
+use Exception;
 use UnexpectedValueException;
 use InvalidArgumentException;
 use LengthException;
@@ -80,6 +81,7 @@ class Validator
 				$data->receiver = $config->receiver;
 			}
 		}
+
 		if (strlen($data->receiver) > 65) {
 			throw new LengthException("receiver não pode conter mais de 65 caracteres");
 		}
@@ -93,6 +95,13 @@ class Validator
 			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->value) . ", esperava-se float", 1);
 		} elseif (! isset($data->reason)) {
 			$data->reason = $this->getReason($config);
+		}
+	}
+
+	protected function validatorResponseError($error)
+	{
+		if ($error !== false) {
+			throw new Exception($error);
 		}
 	}
 

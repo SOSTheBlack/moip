@@ -64,8 +64,8 @@ class Moip extends Validator
 		// // Comission
 		// $this->moip->addComission($reason, $receiver, $value, $percentageValue, $ratePayer);
 
-		// // Receiver
-		$this->moip->setReceiver($data->receiver);
+		// Receiver
+		$this->getReceiver($data);
 
 		// // Payer - Array ('name','email','payerId','identity', 'phone','billingAddress' =>
 		// // 	Array('address','number','complement','city','neighborhood','state','country','zipCode','phone'))
@@ -99,6 +99,7 @@ class Moip extends Validator
 	{
 		if (! empty($send)) {
 			$answer = $this->moip->getAnswer();
+			$this->validatorResponseError($answer->error);
 			$this->response = new StdClass;
 			$this->response->response 	 = $answer->response;
 			$this->response->error 		 = $answer->error;
@@ -110,6 +111,15 @@ class Moip extends Validator
 
 		return $this->response;
 	}
+
+	private function getReceiver($data)
+	{
+		if (! empty($data->receiver)) {
+			$this->moip->setReceiver($data->receiver);
+		}
+
+		return $this;
+	}	
 
 	/**
 	 * Method required to start integration.
