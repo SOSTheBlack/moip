@@ -74,5 +74,27 @@ return [
 	|
 	*/
 
-	'receiver' => ''
+	'receiver' => '',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Parcel
+	|--------------------------------------------------------------------------
+	|
+	| Responsible for setting up the installment options that will be available
+	| to the payer.
+	| Min: Minimum number of parcel to the payer.
+	| max: Maximum amount of parcel to the payer.
+	| rate: Amount of interest a.m per plot.
+	| Transfer: If "true" sets the default value of the interest will be paid 
+	| by the payer MoIP
+	*/
+
+	'min' 		=> 0,
+
+	'max' 		=> 12,
+
+	'rate'		=> 2,
+	
+	'transfer'	=> false,	
 ];
