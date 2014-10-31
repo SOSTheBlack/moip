@@ -47,43 +47,12 @@ class Moip extends Validator
 	{
 		$data = $this->initialize($data);
 		$this->validatorSend($data, $this->config);
-
-		// Razão
 		$this->moip->setReason($data->reason);
-
-		// // Value
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
-		$this->moip->setDeduct($data->values->deduct);
-
+		$this->moip->setDeduct($data->values->deduc
 		$this->moip->setUniqueID($data->unique_id);
-
-		// // Parcel
-		// $this->moip->addParcel($min, $max, $am, $transfer);
-
-		// // Comission
-		// $this->moip->addComission($reason, $receiver, $value, $percentageValue, $ratePayer);
-
-		// Receiver
 		$this->getReceiver($data);
-
-		// // Payer - Array ('name','email','payerId','identity', 'phone','billingAddress' =>
-		// // 	Array('address','number','complement','city','neighborhood','state','country','zipCode','phone'))
-		// $this->moip->setPayer($array);
-
-		// // Payment - 'billet','financing','debit','creditCard','debitCard'
-		// $moip->addPaymentWay('creditCard');
-
-		// // Boleto
-		// $this->moip->setBilletConf($expiration, $workingDays, $instructions, $uriLogo);
-		// $this->moip->addMessage($msg);
-
-		// // URL de retorno do pagado
-		// $this->moip->setReturnURL($url);
-
-		// // URL de envio do NASP
-		// $this->moip->setNotificationURL($url);
-
 		$this->getValidate();
 		return $this->response($this->moip->send());
 	}
