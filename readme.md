@@ -9,7 +9,7 @@ This is a package of a payment intermediary called MOIP.
 
 In the `require` key of `composer.json` file add the following
 
-    "SOSTheBlack/moip": "dev-master"
+    "SOSTheBlack/moip": "1.1.x"
 
 Run the Composer update comand
 
