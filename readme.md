@@ -37,7 +37,7 @@ Then at the end of `config/app.php` add `'Moip'    => 'SOSTheBlack\Moip\Facade'`
 
     ),
 
-Copy the configuration file config/moip.php to app/config / folder. Law making that file changes it deems necessary.
+Copy the configuration file config/moip.php to app/config folder. Law making that file changes it deems necessary.
 
 ### sending data for create chackout page
 
