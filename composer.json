@@ -23,5 +23,10 @@
             "SOSTheBlack\\Moip\\": "src/"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2-dev"
+        }
+    },
     "minimum-stability": "dev"
 }
