@@ -1,6 +1,6 @@
 {
     "name": "sostheblack/moip",
-    "description": "",
+    "description": "This is a package of a payment intermediary called MoIP.",
     "keywords": ["moip", "gateway", "payment", "laravel", "checkout"],
     "license": "MIT",
     "type": "libraries",
@@ -11,12 +11,8 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.4.0",
         "illuminate/support": "4.2.*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.3.*",
-        "barryvdh/laravel-debugbar": "1.7-dev"
     },
     "autoload": {
         "psr-0": {
