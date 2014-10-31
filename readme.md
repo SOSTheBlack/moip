@@ -76,3 +76,4 @@ Now you are ready to go:
     $moip->xmlSend;
 
     // xml reponse
+    $moip->xmlGet;
