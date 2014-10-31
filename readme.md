@@ -1,7 +1,7 @@
 # MoIP (Laravel Package)
 ----------------------
 
-[![Latest Stable Version](https://poser.pugx.org/SOSTheBlack/moip/v/stable.svg)](https://packagist.org/packages/SOSTheBlack/moip) [![Total Downloads](https://poser.pugx.org/SOSTheBlack/moip/downloads.svg)](https://packagist.org/packages/SOSTheBlack/moip) [![Latest Unstable Version](https://poser.pugx.org/SOSTheBlack/moip/v/unstable.svg)](https://packagist.org/packages/SOSTheBlack/moip) [![License](https://poser.pugx.org/SOSTheBlack/moip/license.svg)](https://packagist.org/packages/SOSTheBlack/moip)
+[![Latest Stable Version](https://poser.pugx.org/sostheblack/moip/v/stable.svg)](https://packagist.org/packages/sostheblack/moip) [![Total Downloads](https://poser.pugx.org/sostheblack/moip/downloads.svg)](https://packagist.org/packages/sostheblack/moip) [![Latest Unstable Version](https://poser.pugx.org/sostheblack/moip/v/unstable.svg)](https://packagist.org/packages/sostheblack/moip) [![License](https://poser.pugx.org/sostheblack/moip/license.svg)](https://packagist.org/packages/sostheblack/moip)
 
 This is a package of a payment intermediary called MOIP.
 
