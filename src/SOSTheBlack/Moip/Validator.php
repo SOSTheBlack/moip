@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use LengthException;
 use LogicException;
 use Exception;
+use StdClass;
 
 /**
  * Class to validate all data Moip
@@ -20,6 +21,7 @@ class Validator
 	{
 		$data = $this->toObject($data);
 		$data->values = $this->toObject($data, 'values', true);
+		$data->parcel = $this->toObject($data, 'parcel', false);
 		return $data;
 	}
 
@@ -36,7 +38,9 @@ class Validator
 			return (object) $data;
 		} else {
 			if (! isset($data->$value) && $required === true) {
-				throw new LogicException("É necessário enviar os valores da compra", 1);
+				throw new LogicException("É obrigatório enviar ". $value, 1);
+			} elseif (! isset($data->$value) && $required === false) {
+				return (object) $data->$value = new stdClass();
 			} else {
 				return (object) $data->$value;
 			}
@@ -84,10 +88,10 @@ class Validator
 				$data->receiver = $config->receiver;
 			}
 		}
-
 		if (strlen($data->receiver) > 65) {
 			throw new LengthException("receiver não pode conter mais de 65 caracteres");
 		}
+		
 	}
 
 	/**
