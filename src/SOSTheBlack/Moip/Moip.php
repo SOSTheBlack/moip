@@ -43,7 +43,7 @@ class Moip extends Validator
 	 * @param array or object $data
 	 * @return response moip
 	 */
-	public function sendMoip($data)
+	public function sendMoip( array $data)
 	{
 		$data = $this->initialize($data);
 		$this->validatorSend($data, $this->config);

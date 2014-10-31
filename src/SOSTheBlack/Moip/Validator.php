@@ -1,10 +1,10 @@
 <?php namespace SOSTheBlack\Moip;
 
-use Exception;
 use UnexpectedValueException;
 use InvalidArgumentException;
 use LengthException;
 use LogicException;
+use Exception;
 
 /**
  * Class to validate all data Moip
@@ -23,17 +23,20 @@ class Validator
 		return $data;
 	}
 
+	/**
+	 * Convert array to object
+	 * @param array $data 
+	 * @param type $value 
+	 * @param type $required 
+	 * @return type
+	 */
 	private function toObject($data, $value = '', $required = false)
 	{
-		if (empty($value)) {
-			if (! is_array($data) && ! is_object($data)) {
-				throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data) . ", esperava-se array ou object");
-			} elseif(is_array($data)) {
-				return (object) $data;
-			}
+		if (empty($value) && is_array($data)) {
+			return (object) $data;
 		} else {
 			if (! isset($data->$value) && $required === true) {
-				throw new LogicException("É necessário enviar os dados da compra", 1);
+				throw new LogicException("É necessário enviar os valores da compra", 1);
 			} else {
 				return (object) $data->$value;
 			}
