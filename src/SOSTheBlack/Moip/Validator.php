@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use LengthException;
 use LogicException;
 use Exception;
+use StdClass;
 
 /**
  * Class to validate all data Moip
@@ -20,7 +21,25 @@ class Validator
 	{
 		$data = $this->toObject($data);
 		$data->values = $this->toObject($data, 'values', true);
+		$data->parcel = $this->toObject($data, 'parcel', false);
 		return $data;
+	}
+
+	/**
+	 * Verifies the existence of the configuration file Moip
+	 * @param  array $config Moip the configuration
+	 * @return object        Moip the configuration
+	 */
+	protected function validatorConfig($config)
+	{
+		if (empty($config)) {
+			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
+		} else {
+			$config = $this->toObject($config);
+			$config->credentials = $this->toObject($config, 'credentials', true);
+			$config->parcel = $this->toObject($config, 'parcel', true);
+			return $config;
+		}
 	}
 
 	/**
@@ -36,7 +55,9 @@ class Validator
 			return (object) $data;
 		} else {
 			if (! isset($data->$value) && $required === true) {
-				throw new LogicException("É necessário enviar os valores da compra", 1);
+				throw new LogicException("É obrigatório enviar ". $value, 1);
+			} elseif (! isset($data->$value) && $required === false) {
+				return (object) $data->$value = new stdClass();
 			} else {
 				return (object) $data->$value;
 			}
@@ -83,10 +104,78 @@ class Validator
 			} else {
 				$data->receiver = $config->receiver;
 			}
-		}
+		} 
 
 		if (strlen($data->receiver) > 65) {
 			throw new LengthException("receiver não pode conter mais de 65 caracteres");
+		}
+		
+		$data->parcel 			= $this->getParcel($data, $config, 'parcel');
+		$data->parcel->min 		= $this->getParcel($data, $config, 'parcel', 'min');
+		$data->parcel->max 		= $this->getParcel($data, $config, 'parcel', 'max');
+		$data->parcel->rate 	= $this->getParcel($data, $config, 'parcel', 'rate');
+		$data->parcel->transfer = $this->getParcel($data, $config, 'parcel', 'transfer');
+		$this->validatorParcel($data->parcel);
+	}
+
+	/**
+	 * Validation of params for parcel
+	 * @param  object $parcel 
+	 * @return void
+	 */
+	private function validatorParcel($parcel)
+	{
+		if (! is_int($parcel->min)) {
+			throw new UnexpectedValueException("Espera-se inteiro, foi passado ". gettype($parcel->min));
+		} elseif ($parcel->min < 2 && $parcel->min > 12) {
+			throw new InvalidArgumentException("Parcela minima tem que estar entre 2 e 12");
+		} elseif (! is_int($parcel->max)) {
+			throw new UnexpectedValueException("Espera-se inteiro, foi passado ". gettype($parcel->max));
+		} elseif ($parcel->max < 2 && $parcel->max > 12) {
+			throw new InvalidArgumentException("Parcela maxima tem que estar entre 2 e 12");
+		}
+
+		if (! is_numeric($parcel->rate)) {
+			throw new UnexpectedValueException("Espera-se float, foi passado ". gettype($parcel->rate));
+		} elseif (strlen($parcel->rate) > 7) {
+			throw new InvalidArgumentException("Não pode conter mais de 7 caracteres");
+		}
+
+		if (! is_bool($parcel->transfer)) {
+			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($parcel->transfer));
+		}
+	}
+
+	/**
+	 * Search all parameters related to a portion
+	 * @param  object $data   
+	 * @param  object $config 
+	 * @param  string $key    
+	 * @param  string $value  
+	 * @return object $key and $data
+	 */
+	private function getParcel($data, $config, $key, $value = '')
+	{
+		if (! empty($value)) {
+			if (! isset($data->$key->$value)) {
+				if (! isset($config->$key->$value)) {
+					throw new InvalidArgumentException("Não existe o parâmetro value no arquivo de configuração moip.php");
+				} else {
+					return $config->$key->$value;
+				}
+			} else {
+				return $data->$key->$value;
+			}
+		} else {
+			if (! isset($data->$key)) {
+				if (! isset($config->$key)) {
+					throw new InvalidArgumentException("Não existe o parâmetro value no arquivo de configuração moip.php");
+				} else {
+					return $config->$key;
+				}
+			} else {
+				return $data->$key;
+			}			
 		}
 	}
 
@@ -143,20 +232,6 @@ class Validator
 				throw new UnexpectedValueException("Reason deve ser alfanumárico");
 		} else {
 			return $config->reason;
-		}
-	}
-
-	/**
-	 * Verifies the existence of the configuration file Moip
-	 * @param  array $config Moip the configuration
-	 * @return object        Moip the configuration
-	 */
-	protected function validatorConfig($config)
-	{
-		if (empty($config)) {
-			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
-		} else {
-			return (object) $config;
 		}
 	}
 

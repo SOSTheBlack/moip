@@ -52,6 +52,11 @@ class Moip extends Validator
 		$this->moip->setAdds($data->values->adds);
 		$this->moip->setDeduct($data->values->deduct);
 		$this->moip->setUniqueID($data->unique_id);
+		$this->moip->addParcel(
+			$data->parcel->min, 
+			$data->parcel->max, 
+			$data->parcel->rate, 
+			$data->parcel->transfer);
 		$this->getReceiver($data);
 		$this->getValidate();
 		return $this->response($this->moip->send());
@@ -115,10 +120,10 @@ class Moip extends Validator
 	 */
 	private function authentication()
 	{
-		if ($this->validatorCredential($this->config) === true) {
+		if ($this->validatorCredential($this->config->credentials) === true) {
 			$this->moip->setCredential([
-				'key'	=> $this->config->key,
-				'token' => $this->config->token,
+				'key'	=> $this->config->credentials->key,
+				'token' => $this->config->credentials->token,
 			]);
 		}
 		return $this;
