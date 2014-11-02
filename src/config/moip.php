@@ -31,9 +31,11 @@ return [
 	|
 	*/
 
-	'key' 	=> 'ABABABABABABABABABABABABABABABABABABABAB',
+	'credentials' => [
+		'key' 	=> 'ABABABABABABABABABABABABABABABABABABABAB',
 
-	'token'	=> '01010101010101010101010101010101',
+		'token'	=> '01010101010101010101010101010101',
+	],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -90,11 +92,13 @@ return [
 	| by the payer MoIP
 	*/
 
-	'min' 		=> 1,
+	'parcel' => [
+		'min' 		=> 1,
 
-	'max' 		=> 12,
+		'max' 		=> 12,
 
-	'rate'		=> 2,
-	
-	'transfer'	=> false,	
+		'rate'		=> 2,
+		
+		'transfer'	=> false,	
+	],
 ];
