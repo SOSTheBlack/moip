@@ -10,6 +10,7 @@ Integrates via API, your e-commerce with MoIP quickly and easily
 
 and response
 
+<<<<<<< HEAD
 - `$moip->error`
 - `$moip->response`
 - `$moip->token`
@@ -17,6 +18,7 @@ and response
 - `$moip->xmlSend`
 - `$moip->xmlGet`
 - `Moip::response()`
+>>>>>>> fd03beda032061f39612f03018c4c4d40d37689f
 
 ## Instalation
 
