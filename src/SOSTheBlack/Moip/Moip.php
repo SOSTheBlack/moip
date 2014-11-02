@@ -52,11 +52,23 @@ class Moip extends Validator
 		$this->moip->setAdds($data->values->adds);
 		$this->moip->setDeduct($data->values->deduct);
 		$this->moip->setUniqueID($data->unique_id);
-		$this->moip->addParcel(
-			$data->parcel->min, 
-			$data->parcel->max, 
-			$data->parcel->rate, 
-			$data->parcel->transfer);
+		if ($this->config->parcel->active === true) {
+			$this->moip->addParcel(
+				$data->parcel->min, 
+				$data->parcel->max, 
+				$data->parcel->rate, 
+				$data->parcel->transfer
+			);
+		}
+		if ($this->config->comission->active === true) {
+			$this->moip->addComission(
+				$data->comission->reason,
+				$data->comission->receiver,
+				$data->comission->value,
+				$data->comission->percentageValue,
+				$data->comission->ratePayer
+			);
+		}
 		$this->getReceiver($data);
 		$this->getValidate();
 		return $this->response($this->moip->send());
