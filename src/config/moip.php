@@ -103,7 +103,7 @@ return [
 
 		'max' 		=> 12,
 
-		'rate'		=> false,
+		'rate'		=> 0,
 		
 		'transfer'	=> true,	
 
