@@ -32,9 +32,11 @@ return [
 	*/
 
 	'credentials' => [
+
 		'key' 	=> 'ABABABABABABABABABABABABABABABABABABABAB',
 
 		'token'	=> '01010101010101010101010101010101',
+		
 	],
 
 	/*
@@ -85,6 +87,7 @@ return [
 	|
 	| Responsible for setting up the installment options that will be available
 	| to the payer.
+	|
 	| Min: Minimum number of parcel to the payer.
 	| max: Maximum amount of parcel to the payer.
 	| rate: Amount of interest a.m per plot.
@@ -93,12 +96,50 @@ return [
 	*/
 
 	'parcel' => [
+
+		'active'	=> false,
+
 		'min' 		=> 1,
 
 		'max' 		=> 12,
 
-		'rate'		=> 2,
+		'rate'		=> false,
 		
-		'transfer'	=> false,	
+		'transfer'	=> true,	
+
+	],
+
+	/*
+	|--------------------------------------------------------------------------
+	| Added Comission
+	|--------------------------------------------------------------------------
+	|
+	| Used to define secondary recipients. You can also set one side to pay 
+	| the fee MOIP recipients with the value received.
+	|  
+	| Reason 		 : Reason for which the secondary receiver is getting value.
+	| receiver		 : Login MOIP secondary receiver.
+	| value 		 : Value which will be allocated to the secondary receiver.
+	| percentageValue: If "true" sets that value will be calculated in 
+	| relation to the percentage of the total value of the transaction.
+	| ratePayer		 : If "true" sets that secondary recipient will pay the MOIP 
+	| withvalue received.
+	|
+	*/
+
+	'comission' => [
+
+		'active'			=> false,
+
+		'reason' 			=> '',
+
+		'receiver'			=> '',
+
+		'value'				=> 0,
+
+		'percentageValue' 	=> false,
+
+		'ratePayer' 		=> false,
+
 	],
 ];

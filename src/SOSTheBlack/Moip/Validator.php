@@ -20,8 +20,9 @@ class Validator
 	protected function validatorData($data)
 	{
 		$data = $this->toObject($data);
-		$data->values = $this->toObject($data, 'values', true);
-		$data->parcel = $this->toObject($data, 'parcel', false);
+		$data->values 	 = $this->toObject($data, 'values', true);
+		$data->parcel 	 = $this->toObject($data, 'parcel', false);
+		$data->comission = $this->toObject($data, 'comission', false);
 		return $data;
 	}
 
@@ -35,9 +36,10 @@ class Validator
 		if (empty($config)) {
 			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
 		} else {
-			$config = $this->toObject($config);
-			$config->credentials = $this->toObject($config, 'credentials', true);
-			$config->parcel = $this->toObject($config, 'parcel', true);
+			$config 				= $this->toObject($config);
+			$config->credentials 	= $this->toObject($config, 'credentials', true);
+			$config->parcel 		= $this->toObject($config, 'parcel', true);
+			$config->comission 		= $this->toObject($config, 'comission', true);
 			return $config;
 		}
 	}
@@ -110,12 +112,68 @@ class Validator
 			throw new LengthException("receiver não pode conter mais de 65 caracteres");
 		}
 		
-		$data->parcel 			= $this->getParcel($data, $config, 'parcel');
-		$data->parcel->min 		= $this->getParcel($data, $config, 'parcel', 'min');
-		$data->parcel->max 		= $this->getParcel($data, $config, 'parcel', 'max');
-		$data->parcel->rate 	= $this->getParcel($data, $config, 'parcel', 'rate');
-		$data->parcel->transfer = $this->getParcel($data, $config, 'parcel', 'transfer');
+		$data->parcel 			= $this->getParams($data, $config, 'parcel');
+		$data->parcel->min 		= $this->getParams($data, $config, 'parcel', 'min');
+		$data->parcel->max 		= $this->getParams($data, $config, 'parcel', 'max');
+		$data->parcel->rate 	= $this->getParams($data, $config, 'parcel', 'rate');
+		$data->parcel->transfer = $this->getParams($data, $config, 'parcel', 'transfer');
 		$this->validatorParcel($data->parcel);
+
+		$data->comission 					= $this->getParams($data, $config, 'comission');
+ 		$data->comission->reason 			= $this->getParams($data, $config, 'comission', 'reason');
+ 		$data->comission->receiver 			= $this->getParams($data, $config, 'comission', 'receiver');
+ 		$data->comission->value 			= $this->getParams($data, $config, 'comission', 'value');
+ 		$data->comission->percentageValue 	= $this->getParams($data, $config, 'comission', 'percentageValue');
+ 		$data->comission->ratePayer 		= $this->getParams($data, $config, 'comission', 'ratePayer');
+ 		$this->validatorComission($data->comission);
+
+
+	}
+
+	private function validatorComission($comission)
+	{
+		if (! is_numeric($comission->value)) {
+			throw new UnexpectedValueException("Parâmetro $comission->value dever ser numérico");
+		}
+		if (! is_bool($comission->percentageValue)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($comission->percentageValue) . ", esperava-se boolean");
+		}
+		if (! is_bool($comission->ratePayer)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($comission->ratePayer) . ", esperava-se boolean");
+		}	
+	}
+
+	/**
+	 * Search all parameters
+	 * @param  object $data   
+	 * @param  object $config 
+	 * @param  string $key    
+	 * @param  string $value  
+	 * @return object $key and $data
+	 */
+	private function getParams($data, $config, $key, $value = '')
+	{
+		if (! empty($value)) {
+			if (! isset($data->$key->$value)) {
+				if (! isset($config->$key->$value)) {
+					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+				} else {
+					return $config->$key->$value;
+				}
+			} else {
+				return $data->$key->$value;
+			}
+		} else {
+			if (! isset($data->$key)) {
+				if (! isset($config->$key)) {
+					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+				} else {
+					return $config->$key;
+				}
+			} else {
+				return $data->$key;
+			}			
+		}
 	}
 
 	/**
@@ -143,39 +201,6 @@ class Validator
 
 		if (! is_bool($parcel->transfer)) {
 			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($parcel->transfer));
-		}
-	}
-
-	/**
-	 * Search all parameters related to a portion
-	 * @param  object $data   
-	 * @param  object $config 
-	 * @param  string $key    
-	 * @param  string $value  
-	 * @return object $key and $data
-	 */
-	private function getParcel($data, $config, $key, $value = '')
-	{
-		if (! empty($value)) {
-			if (! isset($data->$key->$value)) {
-				if (! isset($config->$key->$value)) {
-					throw new InvalidArgumentException("Não existe o parâmetro value no arquivo de configuração moip.php");
-				} else {
-					return $config->$key->$value;
-				}
-			} else {
-				return $data->$key->$value;
-			}
-		} else {
-			if (! isset($data->$key)) {
-				if (! isset($config->$key)) {
-					throw new InvalidArgumentException("Não existe o parâmetro value no arquivo de configuração moip.php");
-				} else {
-					return $config->$key;
-				}
-			} else {
-				return $data->$key;
-			}			
 		}
 	}
 
