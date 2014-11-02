@@ -10,12 +10,12 @@ Integrates via API, your e-commerce with MoIP quickly and easily
 
 and response
 
-- `public 'response' => boolean true`
-- `public 'error' => boolean false`
-- `public 'token' => string 'J2E011C4K15150C2Y093Q5R0B0K1C2U7H4A0C070V0P0N0Y6W2X8G1T3M0R9'`
-- `public 'payment_url' => string 'desenvolvedor.moip.com.br/...do?token=J2E011C4K15150C2Y093Q5R0B0K1C2U7H4A0C070V0P0N0Y6W2X8G1T3M0R9'`
-- `public 'xmlSend' => string '<?xml version="1.0" encoding="utf-8"?><EnviarInstrucao>...</EnviarInstrucao>'`
-- `public 'xmlGet' => string '<ns1:EnviarInstrucaoUnicaResponse xmlns:ns1="http://www.moip.com.br/ws/alpha/">...</ns1:EnviarInstrucaoUnicaResponse>'`
+- `public 'response' => true`
+- `public 'error' => false`
+- `public 'token' => 'J2E011C4K15150C2Y093Q5R0B0K1C2U7H4A0C070V0P0N0Y6W2X8G1T3M0R9'`
+- `public 'payment_url' => do?token=J2E011C4K15150C2Y093Q5R0B0K1C2U7H4A0C070V0P0N0Y6W2X8G1T3M0R9'`
+- `public 'xmlSend' => '<?xml version="1.0" encoding="utf-8"?>... </EnviarInstrucao>'`
+- `public 'xmlGet' => '<ns1:EnviarInstrucaoUnicaResponse...</ns1:EnviarInstrucaoUnicaResponse>'`
 
 ## Instalation
 
