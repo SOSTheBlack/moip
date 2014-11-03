@@ -108,6 +108,16 @@ $data = [
         'ratePayer'       => true,
         'percentageValue' => true,
         'receiver'        => 'suporte@moip.com.br',
+    ],
+    'billet' => [
+        'expiration' => 3,
+        'workingDays'=> true,
+        'instructions' => [
+            'firstLine' => 'First line of comment of billet',
+            'secondLine'=> 'Second line of comment of billet',
+            'lastLine'  => 'Last line of comment of billet'
+        ],
+        'urlLogo' => 'http://seutie.com.br/logo.png'
     ]
 ];
 try {
@@ -120,6 +130,7 @@ try {
 ## Sending parameters
 
 #### values
+----------------------
 ##### $full_price_products: Number, $freight: Number, $coupon: Number
 
 1. $full_price_products: Responsible for setting the value that should be paid.
@@ -134,6 +145,7 @@ $data['values'] => [
 ```
 
 #### unique_id
+----------------------
 ##### $id: String
 
 Its unique identifier request this same information will be sent to you on our notification of changes in status so that you can identify and treat your application status.
@@ -141,6 +153,7 @@ Its unique identifier request this same information will be sent to you on our n
 `$data['unique_id'] = $id;`
 
 #### reason
+----------------------
 ##### $value: String
 
 Responsible for defining the reason for the payment
@@ -148,6 +161,7 @@ Responsible for defining the reason for the payment
 `$data['reason'] => $value;`
 
 #### receiver
+----------------------
 ##### $receiver String
 
 Identifies the user who will receive payment in MoIP
@@ -155,6 +169,7 @@ Identifies the user who will receive payment in MoIP
 `$data['receiver'] = $receiver;`
 
 #### parcel
+----------------------
 ##### $min: Number, $max: Number, $rate : Number, $transfer : Boolean
 
 Responsible for the installment which will be available to the paying options.
@@ -173,6 +188,7 @@ $data['parcel'] => [
 ```
 
 #### comission
+----------------------
 ##### $reason: String, $receiver: String, $value: Number, $percentageValue: Boolean, $ratePayer: Boolean
 
 1. $ reason: Reason / Motif to which the secondary recipient will receive the set value.
@@ -190,6 +206,25 @@ $data['comission'] => [
     'ratePayer' => true, 
     'percentageValue' => true, 
     'receiver' => 'suporte@moip.com.br'
+];
+```
+
+#### billet
+----------------------
+##### $expiration: Int ou Date, $workingDays: Boolean, $instructions: Array(), $uriLogo: String
+
+```
+$data['billet'] = [
+    'billet' => [
+        'expiration' => 3,
+        'workingDays'=> true,
+        'instructions' => [
+            'firstLine' => 'First line of comment of billet'',
+            'secondLine'=> 'Second line of comment of billet'',
+            'lastLine'  => 'Last line of comment of billet'
+        ],
+        'urlLogo' => 'http://seutie.com.br/logo.png'
+    ]
 ];
 ```
 

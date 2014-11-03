@@ -23,8 +23,8 @@ class Validator
 		$data->values 	 = $this->toObject($data, 'values', true);
 		$data->parcel 	 = $this->toObject($data, 'parcel');
 		$data->comission = $this->toObject($data, 'comission');
-		// $data->billet	 = $this->toObject($data, 'billet');
-		// $data->billet->instructions = $this->toObject($data->billet, 'instructions') ;
+		$data->billet	 = $this->toObject($data, 'billet');
+		$data->billet->instructions = $this->toObject($data->billet, 'instructions') ;
 		return $data;
 	}
 
@@ -42,6 +42,8 @@ class Validator
 			$config->credentials 	= $this->toObject($config, 'credentials', true);
 			$config->parcel 		= $this->toObject($config, 'parcel', true);
 			$config->comission 		= $this->toObject($config, 'comission', true);
+			$config->billet 		= $this->toObject($config, 'billet');
+			$config->billet->instructions = $this->toObject($config->billet, 'instructions');
 			return $config;
 		}
 	}
@@ -129,9 +131,52 @@ class Validator
  		$data->comission->ratePayer 		= $this->getParams($data, $config, 'comission', 'ratePayer');
  		$this->validatorComission($data->comission);
 
-
+ 		$data->billet = $this->getParams($data, $config, 'billet');
+ 		$data->billet->expiration = $this->getParams($data, $config, 'billet', 'expiration');
+ 		$data->billet->workingDays = $this->getParams($data, $config, 'billet', 'workingDays');
+ 		$data->billet->instructions = $this->getParams($data, $config, 'billet', 'instructions');
+ 		$data->billet->instructions->firstLine = $this->getParams($data->billet, $config->billet, 'instructions', 'firstLine');
+ 		$data->billet->instructions->secondLine = $this->getParams($data->billet, $config->billet, 'instructions', 'secondLine');
+ 		$data->billet->instructions->lastLine = $this->getParams($data->billet, $config->billet, 'instructions', 'lastLine');
+ 		$data->billet->urlLogo = $this->getParams($data, $config, 'billet', 'urlLogo');
+ 		$this->validatorBillet($data->billet);
 	}
 
+	/**
+	 * Validation of billet
+	 * @param  object $billet billet info
+	 * @return void
+	 */
+	private function validatorBillet($billet)
+	{
+		if (! is_integer($billet->expiration) && ! is_string($billet->expiration)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->expiration) . ", esperava-se integer ou string de data");
+		}
+		if (! is_bool($billet->workingDays)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->workingDays) . ", esperava-se boleean");
+		}
+		if (! is_object($billet->instructions)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->instructions) . ", esperava-se object");
+		}
+		if (! is_string($billet->instructions->firstLine) || ! is_string($billet->instructions->secondLine) || ! is_string($billet->instructions->lastLine)) {
+			throw new UnexpectedValueException("Menssagens do boleto devem ser alfanuméricos");	
+		}
+		if (strlen($billet->instructions->firstLine) > 63 || strlen($billet->instructions->secondLine) > 63 || strlen($billet->instructions->lastLine) > 63) {
+			throw new InvalidArgumentException("Menssagens do boleto não devem conter mais de 63 caracteres");	
+		}
+		if (! is_string($billet->urlLogo)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->utlLogo) . ", esperava-se string");
+		}
+		if (strlen($billet->urlLogo) > 256) {
+			throw new InvalidArgumentException("Menssagens do boleto não devem conter mais de 256 caracteres");	
+		}
+	}
+
+	/**
+	 * Validation of comission
+	 * @param  object $comission comission info
+	 * @return void
+	 */
 	private function validatorComission($comission)
 	{
 		if (! is_numeric($comission->value)) {

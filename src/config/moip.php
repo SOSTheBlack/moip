@@ -143,6 +143,7 @@ return [
 
 	],
 
+
 	/*
 	|--------------------------------------------------------------------------
 	| Billet Config
@@ -152,7 +153,7 @@ return [
 	| the banking Billet.
 	|
 	| expiration: Date in "YYYY-MM-DD" format or number of days.
-	| workingDay: If "$ expiration" is the amount of days you can set to.
+	| workingDays: If "expiration" is the amount of days you can set to.
 	| "true" to that is counted in business days, the default is calendar days.
 	| instructions: Additional Message to be printed on the ticket, up to 
 	| three messages.
@@ -162,22 +163,21 @@ return [
 
 	'billet' => [
 
-		'expiration' => 3,
+		'expiration' => 10,
 
-		'workingDay' => true,
+		'workingDays' => false,
 
 		'instructions' => [
 
-			'firstLine',
+			'firstLine' => 'First line of comment of billet',
 
-			'secondLine',
+			'secondLine' => 'Second line of comment of billet',
 
-			'lastLine',
+			'lastLine' => 'Last line of comment of billet'
 
 		],
 
-		'urlLogo' => 'http://seusite.com.br/logo.png',
-
+		'urlLogo' => 'http://seusite.com.br/logo.png'
 	],
 
 ];

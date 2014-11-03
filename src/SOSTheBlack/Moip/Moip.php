@@ -47,7 +47,6 @@ class Moip extends Validator
 	{
 		$data = $this->initialize($data);
 		$this->validatorSend($data, $this->config);
-		
 		$this->moip->setReason($data->reason);
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
@@ -70,17 +69,16 @@ class Moip extends Validator
 				$data->comission->ratePayer
 			);
 		}
-
-		// $this->moip->setBilletConf(
-		// 	$data->billet->expiration,
-		// 	$data->billet->workingDays,
-		// 	[
-		// 		$data->billet->instructions->firstLine,
-		// 		$data->billet->instructions->secondLine,
-		// 		$data->billet->instructions->lastLine
-		// 	],
-		// 	$data->billet->urlLogo
-		// );
+		$this->moip->setBilletConf(
+			$data->billet->expiration,
+			$data->billet->workingDays,
+			[
+				$data->billet->instructions->firstLine,
+				$data->billet->instructions->secondLine,
+				$data->billet->instructions->lastLine
+			],
+			$data->billet->urlLogo
+		);
 		
 		$this->getReceiver($data);
 		$this->getValidate();
