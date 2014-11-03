@@ -18,6 +18,8 @@ and response
 - `$moip->xmlGet`
 - `Moip::response()`
 
+![Moip](http://www.tickimg.com.br/uploads/_captura_de_tela_de.png)
+
 ## Instalation
 
 ### Laravel 4.2 and Blow
