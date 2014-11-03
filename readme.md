@@ -191,12 +191,12 @@ $data['parcel'] => [
 ----------------------
 ##### $reason: String, $receiver: String, $value: Number, $percentageValue: Boolean, $ratePayer: Boolean
 
-1. $ reason: Reason / Motif to which the secondary recipient will receive the set value.
-2. $ receiver: Login MOIP the User to receive the value.
-3. $ value: Value which will be allocated to the secondary receiver.
-4. $ percentageValue: If "true" sets that value will be calculated in relation to the percentage of
+1. $reason: Reason / Motif to which the secondary recipient will receive the set value.
+2. $receiver: Login MOIP the User to receive the value.
+3. $value: Value which will be allocated to the secondary receiver.
+4. $percentageValue: If "true" sets that value will be calculated in relation to the percentage of
 the total value of the transaction.
-5. $ ratepayer: If "true" sets that secondary recipient will pay the MOIP with
+5. $ratepayer: If "true" sets that secondary recipient will pay the MOIP with
 value received.
 
 ```
@@ -212,6 +212,11 @@ $data['comission'] => [
 #### billet
 ----------------------
 ##### $expiration: Int ou Date, $workingDays: Boolean, $instructions: Array(), $uriLogo: String
+
+1. $expiration: Date in "YYYY-MM-DD" format or number of days.
+2. $workingDays: If "expiration" is the amount of days you can set to. "true" to that is counted in business days, the default is calendar days.
+3. $instructions: Additional Message to be printed on the ticket, up to three messages.
+4. $urlLogo: URL of your logo maximum dimensions 75px wide by 40px high.
 
 ```
 $data['billet'] = [
