@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use LengthException;
 use LogicException;
 use Exception;
+use StdClass;
 
 /**
  * Class to validate all data Moip
@@ -19,8 +20,30 @@ class Validator
 	protected function validatorData($data)
 	{
 		$data = $this->toObject($data);
-		$data->values = $this->toObject($data, 'values', true);
+		$data->values 	 = $this->toObject($data, 'values', true);
+		$data->parcel 	 = $this->toObject($data, 'parcel');
+		$data->comission = $this->toObject($data, 'comission');
+		// $data->billet	 = $this->toObject($data, 'billet');
+		// $data->billet->instructions = $this->toObject($data->billet, 'instructions') ;
 		return $data;
+	}
+
+	/**
+	 * Verifies the existence of the configuration file Moip
+	 * @param  array $config Moip the configuration
+	 * @return object        Moip the configuration
+	 */
+	protected function validatorConfig($config)
+	{
+		if (empty($config)) {
+			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
+		} else {
+			$config 				= $this->toObject($config);
+			$config->credentials 	= $this->toObject($config, 'credentials', true);
+			$config->parcel 		= $this->toObject($config, 'parcel', true);
+			$config->comission 		= $this->toObject($config, 'comission', true);
+			return $config;
+		}
 	}
 
 	/**
@@ -36,7 +59,9 @@ class Validator
 			return (object) $data;
 		} else {
 			if (! isset($data->$value) && $required === true) {
-				throw new LogicException("É necessário enviar os valores da compra", 1);
+				throw new LogicException("É obrigatório enviar ". $value, 1);
+			} elseif (! isset($data->$value) && $required === false) {
+				return (object) $data->$value = new stdClass();
 			} else {
 				return (object) $data->$value;
 			}
@@ -83,10 +108,101 @@ class Validator
 			} else {
 				$data->receiver = $config->receiver;
 			}
-		}
+		} 
 
 		if (strlen($data->receiver) > 65) {
 			throw new LengthException("receiver não pode conter mais de 65 caracteres");
+		}
+		
+		$data->parcel 			= $this->getParams($data, $config, 'parcel');
+		$data->parcel->min 		= $this->getParams($data, $config, 'parcel', 'min');
+		$data->parcel->max 		= $this->getParams($data, $config, 'parcel', 'max');
+		$data->parcel->rate 	= $this->getParams($data, $config, 'parcel', 'rate');
+		$data->parcel->transfer = $this->getParams($data, $config, 'parcel', 'transfer');
+		$this->validatorParcel($data->parcel);
+
+		$data->comission 					= $this->getParams($data, $config, 'comission');
+ 		$data->comission->reason 			= $this->getParams($data, $config, 'comission', 'reason');
+ 		$data->comission->receiver 			= $this->getParams($data, $config, 'comission', 'receiver');
+ 		$data->comission->value 			= $this->getParams($data, $config, 'comission', 'value');
+ 		$data->comission->percentageValue 	= $this->getParams($data, $config, 'comission', 'percentageValue');
+ 		$data->comission->ratePayer 		= $this->getParams($data, $config, 'comission', 'ratePayer');
+ 		$this->validatorComission($data->comission);
+
+
+	}
+
+	private function validatorComission($comission)
+	{
+		if (! is_numeric($comission->value)) {
+			throw new UnexpectedValueException("Parâmetro $comission->value dever ser numérico");
+		}
+		if (! is_bool($comission->percentageValue)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($comission->percentageValue) . ", esperava-se boolean");
+		}
+		if (! is_bool($comission->ratePayer)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($comission->ratePayer) . ", esperava-se boolean");
+		}	
+	}
+
+	/**
+	 * Search all parameters
+	 * @param  object $data   
+	 * @param  object $config 
+	 * @param  string $key    
+	 * @param  string $value  
+	 * @return object $key and $data
+	 */
+	private function getParams($data, $config, $key, $value = '')
+	{
+		if (! empty($value)) {
+			if (! isset($data->$key->$value)) {
+				if (! isset($config->$key->$value)) {
+					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+				} else {
+					return $config->$key->$value;
+				}
+			} else {
+				return $data->$key->$value;
+			}
+		} else {
+			if (! isset($data->$key)) {
+				if (! isset($config->$key)) {
+					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+				} else {
+					return $config->$key;
+				}
+			} else {
+				return $data->$key;
+			}			
+		}
+	}
+
+	/**
+	 * Validation of params for parcel
+	 * @param  object $parcel 
+	 * @return void
+	 */
+	private function validatorParcel($parcel)
+	{
+		if (! is_int($parcel->min)) {
+			throw new UnexpectedValueException("Espera-se inteiro, foi passado ". gettype($parcel->min));
+		} elseif ($parcel->min < 2 && $parcel->min > 12) {
+			throw new InvalidArgumentException("Parcela minima tem que estar entre 2 e 12");
+		} elseif (! is_int($parcel->max)) {
+			throw new UnexpectedValueException("Espera-se inteiro, foi passado ". gettype($parcel->max));
+		} elseif ($parcel->max < 2 && $parcel->max > 12) {
+			throw new InvalidArgumentException("Parcela maxima tem que estar entre 2 e 12");
+		}
+
+		if (! is_numeric($parcel->rate)) {
+			throw new UnexpectedValueException("Espera-se float, foi passado ". gettype($parcel->rate));
+		} elseif (strlen($parcel->rate) > 7) {
+			throw new InvalidArgumentException("Não pode conter mais de 7 caracteres");
+		}
+
+		if (! is_bool($parcel->transfer)) {
+			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($parcel->transfer));
 		}
 	}
 
@@ -143,20 +259,6 @@ class Validator
 				throw new UnexpectedValueException("Reason deve ser alfanumárico");
 		} else {
 			return $config->reason;
-		}
-	}
-
-	/**
-	 * Verifies the existence of the configuration file Moip
-	 * @param  array $config Moip the configuration
-	 * @return object        Moip the configuration
-	 */
-	protected function validatorConfig($config)
-	{
-		if (empty($config)) {
-			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
-		} else {
-			return (object) $config;
 		}
 	}
 

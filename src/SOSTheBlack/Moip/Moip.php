@@ -47,11 +47,41 @@ class Moip extends Validator
 	{
 		$data = $this->initialize($data);
 		$this->validatorSend($data, $this->config);
+		
 		$this->moip->setReason($data->reason);
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
 		$this->moip->setDeduct($data->values->deduct);
 		$this->moip->setUniqueID($data->unique_id);
+		if ($this->config->parcel->active === true) {
+			$this->moip->addParcel(
+				$data->parcel->min, 
+				$data->parcel->max, 
+				$data->parcel->rate, 
+				$data->parcel->transfer
+			);
+		}
+		if ($this->config->comission->active === true) {
+			$this->moip->addComission(
+				$data->comission->reason,
+				$data->comission->receiver,
+				$data->comission->value,
+				$data->comission->percentageValue,
+				$data->comission->ratePayer
+			);
+		}
+
+		// $this->moip->setBilletConf(
+		// 	$data->billet->expiration,
+		// 	$data->billet->workingDays,
+		// 	[
+		// 		$data->billet->instructions->firstLine,
+		// 		$data->billet->instructions->secondLine,
+		// 		$data->billet->instructions->lastLine
+		// 	],
+		// 	$data->billet->urlLogo
+		// );
+		
 		$this->getReceiver($data);
 		$this->getValidate();
 		return $this->response($this->moip->send());
@@ -115,10 +145,10 @@ class Moip extends Validator
 	 */
 	private function authentication()
 	{
-		if ($this->validatorCredential($this->config) === true) {
+		if ($this->validatorCredential($this->config->credentials) === true) {
 			$this->moip->setCredential([
-				'key'	=> $this->config->key,
-				'token' => $this->config->token,
+				'key'	=> $this->config->credentials->key,
+				'token' => $this->config->credentials->token,
 			]);
 		}
 		return $this;
