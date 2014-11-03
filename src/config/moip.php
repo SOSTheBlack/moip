@@ -180,4 +180,24 @@ return [
 		'urlLogo' => 'http://seusite.com.br/logo.png'
 	],
 
+	/*
+	|--------------------------------------------------------------------------
+	| Message to Checkout
+	|--------------------------------------------------------------------------
+	|
+	| Display additional messages at checkout MOIP to your buyer.
+	|
+	*/
+
+	'message' => [
+
+		'firstLine' => 'First line of comment of checkout',
+
+		'secondLine' => 'Second line of comment of checkout',
+
+		'lastLine' => 'Last line of comment of checkout'
+		
+	]
+
+
 ];
