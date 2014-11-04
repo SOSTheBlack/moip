@@ -88,6 +88,8 @@ class Moip extends Validator
 		if (! empty($data->message->lastLine)) {
 			$this->moip->addMessage($data->message->lastLine);	
 		}
+
+		$this->moip->setReturnURL($data->returnURL);
 		
 		$this->getReceiver($data);
 		$this->getValidate();

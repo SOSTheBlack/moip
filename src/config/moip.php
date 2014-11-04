@@ -197,7 +197,18 @@ return [
 
 		'lastLine' => ''
 		
-	]
+	],
 
+	/*
+	|--------------------------------------------------------------------------
+	| Return URL
+	|--------------------------------------------------------------------------
+	|
+	| responsible for defining the URL that the buyer will be redirected to 
+	| finalize a payment through checkout MoIP
+	|
+	*/
+
+	'returnURL' => 'https://meusite.com.br/pedidofinalizado',
 
 ];

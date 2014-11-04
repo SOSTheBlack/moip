@@ -91,6 +91,7 @@ $data = [
     'unique_id' => 100000001,
     'reason'    => 'market of Natal 01',
     'receiver'  => 'integracao@moip.com.br',
+    'returnURL' => 'https://meusite.com.br/cliente/$id/pedido/pedidorealizado',
     'parcel'    => [
         'min'       => 2, 
         'max'       => 12, 
@@ -250,6 +251,16 @@ $data['message'] => [
     'secondLine'=> 'comment of checkout'',
     'lastLine'  => 'comment of checkout'
 ];
+```
+
+#### returnURL
+----------------------
+##### $url : String
+
+1. $url: responsible for defining the URL that the buyer will be redirected to finalize a payment through checkout MoIP
+
+```
+$dta['returnURL'] => 'https://meusite.com.br/pedidofinalizado';
 ```
 
 ### Data Response
