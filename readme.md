@@ -125,6 +125,13 @@ $data = [
         'firstLine' => 'First comment of checkout',
         'secondLine'=> 'Second comment of checkout',
         'lastLine'  => 'Last comment of checkout'
+    ],
+    'payment' => [
+        'creditCard'=> true,
+        'billet'    => false,
+        'financing' => false,
+        'debit'     => false,
+        'debitCard' => false
     ]
 ];
 try {
@@ -157,7 +164,9 @@ $data['values'] => [
 
 Its unique identifier request this same information will be sent to you on our notification of changes in status so that you can identify and treat your application status.
 
-`$data['unique_id'] = $id;`
+```
+$data['unique_id'] = $id;
+```
 
 #### reason
 ----------------------
@@ -165,7 +174,9 @@ Its unique identifier request this same information will be sent to you on our n
 
 Responsible for defining the reason for the payment
 
-`$data['reason'] => $value;`
+```
+$data['reason'] = $value;
+```
 
 #### receiver
 ----------------------
@@ -173,7 +184,9 @@ Responsible for defining the reason for the payment
 
 Identifies the user who will receive payment in MoIP
 
-`$data['receiver'] = $receiver;`
+```
+$data['receiver'] = $receiver;
+```
 
 #### parcel
 ----------------------
@@ -186,7 +199,7 @@ Responsible for the installment which will be available to the paying options.
 3. $rate : Amount of interest a.m per parcel.
 4. $transfer : If `true` sets the default value of the interest will be paid by the paying MOIP.
 ```
-$data['parcel'] => [
+$data['parcel'] = [
     'min'       => 2, 
     'max'       => 12, 
     'rate'      => 1.5, 
@@ -207,7 +220,7 @@ the total value of the transaction.
 value received.
 
 ```
-$data['comission'] => [ 
+$data['comission'] = [ 
     'value' => 7, 
     'reason' => 'Taxa MoIP', 
     'ratePayer' => true, 
@@ -247,7 +260,7 @@ $data['billet'] = [
 1. $msg: Display additional messages at checkout MOIP to your buyer.
 
 ```
-$data['message'] => [
+$data['message'] = [
     'firstLine' => 'comment of checkout'',
     'secondLine'=> 'comment of checkout'',
     'lastLine'  => 'comment of checkout'
@@ -261,7 +274,7 @@ $data['message'] => [
 1. $url: responsible for defining the URL that the buyer will be redirected to finalize a payment through checkout MoIP
 
 ```
-$dta['returnURL'] => 'https://meusite.com.br/pedidofinalizado';
+$data['returnURL'] = 'https://meusite.com.br/pedidofinalizado';
 ```
 
 #### notificationURL
@@ -271,7 +284,28 @@ $dta['returnURL'] => 'https://meusite.com.br/pedidofinalizado';
 1. $url: responsible for defining the URL to which the MOIP shall notify to the NASP (Notification of Change in Status of Payment) the change of status.
 
 ```
-$dta['notificationURL'] => 'https://meusite.com.br/nasp';
+$data['notificationURL'] = 'https://meusite.com.br/nasp';
+```
+
+#### payment
+----------------------
+##### $payment : String
+
+1. $payment: Defines which forms of payment that will be displayed to the payer in Checkout MOIP
+billet: To provide a "Billet Banking" as payment option at checkout.
+financing: To enable the "Financing" as payment option at checkout.
+debit: To provide the "Debit account" as a payment method at checkout.
+creditCard: To provide a "Credit Card" as payment option in checkout.
+debitCard: To provide a "Debit Card" as payment option in checkout.
+
+```
+$data['payment'] = [
+    'creditCard'=> true,
+    'billet'    => false,
+    'financing' => false,
+    'debit'     => false,
+    'debitCard' => false
+]
 ```
 
 ### Data Response

@@ -26,6 +26,7 @@ class Validator
 		$data->billet	 = $this->toObject($data, 'billet');
 		$data->billet->instructions = $this->toObject($data->billet, 'instructions') ;
 		$data->message 	 = $this->toObject($data, 'message');
+		$data->payment	 = $this->toObject($data, 'payment');
 		return $data;
 	}
 
@@ -46,6 +47,7 @@ class Validator
 			$config->billet 		= $this->toObject($config, 'billet');
 			$config->billet->instructions = $this->toObject($config->billet, 'instructions');
 			$config->message 		= $this->toObject($config, 'message');
+			$config->payment 		= $this->toObject($config, 'payment');
 			return $config;
 		}
 	}
@@ -159,7 +161,19 @@ class Validator
 		$data->notificationURL = $this->getParams($data, $config, 'notificationURL');
 		if (strlen($data->notificationURL) > 256) {
 			throw new InvalidArgumentException("URL de notificação não devem conter mais de 256 caracteres");	
-		}		
+		}
+
+		$data->payment = $this->getParams($data, $config, 'payment');
+		$data->payment->creditCard = $this->getParams($data, $config, 'payment', 'creditCard');
+		$data->payment->billet = $this->getParams($data, $config, 'payment', 'billet');
+		$data->payment->financing = $this->getParams($data, $config, 'payment', 'financing');
+		$data->payment->debit = $this->getParams($data, $config, 'payment', 'debit');
+		$data->payment->debitCard = $this->getParams($data, $config, 'payment', 'debitCard');
+		foreach ($data->payment as $key => $value) {
+			if (! is_bool($value)) {
+				throw new UnexpectedValueException("$key passado é do tipo ". gettype($key) . ", esperava-se boolean");
+			}
+		}
 	}
 
 	/**
