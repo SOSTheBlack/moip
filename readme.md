@@ -233,6 +233,20 @@ $data['billet'] = [
 ];
 ```
 
+#### message
+----------------------
+##### $msg: String
+
+1. $msg: Display additional messages at checkout MOIP to your buyer.
+
+```
+$data['message'] => [
+    'firstLine' => 'comment of checkout'',
+    'secondLine'=> 'comment of checkout'',
+    'lastLine'  => 'comment of checkout'
+];
+```
+
 ### Data Response
 
 Method | Response

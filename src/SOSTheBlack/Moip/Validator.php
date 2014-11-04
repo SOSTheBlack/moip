@@ -147,6 +147,7 @@ class Validator
  		$data->message->firstLine	= $this->getParams($data, $config, 'message', 'firstLine');
  		$data->message->secondLine	= $this->getParams($data, $config, 'message', 'secondLine');
  		$data->message->lastLine	= $this->getParams($data, $config, 'message', 'lastLine');
+ 		$this->validatorMessage($data->message);
 	}
 
 	/**
@@ -179,6 +180,13 @@ class Validator
 			} else {
 				return $data->$key;
 			}			
+		}
+	}
+
+	private function validatorMessage($message)
+	{
+		if (strlen($message->firstLine) > 256 || strlen($message->secondLine) > 256 || strlen($message->firstLine > 256)) {
+			throw new InvalidArgumentException("Menssagens do checkout não devem conter mais de 256 caracteres");	
 		}
 	}
 

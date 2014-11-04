@@ -79,9 +79,15 @@ class Moip extends Validator
 			],
 			$data->billet->urlLogo
 		);
-		$this->moip->addMessage($data->message->firstLine);
-		$this->moip->addMessage($data->message->secondLine);
-		$this->moip->addMessage($data->message->lastLine);
+		if (! empty($data->message->firstLine)) {
+			$this->moip->addMessage($data->message->firstLine);	
+		}
+		if (! empty($data->message->secondLine)) {
+			$this->moip->addMessage($data->message->secondLine);	
+		}
+		if (! empty($data->message->lastLine)) {
+			$this->moip->addMessage($data->message->lastLine);	
+		}
 		
 		$this->getReceiver($data);
 		$this->getValidate();

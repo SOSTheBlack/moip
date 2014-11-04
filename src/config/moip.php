@@ -191,11 +191,11 @@ return [
 
 	'message' => [
 
-		'firstLine' => 'First line of comment of checkout',
+		'firstLine' => '',
 
-		'secondLine' => 'Second line of comment of checkout',
+		'secondLine' => '',
 
-		'lastLine' => 'Last line of comment of checkout'
+		'lastLine' => ''
 		
 	]
 
