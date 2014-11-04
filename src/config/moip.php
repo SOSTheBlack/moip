@@ -211,4 +211,18 @@ return [
 
 	'returnURL' => 'https://meusite.com.br/pedidofinalizado',
 
+	/* 
+	|--------------------------------------------------------------------------
+	| Notification URL
+	|--------------------------------------------------------------------------
+	|
+	| responsible for defining the URL to which the MOIP shall notify to the 
+	| NASP (Notification of Change in Status of Payment) the change of status.
+	| Override the default URL registered in Portfolio MoIP for sending 
+	| information on changes in the payment status.
+	|
+	*/
+
+	'notificationURL' => '',
+	
 ];

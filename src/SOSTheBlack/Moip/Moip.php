@@ -90,6 +90,10 @@ class Moip extends Validator
 		}
 
 		$this->moip->setReturnURL($data->returnURL);
+
+		if (! empty($data->notificationURL)) {
+			$this->moip->setNotificationURL($data->notificationURL);
+		}
 		
 		$this->getReceiver($data);
 		$this->getValidate();

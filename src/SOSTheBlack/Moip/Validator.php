@@ -151,11 +151,15 @@ class Validator
 			throw new InvalidArgumentException("Menssagens do checkout não devem conter mais de 256 caracteres");	
 		}
 
-
 		$data->returnURL = $this->getParams($data, $config, 'returnURL');
 		if (strlen($data->returnURL) > 256) {
 			throw new InvalidArgumentException("URL de retorno não devem conter mais de 256 caracteres");	
 		}
+
+		$data->notificationURL = $this->getParams($data, $config, 'notificationURL');
+		if (strlen($data->notificationURL) > 256) {
+			throw new InvalidArgumentException("URL de notificação não devem conter mais de 256 caracteres");	
+		}		
 	}
 
 	/**

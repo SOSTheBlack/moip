@@ -92,6 +92,7 @@ $data = [
     'reason'    => 'market of Natal 01',
     'receiver'  => 'integracao@moip.com.br',
     'returnURL' => 'https://meusite.com.br/cliente/$id/pedido/pedidorealizado',
+    'notificationURL' => 'https://meusite.com.br/nasp',
     'parcel'    => [
         'min'       => 2, 
         'max'       => 12, 
@@ -261,6 +262,16 @@ $data['message'] => [
 
 ```
 $dta['returnURL'] => 'https://meusite.com.br/pedidofinalizado';
+```
+
+#### notificationURL
+----------------------
+##### $url : String
+
+1. $url: responsible for defining the URL to which the MOIP shall notify to the NASP (Notification of Change in Status of Payment) the change of status.
+
+```
+$dta['notificationURL'] => 'https://meusite.com.br/nasp';
 ```
 
 ### Data Response
