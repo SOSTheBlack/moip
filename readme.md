@@ -119,6 +119,11 @@ $data = [
         ],
         'urlLogo' => 'http://seutie.com.br/logo.png'
     ]
+    'message' => [
+        'firstLine' => 'First comment of checkout',
+        'secondLine'=> 'Second comment of checkout',
+        'lastLine'  => 'Last comment of checkout'
+    ]
 ];
 try {
     $moip = Moip::sendMoip($data);
