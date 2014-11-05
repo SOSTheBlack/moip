@@ -176,6 +176,34 @@ class Validator
 				throw new UnexpectedValueException("$key passado é do tipo ". gettype($key) . ", esperava-se boolean");
 			}
 		}
+
+		if ($this->validatorValidate($config->validate) === 'Identification' && ! isset($data->payer->address)) {
+			$payer = [
+				'name'  => ''    ,
+		        'email'  => ''   ,
+		        'payerId'  => '' ,
+		        'billingAddress' => [
+		            'address'  => '' ,
+		            'number'   => '' ,
+		            'complement'=> '',
+		            'city'   => ''   ,
+		            'neighborhood'=> '' ,
+		            'state'    => '' ,
+		            'country'  => '' ,
+		            'zipCode'  => '' ,
+		            'phone'   => ''  
+		        ]
+			];
+			if (! isset($data->payer)) {
+				throw new InvalidArgumentException("é obrigatório informar os todos os dados para pagador");	
+			} else {
+				foreach ($payer as $keyPayer => $valuePayer) {
+					if (! isset($data->payer->$keyPayer)) {
+						throw new InvalidArgumentException("é obrigatório informar $keyPayer do pagador");		
+					}
+				}
+			}
+		}
 	}
 
 	/**

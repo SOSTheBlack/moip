@@ -302,13 +302,13 @@ class Api {
                 'phone');
 
             foreach ($dataValidate as $key) {
-                if (!isset($payer[$key])) {
+                if (!isset($payer->$key)) {
                     $varNotSeted .= ' [' . $key . '] ';
                 }
             }
 
             foreach ($dataValidateAddress as $key) {
-                if (!isset($payer['billingAddress'][$key])) {
+                if (!isset($payer->billingAddress->$key)) {
                     $varNotSeted .= ' [' . $key . '] ';
                 }
             }
