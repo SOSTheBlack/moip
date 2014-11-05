@@ -53,6 +53,12 @@ class Moip extends Validator
 		$this->moip->setAdds($data->values->adds);
 		$this->moip->setDeduct($data->values->deduct);
 		$this->moip->setUniqueID($data->unique_id);
+
+		foreach ($data->payment as $key => $value) {
+			if ($value === false) continue;
+			else $this->moip->addPaymentWay($key);
+		}
+
 		if ($this->config->parcel->active === true) {
 			$this->moip->addParcel(
 				$data->parcel->min, 

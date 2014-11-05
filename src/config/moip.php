@@ -224,5 +224,34 @@ return [
 	*/
 
 	'notificationURL' => '',
-	
+
+	/*
+	|--------------------------------------------------------------------------
+	| Payment Way
+	|--------------------------------------------------------------------------
+	|
+	| Defines which forms of payment that will be displayed to the payer in 
+	| Checkout MOIP
+	|
+	| billet: To provide a "Billet Banking" as payment option at checkout.
+	| financing: To enable the "Financing" as payment option at checkout.
+	| debit: To provide the "Debit account" as a payment method at checkout.
+	| creditCard: To provide a "Credit Card" as payment option in checkout.
+ 	| debitCard: To provide a "Debit Card" as payment option in checkout.
+	|
+	*/
+
+    'payment' => [
+
+    	'creditCard'=> true,
+
+    	'billet'	=> true,
+
+    	'financing'	=> true,
+
+    	'debit'		=> true,
+
+    	'debitCard'	=> true
+
+    ]	
 ];
