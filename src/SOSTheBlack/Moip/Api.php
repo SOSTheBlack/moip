@@ -441,31 +441,31 @@ class Api {
         if (!empty($this->payer)) {
             $p = $this->payer;
             $this->xml->InstrucaoUnica->addChild('Pagador');
-            (isset($p['name'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('Nome', $this->payer['name']) : null;
-            (isset($p['email'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('Email', $this->payer['email']) : null;
-            (isset($p['payerId'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('IdPagador', $this->payer['payerId']) : null;
-            (isset($p['identity'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('Identidade', $this->payer['identity']) : null;
-            (isset($p['phone'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('TelefoneCelular', $this->payer['phone']) : null;
+            (isset($p->name)) ? $this->xml->InstrucaoUnica->Pagador->addChild('Nome', $this->payer->name) : null;
+            (isset($p->email)) ? $this->xml->InstrucaoUnica->Pagador->addChild('Email', $this->payer->email) : null;
+            (isset($p->payerId)) ? $this->xml->InstrucaoUnica->Pagador->addChild('IdPagador', $this->payer->payerId) : null;
+            (isset($p->identity)) ? $this->xml->InstrucaoUnica->Pagador->addChild('Identidade', $this->payer->identity) : null;
+            (isset($p->phone)) ? $this->xml->InstrucaoUnica->Pagador->addChild('TelefoneCelular', $this->payer->phone) : null;
 
-            $p = $this->payer['billingAddress'];
+            $p = $this->payer->billingAddress;
             $this->xml->InstrucaoUnica->Pagador->addChild('EnderecoCobranca');
-            (isset($p['address'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Logradouro', $this->payer['billingAddress']['address']) : null;
+            (isset($p->address)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Logradouro', $this->payer->billingAddress->address) : null;
 
-            (isset($p['number'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Numero', $this->payer['billingAddress']['number']) : null;
+            (isset($p->number)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Numero', $this->payer->billingAddress->number) : null;
 
-            (isset($p['complement'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Complemento', $this->payer['billingAddress']['complement']) : null;
+            (isset($p->complement)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Complemento', $this->payer->billingAddress->complement) : null;
 
-            (isset($p['neighborhood'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Bairro', $this->payer['billingAddress']['neighborhood']) : null;
+            (isset($p->neighborhood)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Bairro', $this->payer->billingAddress->neighborhood) : null;
 
-            (isset($p['city'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer['billingAddress']['city']) : null;
+            (isset($p->city)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer->billingAddress->city) : null;
 
-            (isset($p['state'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer['billingAddress']['state']) : null;
+            (isset($p->state)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer->billingAddress->state) : null;
 
-            (isset($p['country'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer['billingAddress']['country']) : null;
+            (isset($p->country)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer->billingAddress->country) : null;
 
-            (isset($p['zipCode'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('CEP', $this->payer['billingAddress']['zipCode']) : null;
+            (isset($p->zipCode)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('CEP', $this->payer->billingAddress->zipCode) : null;
 
-            (isset($p['phone'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer['billingAddress']['phone']) : null;
+            (isset($p->phone)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer->billingAddress->phone) : null;
         }
 
         return $this;

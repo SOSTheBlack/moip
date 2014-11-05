@@ -47,6 +47,7 @@ class Moip extends Validator
 	{
 		$data = $this->initialize($data);
 		$this->validatorSend($data, $this->config);
+		//dd($data);
 		$this->moip->setReason($data->reason);
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
@@ -94,6 +95,8 @@ class Moip extends Validator
 		if (! empty($data->notificationURL)) {
 			$this->moip->setNotificationURL($data->notificationURL);
 		}
+
+		$this->moip->setPayer($data->payer);
 		
 		$this->getReceiver($data);
 		$this->getValidate();

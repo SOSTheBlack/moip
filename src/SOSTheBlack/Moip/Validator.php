@@ -26,6 +26,8 @@ class Validator
 		$data->billet	 = $this->toObject($data, 'billet');
 		$data->billet->instructions = $this->toObject($data->billet, 'instructions') ;
 		$data->message 	 = $this->toObject($data, 'message');
+		$data->payer 	 = $this->toObject($data, 'payer');
+		$data->payer->billingAddress = $this->toObject($data->payer, 'billingAddress');
 		return $data;
 	}
 
