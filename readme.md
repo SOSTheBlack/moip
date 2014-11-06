@@ -3,10 +3,10 @@
 
 [![Latest Stable Version](https://poser.pugx.org/sostheblack/moip/v/stable.svg)](https://packagist.org/packages/sostheblack/moip) [![Total Downloads](https://poser.pugx.org/sostheblack/moip/downloads.svg)](https://packagist.org/packages/sostheblack/moip) [![Latest Unstable Version](https://poser.pugx.org/sostheblack/moip/v/unstable.svg)](https://packagist.org/packages/sostheblack/moip) [![License](https://poser.pugx.org/sostheblack/moip/license.svg)](https://packagist.org/packages/sostheblack/moip)
 
-Integrates via API, your e-commerce with MoIP quickly and easily
+Package for integrating its platform with the intermediary payment MoIP.
 
 - `Moip::sendMoip($data);`
-- `Moip::response`;
+- `Moip::response()`;
 
 and response
 
@@ -93,6 +93,24 @@ $data = [
     'receiver'  => 'integracao@moip.com.br',
     'returnURL' => 'https://meusite.com.br/cliente/$id/pedido/pedidorealizado',
     'notificationURL' => 'https://meusite.com.br/nasp',
+    'payer'     => [
+        'name'      => 'user name',
+        'email'     => 'integracao@moip.com.br',
+        'payerId'   => 'id_user',
+        'identity'  => '111.111.111-11',
+        'phone'     => '(11) 1111-1111)',
+        'billingAddress' => [
+            'address'   => 'Street Love',
+            'number'    => 45,
+            'complement'=> 'plaza',
+            'city'      => 'São Paulo',
+            'neighborhood' => 'Love',
+            'state'     => 'SP',
+            'country'   => 'BRA',
+            'zipCode'   => '01230-000',
+            'phone'     => '(11) 1 1111-1111)'
+        ]
+    ],    
     'parcel'    => [
         'min'       => 2, 
         'max'       => 12, 
@@ -143,6 +161,33 @@ try {
 
 ## Sending parameters
 
+#### payer
+----------------------
+Send to MoIP data payer
+
+```
+$data['payer'] = [
+    'payer'     => [
+        'name'      => 'user name',
+        'email'     => 'integracao@moip.com.br',
+        'payerId'   => 'id_user',
+        'identity'  => '111.111.111-11',
+        'phone'     => '(11) 1111-1111)',
+        'billingAddress' => [
+            'address'   => 'Street Love',
+            'number'    => 45,
+            'complement'=> 'plaza',
+            'city'      => 'São Paulo',
+            'neighborhood' => 'Love',
+            'state'     => 'SP',
+            'country'   => 'BRA',
+            'zipCode'   => '01230-000',
+            'phone'     => '(11) 1 1111-1111)'
+        ]
+    ],    
+];
+```
+
 #### values
 ----------------------
 ##### $full_price_products: Number, $freight: Number, $coupon: Number
@@ -151,7 +196,7 @@ try {
 2. $freigth: Responsible for defining the additional amount to be paid.
 3. $deduct: Responsible for defining the value of discount will be subtracted from the total to be paid.
 ```
-$data['values'] => [
+$data['values'] = [
     'value'     => $full_price_products,
     'adds'      => $freigth,
     'dedudct'   => $deduct

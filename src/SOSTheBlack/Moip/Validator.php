@@ -100,13 +100,13 @@ class Validator
 
 		if (! isset($data->values->adds)) {
 			$data->values->adds = 0.0;
-		} elseif (! is_float($data->values->adds) || ! is_double($data->values->adds)) {
+		} elseif (! is_numeric($data->values->adds)) {
 			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->deduct) . ", esperava-se float");
 		}
 
 		if (! isset($data->values->deduct)) {
 			$data->values->deduct = 0.0;
-		} elseif (! is_float($data->values->deduct) || ! is_double($data->values->deduct) ) {
+		} elseif (! is_numeric($data->values->deduct)) {
 			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->deduct) . ", esperava-se float");
 		}
 
@@ -177,29 +177,59 @@ class Validator
 			}
 		}
 
-		if ($this->validatorValidate($config->validate) === 'Identification' && ! isset($data->payer->address)) {
-			$payer = [
-				'name'  => ''    ,
-		        'email'  => ''   ,
-		        'payerId'  => '' ,
-		        'billingAddress' => [
-		            'address'  => '' ,
-		            'number'   => '' ,
-		            'complement'=> '',
-		            'city'   => ''   ,
-		            'neighborhood'=> '' ,
-		            'state'    => '' ,
-		            'country'  => '' ,
-		            'zipCode'  => '' ,
-		            'phone'   => ''  
-		        ]
-			];
-			if (! isset($data->payer)) {
-				throw new InvalidArgumentException("é obrigatório informar os todos os dados para pagador");	
-			} else {
-				foreach ($payer as $keyPayer => $valuePayer) {
-					if (! isset($data->payer->$keyPayer)) {
-						throw new InvalidArgumentException("é obrigatório informar $keyPayer do pagador");		
+		if ($this->validatorValidate($config->validate) === 'Identification') {
+			$this->validatorPayer($data->payer);
+		}
+	}
+
+	/**
+	 * Validation for data of payer
+	 * @param  object $payer  data of payer
+	 * @return void
+	 */
+	private function validatorPayer($payer)
+	{
+		$payerArray = [
+			'name'  => ''    ,
+	        'email'  => ''   ,
+	        'payerId'  => '' ,
+	        'identity' => '',
+	        'phone' => '',
+	        'billingAddress' => [
+	            'address'  => '' ,
+	            'number'   => '' ,
+	            'complement'=> '',
+	            'city'   => ''   ,
+	            'neighborhood'=> '' ,
+	            'state'    => '' ,
+	            'country'  => '' ,
+	            'zipCode'  => '' ,
+	            'phone'   => ''  
+	        ]
+		];
+		if (empty($payer->billingAddress)) {
+			throw new InvalidArgumentException("é obrigatório informar os todos os dados para pagador");	
+		} else {
+			foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
+				if (array_key_exists($keyPayerArray, $payer) === false) {
+					throw new InvalidArgumentException("é obrigatório informar $keyPayerArray do pagador");		
+				}
+				if (empty($payer->$keyPayerArray)) {
+					throw new InvalidArgumentException($keyPayerArray . " não pode estar vazio");
+				}
+
+				if ($keyPayerArray === 'billingAddress') {
+					foreach ($payerArray['billingAddress'] as $keyBillingAddress => $valueBillingAddress) {
+						if (array_key_exists($keyBillingAddress, $payer->billingAddress) === false) {
+							throw new InvalidArgumentException("é obrigatório informar $keyBillingAddress do pagador");		
+						}
+						if (empty($payer->billingAddress->$keyBillingAddress)) {
+							throw new InvalidArgumentException($keyBillingAddress . " não pode estar vazio");
+						}
+
+						if ($keyBillingAddress === 'state' && strlen($payer->billingAddress->state) > 2 ) {
+							throw new InvalidArgumentException("Estado deve estar no formado ISO-CODE(2)");
+						}
 					}
 				}
 			}
@@ -325,7 +355,7 @@ class Validator
 	{
 		if (! isset($data->values->value)) {
 			throw new LogicException("Não foi informado o valor da compra", 1);
-		} elseif (! is_float($data->values->value)) {
+		} elseif (! is_numeric($data->values->value)) {
 			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->value) . ", esperava-se float", 1);
 		} elseif (! isset($data->reason)) {
 			$data->reason = $this->getReason($config);

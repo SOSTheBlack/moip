@@ -1,6 +1,6 @@
 {
     "name": "sostheblack/moip",
-    "description": "This is a package of a payment intermediary called MoIP.",
+    "description": "Package for integrating its platform with the intermediary payment MoIP..",
     "keywords": ["moip", "gateway", "payment", "laravel", "checkout"],
     "license": "MIT",
     "type": "libraries",
@@ -21,7 +21,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.5-dev"
+            "dev-master": "1.6-dev"
         }
     },
     "minimum-stability": "dev"
