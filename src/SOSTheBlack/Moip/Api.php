@@ -395,7 +395,7 @@ class Api {
 
         if (!isset($this->xml->InstrucaoUnica->Boleto)) {
             $this->xml->InstrucaoUnica->addChild('Boleto');
-            $this->xml->InstrucaoUnica->Boleto = '';
+            $this->xml->InstrucaoUnica->Boleto = new stdClass;
             if (is_numeric($expiration)) {
                 $this->xml->InstrucaoUnica->Boleto->addChild('DiasExpiracao', $expiration);
 
