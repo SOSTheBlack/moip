@@ -60,7 +60,7 @@ class Client {
 
     /**
      * @param string $credentials token / key authentication Moip
-     * @param string $url url request
+     * @param string|object $url url request
      * @param string $error errors
      * @return SOSTheBlack\Moip\Cliente
      */

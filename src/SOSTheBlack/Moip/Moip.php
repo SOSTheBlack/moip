@@ -52,7 +52,7 @@ class Moip extends Validator
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
 		$this->moip->setDeduct($data->values->deduct);
-		$this->moip->setUniqueID($data->unique_id);
+		$this->moip->setUniqueID( $data->unique_id);
 
 		foreach ($data->payment as $key => $value) {
 			if ($value === false) continue;
@@ -120,8 +120,7 @@ class Moip extends Validator
 	{
 		if (! empty($send)) {
 			$answer = $this->moip->getAnswer();
-			//dd($answer);
-			$this->validatorResponseError($answer->error);
+			$this->validatorResponseError(isset($answer->scalar) ? $answer->scalar : $answer->error);
 			$this->response = new StdClass;
 			$this->response->response 	 = $answer->response;
 			$this->response->error 		 = $answer->error;
