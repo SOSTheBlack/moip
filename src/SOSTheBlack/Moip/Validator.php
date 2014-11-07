@@ -148,7 +148,7 @@ class Validator
  		$this->validatorBillet($data->billet);
 
  		$data->message 				= $this->getParams($data, $config, 'message');
- 		$data->message->firstLine	= $this->getParams($data, $config, 'message', 'firstLine');
+ 		$data->message->firstLine	= (string) $this->getParams($data, $config, 'message', 'firstLine');
  		$data->message->secondLine	= $this->getParams($data, $config, 'message', 'secondLine');
  		$data->message->lastLine	= $this->getParams($data, $config, 'message', 'lastLine');
 		if (strlen($data->message->firstLine) > 256 || strlen($data->message->secondLine) > 256 || strlen($data->message->firstLine > 256)) {
@@ -251,10 +251,10 @@ class Validator
 				if (! isset($config->$key->$value)) {
 					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
 				} else {
-					return $config->$key->$value;
+					return (string) $config->$key->$value;
 				}
 			} else {
-				return $data->$key->$value;
+				return (string) $data->$key->$value;
 			}
 		} else {
 			if (! isset($data->$key)) {
