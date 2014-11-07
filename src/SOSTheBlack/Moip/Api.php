@@ -2,6 +2,7 @@
 
 use SimpleXmlElement;
 use StdClass;
+use App;
 
 /**
  * Library to help PHP users of Moip's API
@@ -196,8 +197,11 @@ class Api {
      * @access private
      */
     private function initXMLObject() {
-        $initializeXML = '<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>';
-        $this->xml = new SimpleXmlElement($initializeXML);
+        App::singleton('SimpleXmlElement', function(){
+            $initializeXML = '<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>';
+            return new \SimpleXmlElement($initializeXML);
+        });
+        $this->xml = App::make('SimpleXmlElement');
         $this->xml->addChild('InstrucaoUnica');
     }
 
