@@ -149,18 +149,18 @@ class Validator
 
  		$data->message 				= $this->getParams($data, $config, 'message');
  		$data->message->firstLine	= (string) $this->getParams($data, $config, 'message', 'firstLine');
- 		$data->message->secondLine	= $this->getParams($data, $config, 'message', 'secondLine');
- 		$data->message->lastLine	= $this->getParams($data, $config, 'message', 'lastLine');
+ 		$data->message->secondLine	= (string) $this->getParams($data, $config, 'message', 'secondLine');
+ 		$data->message->lastLine	= (string) $this->getParams($data, $config, 'message', 'lastLine');
 		if (strlen($data->message->firstLine) > 256 || strlen($data->message->secondLine) > 256 || strlen($data->message->firstLine > 256)) {
 			throw new InvalidArgumentException("Menssagens do checkout não devem conter mais de 256 caracteres");	
 		}
 
-		$data->returnURL = $this->getParams($data, $config, 'returnURL');
+		$data->returnURL = (string) $this->getParams($data, $config, 'returnURL');
 		if (strlen($data->returnURL) > 256) {
 			throw new InvalidArgumentException("URL de retorno não devem conter mais de 256 caracteres");	
 		}
 
-		$data->notificationURL = $this->getParams($data, $config, 'notificationURL');
+		$data->notificationURL = (string) $this->getParams($data, $config, 'notificationURL');
 		if (strlen($data->notificationURL) > 256) {
 			throw new InvalidArgumentException("URL de notificação não devem conter mais de 256 caracteres");	
 		}
@@ -251,10 +251,10 @@ class Validator
 				if (! isset($config->$key->$value)) {
 					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
 				} else {
-					return (string) $config->$key->$value;
+					return $config->$key->$value;
 				}
 			} else {
-				return (string) $data->$key->$value;
+				return $data->$key->$value;
 			}
 		} else {
 			if (! isset($data->$key)) {
