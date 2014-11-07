@@ -66,7 +66,7 @@ class Client {
      */
     function curlGet($credentials, $url, $error=null) 
     {
-        return $this->initialCurl($credentials, null, $url, (string) $error);
+        return $this->initialCurl($credentials, null, (string) $url, $error);
     }
 
    /**
