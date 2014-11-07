@@ -1,5 +1,6 @@
 <?php namespace SOSTheBlack\Moip;
 
+use App;
 use Config;
 use StdClass;
 
@@ -154,7 +155,7 @@ class Moip extends Validator
 	 */
 	private function initialize($data)
 	{
-		$this->moip = new Api;
+		$this->moip = App::make('\SOSTheBlack\Moip\Api');
 		$this->config = $this->validatorConfig(Config::get('sostheblack::moip'));
 		$this->getEnvironment();
 		$this->authentication();
