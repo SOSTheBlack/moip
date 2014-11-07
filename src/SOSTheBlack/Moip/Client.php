@@ -55,7 +55,7 @@ class Client {
      */
     function curlPost($credentials, $xml, $url, $error=null) 
     {
-        return $this->initialCurl($credentials, $xml, $url, $error=null);   
+        return $this->initialCurl($credentials, $xml, $url, $error);   
     }
 
     /**
@@ -66,8 +66,7 @@ class Client {
      */
     function curlGet($credentials, $url, $error=null) 
     {
-        $xml = null;
-        return $this->initialCurl($credentials, $xml, $url, $error=null);
+        return $this->initialCurl($credentials, null, $url, $error);
     }
 
    /**
