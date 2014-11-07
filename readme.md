@@ -27,6 +27,7 @@ and response
 Begin by installing this package through Composer. Edit your project's `composer.json` file to require `sostheblack/moip`.
 
 soon in version v1.*
+
 ```
 "require-dev": {
     "sostheblack/moip": "1.*"
@@ -35,9 +36,17 @@ soon in version v1.*
 
 Next, update Composer from the Terminal:
 
-`$ composer update`
+```
+$ composer update
+```
 
-Once that's been completed, the next step operation is to copy the file that is in moip.php `vendor/sostheblack/src/config/moip.php` and Paste in `app/config`
+Once that's been completed, the next step operation is run this command in terminal
+
+```
+$ php artisan config:publish sostheblack/moip
+```
+
+A configuration file will be created in `app/config/packages/sostheblack/moip/moip.php`
 
 Make the necessary settings and proceed to the next step
 
@@ -50,7 +59,7 @@ Add a new item to the providers array.
     'Illuminate\Foundation\Providers\ArtisanServiceProvider',
     'Illuminate\Auth\AuthServiceProvider',
     ...
-    'SOSTheBlack\Moip\ServiceProvider',
+    'SOSTheBlack\Moip\MoipServiceProvider',
 ),
 ```
 

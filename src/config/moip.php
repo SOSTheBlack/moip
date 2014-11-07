@@ -97,11 +97,11 @@ return [
 
 	'parcel' => [
 
-		'active'	=> false,
+		'active'	=> true,
 
 		'min' 		=> 1,
 
-		'max' 		=> 12,
+		'max' 		=> 10,
 
 		'rate'		=> 0,
 		

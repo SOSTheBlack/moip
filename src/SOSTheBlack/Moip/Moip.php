@@ -155,7 +155,7 @@ class Moip extends Validator
 	private function initialize($data)
 	{
 		$this->moip = new Api;
-		$this->config = $this->validatorConfig(Config::get('moip'));
+		$this->config = $this->validatorConfig(Config::get('sostheblack::moip'));
 		$this->getEnvironment();
 		$this->authentication();
 		return $this->validatorData($data);
