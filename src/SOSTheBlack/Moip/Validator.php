@@ -19,7 +19,7 @@ class Validator
 	 */
 	protected function validatorData($data)
 	{
-		$data = $this->toObject($data);
+		$data = (object) $data;
 		$data->values 	 = $this->toObject($data, 'values', true);
 		$data->parcel 	 = $this->toObject($data, 'parcel');
 		$data->comission = $this->toObject($data, 'comission');
