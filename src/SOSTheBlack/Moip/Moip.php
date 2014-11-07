@@ -55,18 +55,18 @@ class Moip extends Validator
 		$this->moip->setUniqueID( $data->unique_id);
 
 		foreach ($data->payment as $key => $value) {
-			if ($value === false) continue;
-			else $this->moip->addPaymentWay($key);
+			if ($value === true) {
+				$this->moip->addPaymentWay($key);
+			}
 		}
 
-		if ($this->config->parcel->active === true) {
-			$this->moip->addParcel(
-				$data->parcel->min, 
-				$data->parcel->max, 
-				$data->parcel->rate, 
-				$data->parcel->transfer
-			);
-		}
+		$this->moip->addParcel(
+			$data->parcel->min, 
+			$data->parcel->max, 
+			$data->parcel->rate, 
+			$data->parcel->transfer
+		);
+
 		if ($this->config->comission->active === true) {
 			$this->moip->addComission(
 				$data->comission->reason,
@@ -86,14 +86,11 @@ class Moip extends Validator
 			],
 			$data->billet->urlLogo
 		);
-		if (! empty($data->message->firstLine)) {
-			$this->moip->addMessage($data->message->firstLine);	
-		}
-		if (! empty($data->message->secondLine)) {
-			$this->moip->addMessage($data->message->secondLine);	
-		}
-		if (! empty($data->message->lastLine)) {
-			$this->moip->addMessage($data->message->lastLine);	
+
+		foreach ($data->message as $keyMessage => $valueMessage) {
+			if (! empty($valueMessage)) {
+				$this->moip->addMessage($valueMessage);
+			}
 		}
 
 		$this->moip->setReturnURL($data->returnURL);
@@ -120,7 +117,7 @@ class Moip extends Validator
 	{
 		if (! empty($send)) {
 			$answer = $this->moip->getAnswer();
-			$this->validatorResponseError(isset($answer->scalar) ? $answer->scalar : $answer->error);
+			$this->validatorResponseError($answer->error);
 			$this->response = new StdClass;
 			$this->response->response 	 = $answer->response;
 			$this->response->error 		 = $answer->error;

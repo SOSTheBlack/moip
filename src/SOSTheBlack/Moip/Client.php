@@ -100,8 +100,7 @@ class Client {
             $ret = curl_exec($ch);
             $err = curl_error($ch);
             $info = curl_getinfo($ch);
-            curl_close($ch);
-
+            curl_close($ch);            
 
             if ($info['http_code'] == "200")
                 return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
