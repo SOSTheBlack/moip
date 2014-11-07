@@ -138,7 +138,7 @@ $data = [
             'lastLine'  => 'Last line of comment of billet'
         ],
         'urlLogo' => 'http://seutie.com.br/logo.png'
-    ]
+    ],
     'message' => [
         'firstLine' => 'First comment of checkout',
         'secondLine'=> 'Second comment of checkout',
