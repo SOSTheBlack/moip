@@ -1,6 +1,7 @@
 <?php namespace SOSTheBlack\Moip;
 
 use SimpleXmlElement;
+use StdClass;
 
 /**
  * Library to help PHP users of Moip's API
@@ -195,7 +196,7 @@ class Api {
      * @access private
      */
     private function initXMLObject() {
-        $this->xml = new SimpleXmlElement('<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>');
+        $this->xml = new \SimpleXmlElement('<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>');
         $this->xml->addChild('InstrucaoUnica');
     }
 
@@ -395,7 +396,7 @@ class Api {
 
         if (!isset($this->xml->InstrucaoUnica->Boleto)) {
             $this->xml->InstrucaoUnica->addChild('Boleto');
-            $this->xml->InstrucaoUnica->Boleto = new stdClass;
+            $this->xml->InstrucaoUnica->Boleto = (object) $this->xml->InstrucaoUnica->Boleto;
             if (is_numeric($expiration)) {
                 $this->xml->InstrucaoUnica->Boleto->addChild('DiasExpiracao', $expiration);
 
@@ -787,7 +788,7 @@ class Api {
 
         $url = $this->environment->base_url . "/ws/alpha/ChecarValoresParcelamento/$login/$maxParcel/$rate/$simulatedValue";
         $credential = $this->credential['token'] . ':' . $this->credential['key'];
-        $answer = $client->curlGet($credential, $url, $this->errors);
+        $answer = $client->curlGet($credential, $url, (string) $this->errors);
 
         if ($answer->response) {
             $xml = new SimpleXmlElement($answer->xml);
