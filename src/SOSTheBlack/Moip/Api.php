@@ -196,7 +196,8 @@ class Api {
      * @access private
      */
     private function initXMLObject() {
-        $this->xml = new \SimpleXmlElement('<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>');
+        $initializeXML = '<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>';
+        $this->xml = new SimpleXmlElement($initializeXML);
         $this->xml->addChild('InstrucaoUnica');
     }
 
