@@ -42,7 +42,7 @@ class Validator
 		if (empty($config)) {
 			throw new InvalidArgumentException("Arquivo de configuração moip não foi encontrado", 1);
 		} else {
-			$config 				= $this->toObject($config);
+			$config 				= (object) $config;
 			$config->credentials 	= $this->toObject($config, 'credentials', true);
 			$config->parcel 		= $this->toObject($config, 'parcel', true);
 			$config->comission 		= $this->toObject($config, 'comission', true);
