@@ -43,8 +43,10 @@ $ composer update
 Once that's been completed, the next step operation is run this command in terminal
 
 ```
-$ php artisan config:publish --path=workbench/SOSTheBlack/moip/src/config sostheblack/moip
+$ php artisan config:publish sostheblack/moip
 ```
+
+A configuration file will be created in `app/config/packages/sostheblack/moip/moip.php`
 
 Make the necessary settings and proceed to the next step
 
