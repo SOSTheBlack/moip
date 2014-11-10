@@ -9,6 +9,10 @@ use StdClass;
 
 /**
  * Class to validate all data Moip
+ * 
+ * @author Jean Cesar Garcia <jeancesargarcia@gmail.com>
+ * @version v1.6.0
+ * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
 class Validator
 {
@@ -55,6 +59,34 @@ class Validator
 	}
 
 	/**
+	 * Validates the data sent by the user
+	 * @param  object $data   user data
+	 * @param  object $config config Moip
+	 * @return void
+	 */
+	protected function validatorSend($data, $config)
+	{
+		if ($this->validatorValidate($config->validate) === 'Identification') {
+			$this->validatorIdentification($data, $config);
+			$this->validatorPayer($data->payer);
+		} else {
+			$this->validatorBasic($data, $config);
+		}
+
+		$this->validatorUniqueID($data->unique_id);
+		$this->validatorValues($data->values);
+		$this->validatorReceiver($data, $config);
+		$this->validatorParcel($data, $config);
+ 		$this->validatorComission($data, $config);
+ 		$this->validatorBillet($data, $config);
+ 		$this->validatorMessage($data, $config);
+ 		$this->validatorReturnURL($data, $config);
+ 		$this->validatorNotificationURL($data, $config);
+ 		$this->validatorPayment($data, $config);
+	}
+
+
+	/**
 	 * Convert array to object
 	 * @param array $data 
 	 * @param string $value 
@@ -77,94 +109,71 @@ class Validator
 	}
 
 	/**
-	 * Validates the data sent by the user
-	 * @param  object $data   user data
-	 * @param  object $config config Moip
+	 * Validation for the parameter unqiue_id
+	 * @param  string $unique_id indentification unique for request
 	 * @return void
 	 */
-	protected function validatorSend($data, $config)
+	private function validatorUniqueID($unique_id)
 	{
-		if ($this->validatorValidate($config->validate) === 'Identification') {
-			$this->validatorIdentification($data, $config);
-		} else {
-			$this->validatorBasic($data, $config);
-		}
-
-		if (isset($data->unique_id)) {
-			if (! ctype_alnum($data->unique_id) && ! is_bool($data->unique_id) ) {
+		if (isset($unique_id)) {
+			if (! ctype_alnum($unique_id) && ! is_bool($unique_id) ) {
 				throw new UnexpectedValueException("reason deve ser alfanumárico");
 			}
 		} else {
-			$data->unique_id = false;
+			$unique_id = false;
+		}		
+	}
+
+	/**
+	 * Validation for the parameter values ( prices )
+	 * @param  object $values prices of request
+	 * @return void
+	 */
+	private function validatorValues($values)
+	{
+		if (! isset($values->adds)) {
+			$values->adds = 0.0;
+		} elseif (! is_numeric($values->adds)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($values->deduct) . ", esperava-se float");
 		}
 
-		if (! isset($data->values->adds)) {
-			$data->values->adds = 0.0;
-		} elseif (! is_numeric($data->values->adds)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->deduct) . ", esperava-se float");
+		if (! isset($values->deduct)) {
+			$values->deduct = 0.0;
+		} elseif (! is_numeric($values->deduct)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($values->deduct) . ", esperava-se float");
 		}
+	}
 
-		if (! isset($data->values->deduct)) {
-			$data->values->deduct = 0.0;
-		} elseif (! is_numeric($data->values->deduct)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->values->deduct) . ", esperava-se float");
-		}
 
+	/**
+	 * Validation for the receiver
+	 * @param  object $data   data sent
+	 * @param  object $config configured data
+	 * @return data
+	 */
+	private function validatorReceiver($data, $config)
+	{
 		if (! isset($data->receiver)) {
 			if (! isset($config->receiver)) {
 				throw new InvalidArgumentException("Não foi encontrado o parametro receiver no arquivo de configuração moip.php");
 			} else {
 				$data->receiver = $config->receiver;
 			}
-		} 
+		}
 
 		if (strlen($data->receiver) > 65) {
 			throw new LengthException("receiver não pode conter mais de 65 caracteres");
 		}
-		
-		$data->parcel 			= $this->getParams($data, $config, 'parcel');
-		$data->parcel->min 		= $this->getParams($data, $config, 'parcel', 'min');
-		$data->parcel->max 		= $this->getParams($data, $config, 'parcel', 'max');
-		$data->parcel->rate 	= $this->getParams($data, $config, 'parcel', 'rate');
-		$data->parcel->transfer = $this->getParams($data, $config, 'parcel', 'transfer');
-		$this->validatorParcel($data->parcel);
+	}
 
-		$data->comission 					= $this->getParams($data, $config, 'comission');
- 		$data->comission->reason 			= $this->getParams($data, $config, 'comission', 'reason');
- 		$data->comission->receiver 			= $this->getParams($data, $config, 'comission', 'receiver');
- 		$data->comission->value 			= $this->getParams($data, $config, 'comission', 'value');
- 		$data->comission->percentageValue 	= $this->getParams($data, $config, 'comission', 'percentageValue');
- 		$data->comission->ratePayer 		= $this->getParams($data, $config, 'comission', 'ratePayer');
- 		$this->validatorComission($data->comission);
-
- 		$data->billet = $this->getParams($data, $config, 'billet');
- 		$data->billet->expiration = $this->getParams($data, $config, 'billet', 'expiration');
- 		$data->billet->workingDays = $this->getParams($data, $config, 'billet', 'workingDays');
- 		$data->billet->instructions = $this->getParams($data, $config, 'billet', 'instructions');
- 		$data->billet->instructions->firstLine = $this->getParams($data->billet, $config->billet, 'instructions', 'firstLine');
- 		$data->billet->instructions->secondLine = $this->getParams($data->billet, $config->billet, 'instructions', 'secondLine');
- 		$data->billet->instructions->lastLine = $this->getParams($data->billet, $config->billet, 'instructions', 'lastLine');
- 		$data->billet->urlLogo = $this->getParams($data, $config, 'billet', 'urlLogo');
- 		$this->validatorBillet($data->billet);
-
- 		$data->message 				= $this->getParams($data, $config, 'message');
- 		$data->message->firstLine	= (string) $this->getParams($data, $config, 'message', 'firstLine');
- 		$data->message->secondLine	= (string) $this->getParams($data, $config, 'message', 'secondLine');
- 		$data->message->lastLine	= (string) $this->getParams($data, $config, 'message', 'lastLine');
-		if (strlen($data->message->firstLine) > 256 || strlen($data->message->secondLine) > 256 || strlen($data->message->firstLine > 256)) {
-			throw new InvalidArgumentException("Menssagens do checkout não devem conter mais de 256 caracteres");	
-		}
-
-		$data->returnURL = (string) $this->getParams($data, $config, 'returnURL');
-		if (strlen($data->returnURL) > 256) {
-			throw new InvalidArgumentException("URL de retorno não devem conter mais de 256 caracteres");	
-		}
-
-		$data->notificationURL = (string) $this->getParams($data, $config, 'notificationURL');
-		if (strlen($data->notificationURL) > 256) {
-			throw new InvalidArgumentException("URL de notificação não devem conter mais de 256 caracteres");	
-		}
-
+	/**
+	 * Validator for the payment 
+	 * @param  object $data   data sent
+	 * @param  object $config configured data
+	 * @return void
+	 */
+	private function validatorPayment($data, $config)
+	{
 		$data->payment = $this->getParams($data, $config, 'payment');
 		$data->payment->creditCard = $this->getParams($data, $config, 'payment', 'creditCard');
 		$data->payment->billet = $this->getParams($data, $config, 'payment', 'billet');
@@ -176,10 +185,51 @@ class Validator
 				throw new UnexpectedValueException("$key passado é do tipo ". gettype($key) . ", esperava-se boolean");
 			}
 		}
+	}
 
-		if ($this->validatorValidate($config->validate) === 'Identification') {
-			$this->validatorPayer($data->payer);
+	/**
+	 * Validation fot the notification URL
+	 * @param  object $data   data sent
+	 * @param  object $config configured data
+	 * @return void
+	 */
+	private function validatorNotificationURL($data, $config)
+	{
+		$data->notificationURL = (string) $this->getParams($data, $config, 'notificationURL');
+		if (strlen($data->notificationURL) > 256) {
+			throw new InvalidArgumentException("URL de notificação não devem conter mais de 256 caracteres");	
 		}
+	}
+
+	/**
+	 * validation for the return URL
+	 * @param  object $data   data sent
+	 * @param  object $config configured data
+	 * @return void
+	 */
+	private function validatorReturnURL($data, $config)
+	{
+		$data->returnURL = (string) $this->getParams($data, $config, 'returnURL');
+		if (strlen($data->returnURL) > 256) {
+			throw new InvalidArgumentException("URL de retorno não devem conter mais de 256 caracteres");	
+		}
+	}
+
+	/**
+	 * Validation for the message
+	 * @param  object $data   data sent
+	 * @param  object $config configured data
+	 * @return void
+	 */
+	private function validatorMessage($data, $config)
+	{
+ 		$data->message 				= $this->getParams($data, $config, 'message');
+ 		$data->message->firstLine	= (string) $this->getParams($data, $config, 'message', 'firstLine');
+ 		$data->message->secondLine	= (string) $this->getParams($data, $config, 'message', 'secondLine');
+ 		$data->message->lastLine	= (string) $this->getParams($data, $config, 'message', 'lastLine');
+		if (strlen($data->message->firstLine) > 256 || strlen($data->message->secondLine) > 256 || strlen($data->message->firstLine > 256)) {
+			throw new InvalidArgumentException("Menssagens do checkout não devem conter mais de 256 caracteres");	
+		}		
 	}
 
 	/**
@@ -274,27 +324,30 @@ class Validator
 	 * @param  object $billet billet info
 	 * @return void
 	 */
-	private function validatorBillet($billet)
+	private function validatorBillet($data, $config)
 	{
-		if (! is_integer($billet->expiration) && ! is_string($billet->expiration)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->expiration) . ", esperava-se integer ou string de data");
+ 		$data->billet = $this->getParams($data, $config, 'billet');
+ 		$data->billet->expiration = $this->getParams($data, $config, 'billet', 'expiration');
+ 		$data->billet->workingDays = $this->getParams($data, $config, 'billet', 'workingDays');
+ 		$data->billet->instructions = $this->getParams($data, $config, 'billet', 'instructions');
+ 		$data->billet->instructions->firstLine = $this->getParams($data->billet, $config->billet, 'instructions', 'firstLine');
+ 		$data->billet->instructions->secondLine = $this->getParams($data->billet, $config->billet, 'instructions', 'secondLine');
+ 		$data->billet->instructions->lastLine = $this->getParams($data->billet, $config->billet, 'instructions', 'lastLine');
+ 		$data->billet->urlLogo = $this->getParams($data, $config, 'billet', 'urlLogo');
+
+		if (! is_integer($data->billet->expiration) && ! is_string($data->billet->expiration)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->billet->expiration) . ", esperava-se integer ou string de data");
 		}
-		if (! is_bool($billet->workingDays)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->workingDays) . ", esperava-se boleean");
+		if (! is_bool($data->billet->workingDays)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->billet->workingDays) . ", esperava-se boleean");
 		}
-		if (! is_object($billet->instructions)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->instructions) . ", esperava-se object");
-		}
-		if (! is_string($billet->instructions->firstLine) || ! is_string($billet->instructions->secondLine) || ! is_string($billet->instructions->lastLine)) {
+		if (! is_string($data->billet->urlLogo) || ! is_string($data->billet->instructions->firstLine) || ! is_string($data->billet->instructions->secondLine) || ! is_string($data->billet->instructions->lastLine)) {
 			throw new UnexpectedValueException("Menssagens do boleto devem ser alfanuméricos");	
 		}
-		if (strlen($billet->instructions->firstLine) > 63 || strlen($billet->instructions->secondLine) > 63 || strlen($billet->instructions->lastLine) > 63) {
-			throw new InvalidArgumentException("Menssagens do boleto não devem conter mais de 63 caracteres");	
+		if (strlen($data->billet->instructions->firstLine) > 63 || strlen($data->billet->instructions->secondLine) > 63 || strlen($data->billet->instructions->lastLine) > 63) {
+			throw new InvalidArgumentException("Menssagens e URL do boleto não devem conter mais de 63 caracteres");	
 		}
-		if (! is_string($billet->urlLogo)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($billet->utlLogo) . ", esperava-se string");
-		}
-		if (strlen($billet->urlLogo) > 256) {
+		if (strlen($data->billet->urlLogo) > 256) {
 			throw new InvalidArgumentException("Menssagens do boleto não devem conter mais de 256 caracteres");	
 		}
 	}
@@ -304,16 +357,23 @@ class Validator
 	 * @param  object $comission comission info
 	 * @return void
 	 */
-	private function validatorComission($comission)
+	private function validatorComission($data, $config)
 	{
-		if (! is_numeric($comission->value)) {
-			throw new UnexpectedValueException("Parâmetro $comission->value dever ser numérico");
+		$data->comission 					= $this->getParams($data, $config, 'comission');
+ 		$data->comission->reason 			= $this->getParams($data, $config, 'comission', 'reason');
+ 		$data->comission->receiver 			= $this->getParams($data, $config, 'comission', 'receiver');
+ 		$data->comission->value 			= $this->getParams($data, $config, 'comission', 'value');
+ 		$data->comission->percentageValue 	= $this->getParams($data, $config, 'comission', 'percentageValue');
+ 		$data->comission->ratePayer 		= $this->getParams($data, $config, 'comission', 'ratePayer');
+
+		if (! is_numeric($data->comission->value)) {
+			throw new UnexpectedValueException("Parâmetro $data->comission->value dever ser numérico");
 		}
-		if (! is_bool($comission->percentageValue)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($comission->percentageValue) . ", esperava-se boolean");
+		if (! is_bool($data->comission->percentageValue)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->comission->percentageValue) . ", esperava-se boolean");
 		}
-		if (! is_bool($comission->ratePayer)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($comission->ratePayer) . ", esperava-se boolean");
+		if (! is_bool($data->comission->ratePayer)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->comission->ratePayer) . ", esperava-se boolean");
 		}	
 	}
 
@@ -322,26 +382,16 @@ class Validator
 	 * @param  object $parcel 
 	 * @return void
 	 */
-	private function validatorParcel($parcel)
+	private function validatorParcel($data, $config)
 	{
-		if (! is_int($parcel->min)) {
-			throw new UnexpectedValueException("Espera-se inteiro, foi passado ". gettype($parcel->min));
-		} elseif ($parcel->min < 2 && $parcel->min > 12) {
-			throw new InvalidArgumentException("Parcela minima tem que estar entre 2 e 12");
-		} elseif (! is_int($parcel->max)) {
-			throw new UnexpectedValueException("Espera-se inteiro, foi passado ". gettype($parcel->max));
-		} elseif ($parcel->max < 2 && $parcel->max > 12) {
-			throw new InvalidArgumentException("Parcela maxima tem que estar entre 2 e 12");
-		}
+		$data->parcel 			= $this->getParams($data, $config, 'parcel');
+		$data->parcel->min 		= $this->getParams($data, $config, 'parcel', 'min');
+		$data->parcel->max 		= $this->getParams($data, $config, 'parcel', 'max');
+		$data->parcel->rate 	= $this->getParams($data, $config, 'parcel', 'rate');
+		$data->parcel->transfer = $this->getParams($data, $config, 'parcel', 'transfer');
 
-		if (! is_numeric($parcel->rate)) {
-			throw new UnexpectedValueException("Espera-se float, foi passado ". gettype($parcel->rate));
-		} elseif (strlen($parcel->rate) > 7) {
-			throw new InvalidArgumentException("Não pode conter mais de 7 caracteres");
-		}
-
-		if (! is_bool($parcel->transfer)) {
-			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($parcel->transfer));
+		if (! is_bool($data->parcel->transfer)) {
+			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($data->parcel->transfer));
 		}
 	}
 

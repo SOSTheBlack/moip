@@ -171,6 +171,12 @@ class Api {
         $this->initXMLObject();
     }
 
+    /**
+     * encoding converting
+     * @param  string  $text 
+     * @param  boolean $post 
+     * @return void
+     */
 	private function convert_encoding($text, $post = false)
 	{
 		if ($post)
