@@ -72,8 +72,7 @@ class Validator
 		} else {
 			$this->validatorBasic($data, $config);
 		}
-
-		$this->validatorUniqueID($data->unique_id);
+		$this->validatorUniqueID($data);
 		$this->validatorValues($data->values);
 		$this->validatorReceiver($data, $config);
 		$this->validatorParcel($data, $config);
@@ -113,14 +112,14 @@ class Validator
 	 * @param  string $unique_id indentification unique for request
 	 * @return void
 	 */
-	private function validatorUniqueID($unique_id)
+	private function validatorUniqueID($data)
 	{
-		if (isset($unique_id)) {
-			if (! ctype_alnum($unique_id) && ! is_bool($unique_id) ) {
-				throw new UnexpectedValueException("reason deve ser alfanumárico");
+		if (isset($data->unique_id)) {
+			if (! ctype_alnum($data->unique_id) && ! is_bool($data->unique_id) ) {
+				throw new UnexpectedValueException("data->unique_id deve ser alfanumárico");
 			}
 		} else {
-			$unique_id = false;
+			$data->unique_id = false;
 		}		
 	}
 
