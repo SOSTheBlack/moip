@@ -471,13 +471,10 @@ class Validator
 	 */
 	protected function validatorCredential($credential)
 	{
-		if (! isset($credential->token)) {
-			throw new InvalidArgumentException("Falha na Autenticação: Não existe a chave token no arquivo do configuração do moip", 1);
-		} elseif (! isset($credential->key)) {
-			throw new InvalidArgumentException("Falha na Autenticação: Não existe a chave key no arquivo do configuração do moip", 1);
+		if (! isset($credential->token) || ! isset($credential->key) ) {
+			throw new InvalidArgumentException("Falha na Autenticação: ", 1);
 		}
-
-		return $this->validatorToken($credential->token) && $this->validatorKey($credential->key);
+		return $this->validatorTokenKey($credential);
 	}
 
 	/**
@@ -485,29 +482,11 @@ class Validator
 	 * @param  string $token
 	 * @return boolean       true
 	 */
-	private function validatorToken($token)
+	private function validatorTokenKey($credential)
 	{
-		if (empty($token)) {
-			throw new InvalidArgumentException("Falha na Autenticação: Token não pode estar vazio", 1);
-		} elseif (strlen($token) != 32) {
-			throw new LengthException("Falha na Autenticação: Tamanho do token não pode ser diferente de 32", 1);
+		if (empty($credential) || strlen($credential->token) != 32 || strlen($credential->key) != 40) {
+			throw new InvalidArgumentException("Credenciais incorretas");
 		}
 		return true;
-	}
-
-	/**
-	 * Validate key
-	 * @param  string $key
-	 * @return boolean     true
-	 */
-	private function validatorKey($key)
-	{
-		if (empty($key)) {
-			throw new InvalidArgumentException("Falha na Autenticação: Key não pode estar vazio", 1);
-		} elseif (strlen($key) != 40) {
-			throw new LengthException("Falha na Autenticação: Tamanho de key não pode ser diferente 40", 1);
-		} else {
-			return true;
-		}
 	}
 }
