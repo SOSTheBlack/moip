@@ -1,5 +1,6 @@
 <?php namespace SOSTheBlack\Moip;
 
+use App;
 use Config;
 use StdClass;
 
@@ -7,6 +8,10 @@ use StdClass;
  * Moip's API abstraction class
  *
  * Class to use for all abstraction of Moip's API
+ * 
+ * @author Jean Cesar Garcia <jeancesargarcia@gmail.com>
+ * @version v1.6.0
+ * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
 class Moip extends Validator
 {
@@ -51,61 +56,112 @@ class Moip extends Validator
 		$this->moip->setValue($data->values->value);
 		$this->moip->setAdds($data->values->adds);
 		$this->moip->setDeduct($data->values->deduct);
-		$this->moip->setUniqueID($data->unique_id);
-
-		foreach ($data->payment as $key => $value) {
-			if ($value === false) continue;
-			else $this->moip->addPaymentWay($key);
-		}
-
-		if ($this->config->parcel->active === true) {
-			$this->moip->addParcel(
-				$data->parcel->min, 
-				$data->parcel->max, 
-				$data->parcel->rate, 
-				$data->parcel->transfer
-			);
-		}
-		if ($this->config->comission->active === true) {
-			$this->moip->addComission(
-				$data->comission->reason,
-				$data->comission->receiver,
-				$data->comission->value,
-				$data->comission->percentageValue,
-				$data->comission->ratePayer
-			);
-		}
-		$this->moip->setBilletConf(
-			$data->billet->expiration,
-			$data->billet->workingDays,
-			[
-				$data->billet->instructions->firstLine,
-				$data->billet->instructions->secondLine,
-				$data->billet->instructions->lastLine
-			],
-			$data->billet->urlLogo
-		);
-		if (! empty($data->message->firstLine)) {
-			$this->moip->addMessage($data->message->firstLine);	
-		}
-		if (! empty($data->message->secondLine)) {
-			$this->moip->addMessage($data->message->secondLine);	
-		}
-		if (! empty($data->message->lastLine)) {
-			$this->moip->addMessage($data->message->lastLine);	
-		}
-
+		$this->moip->setUniqueID( $data->unique_id);
+		$this->getPayment($data->payment);
+		$this->getParcel($data->parcel);
+		$this->getComission($data->comission, $this->config);
+		$this->getBilletConfig($data->billet);
+		$this->getMessage($data->message);
+		$this->getNotificationURL($data->notificationURL);
 		$this->moip->setReturnURL($data->returnURL);
-
-		if (! empty($data->notificationURL)) {
-			$this->moip->setNotificationURL($data->notificationURL);
-		}
-
 		$this->moip->setPayer($data->payer);
-		
 		$this->getReceiver($data);
 		$this->getValidate();
 		return $this->response($this->moip->send());
+	}
+
+	/**
+	 * Method that sends data payment for the MoIP
+	 * @param  object $payment forms of payment
+	 * @return void
+	 */
+	private function getPayment($payment)
+	{
+		foreach ($payment as $key => $value) {
+			if ($value === true) {
+				$this->moip->addPaymentWay($key);
+			}
+		}
+	}
+
+	/**
+	 * Method that sends data parcel for the MoIP
+	 * @param object $parcel data of parcel
+	 * @return void
+	 */
+	private function getParcel($parcel)
+	{
+		$this->moip->addParcel(
+			$parcel->min, 
+			$parcel->max, 
+			$parcel->rate, 
+			$parcel->transfer
+		);
+	}
+
+	/**
+	 * Method that sends data comission for the MoIP
+	 * @param object $comission 
+	 * @param object $config 
+	 * @return void
+	 */
+	private function getComission($comission, $config)
+	{
+		if ($config->comission->active === true) {
+			$this->moip->addComission(
+				$comission->reason,
+				$comission->receiver,
+				$comission->value,
+				$comission->percentageValue,
+				$comission->ratePayer
+			);
+		}		
+	}
+
+	/**
+	 * Method taht sends data billet for the MoIP
+	 * @param  object $billet data of billet
+	 * @return void         
+	 */
+	private function getBilletConfig($billet)
+	{
+		$this->moip->setBilletConf(
+			$billet->expiration,
+			$billet->workingDays,
+			[
+				$billet->instructions->firstLine,
+				$billet->instructions->secondLine,
+				$billet->instructions->lastLine
+			],
+			$billet->urlLogo
+		);
+	}
+
+	/**
+	 * Sends messages for ads in checkout MoIP
+	 * @param  object $message Messges for ads
+	 * @return void
+	 */
+	private function getMessage($message)
+	{
+		foreach ($message as $keyMessage => $valueMessage) {
+			if (! empty($valueMessage)) {
+				$this->moip->addMessage($valueMessage);
+			}
+		}		
+	}
+
+	/**
+	 * Sends notification URL for MoIP
+	 * 
+	 * @param  string $notificationURL notification URL
+	 * @return void
+	 */
+	private function getNotificationURL($notificationURL)
+	{
+		if (! empty($notificationURL)) {
+			$this->moip->setNotificationURL($notificationURL);
+		}
 	}
 
 	/**
@@ -119,7 +175,6 @@ class Moip extends Validator
 	{
 		if (! empty($send)) {
 			$answer = $this->moip->getAnswer();
-			//dd($answer);
 			$this->validatorResponseError($answer->error);
 			$this->response = new StdClass;
 			$this->response->response 	 = $answer->response;
@@ -154,7 +209,7 @@ class Moip extends Validator
 	 */
 	private function initialize($data)
 	{
-		$this->moip = new Api;
+		$this->moip = App::make('\SOSTheBlack\Moip\Api');
 		$this->config = $this->validatorConfig(Config::get('sostheblack::moip'));
 		$this->getEnvironment();
 		$this->authentication();

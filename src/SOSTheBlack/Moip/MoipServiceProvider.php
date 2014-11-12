@@ -4,6 +4,13 @@ use Illuminate\Support\ServiceProvider;
 use View;
 use Config;
 
+/**
+ * Moip Service Provider
+ * 
+ * @author Jean Cesar Garcia <jeancesargarcia@gmail.com>
+ * @version v1.6.0
+ * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
+ */
 class MoipServiceProvider extends ServiceProvider {
 
 	/**

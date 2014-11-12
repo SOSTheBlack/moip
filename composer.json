@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.4.0",
         "illuminate/support": "4.2.*"
     },
     "require-dev": {
@@ -27,8 +27,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6-dev"
+            "dev-master": "1.7-dev"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

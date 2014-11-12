@@ -1,5 +1,11 @@
 <?php 
 
+/**
+ * configuration required to integrate MoIP
+ * @author Jean Cesar Garcia <jeancesargarcia@gmail.com>
+ * @version v1.4.3
+ * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
+ */
 return [
 	
 	/*

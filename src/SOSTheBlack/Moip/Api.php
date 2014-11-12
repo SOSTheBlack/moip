@@ -1,6 +1,8 @@
 <?php namespace SOSTheBlack\Moip;
 
 use SimpleXmlElement;
+use StdClass;
+use App;
 
 /**
  * Library to help PHP users of Moip's API
@@ -135,7 +137,7 @@ class Api {
      *
      * @var SimpleXMLElement
      */
-    protected $xml;
+    protected $xml = null;
     /**
      * Simple XML object
      *
@@ -169,6 +171,12 @@ class Api {
         $this->initXMLObject();
     }
 
+    /**
+     * encoding converting
+     * @param  string  $text 
+     * @param  boolean $post 
+     * @return void
+     */
 	private function convert_encoding($text, $post = false)
 	{
 		if ($post)
@@ -195,7 +203,11 @@ class Api {
      * @access private
      */
     private function initXMLObject() {
-        $this->xml = new SimpleXmlElement('<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>');
+        App::singleton('SimpleXmlElement', function(){
+            $initializeXML = '<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>';
+            return new \SimpleXmlElement($initializeXML);
+        });
+        $this->xml = App::make('SimpleXmlElement');
         $this->xml->addChild('InstrucaoUnica');
     }
 
@@ -330,7 +342,7 @@ class Api {
      * @access public
      */
     public function setUniqueID($id) {
-        $this->uniqueID = $id;
+        $this->uniqueID = (string) $id;
         $this->xml->InstrucaoUnica->addChild('IdProprio', $this->uniqueID);
 
         return $this;
@@ -395,7 +407,7 @@ class Api {
 
         if (!isset($this->xml->InstrucaoUnica->Boleto)) {
             $this->xml->InstrucaoUnica->addChild('Boleto');
-
+            $this->xml->InstrucaoUnica->Boleto = (object) $this->xml->InstrucaoUnica->Boleto;
             if (is_numeric($expiration)) {
                 $this->xml->InstrucaoUnica->Boleto->addChild('DiasExpiracao', $expiration);
 
@@ -504,13 +516,20 @@ class Api {
      */
     public function setAdds($value) {
         $this->adds = $value;
+        $this->values(true);
+        return $this;
+    }
 
-        if (isset($this->adds)) {
+    public function values($adds)
+    {
+        if ($adds === true) {
             $this->xml->InstrucaoUnica->Valores->addChild('Acrescimo', $this->adds)
                     ->addAttribute('moeda', 'BRL');
+        } else {
+            $this->xml->InstrucaoUnica->Valores->addChild('Deducao', $this->deduction)
+                    ->addAttribute('moeda', 'BRL');
         }
-
-        return $this;
+        
     }
 
     /**
@@ -524,12 +543,7 @@ class Api {
      */
     public function setDeduct($value) {
         $this->deduction = $value;
-
-        if (isset($this->deduction)) {
-            $this->xml->InstrucaoUnica->Valores->addChild('Deducao', $this->deduction)
-                    ->addAttribute('moeda', 'BRL');
-        }
-
+        $this->values(false);
         return $this;
     }
 
@@ -591,7 +605,7 @@ class Api {
      * @access public
      */
     public function setError($error) {
-        $this->errors = $error;
+        $this->errors = (object) $error;
 
         return $this;
     }
@@ -785,7 +799,7 @@ class Api {
 
         $url = $this->environment->base_url . "/ws/alpha/ChecarValoresParcelamento/$login/$maxParcel/$rate/$simulatedValue";
         $credential = $this->credential['token'] . ':' . $this->credential['key'];
-        $answer = $client->curlGet($credential, $url, $this->errors);
+        $answer = $client->curlGet($credential, $url, (string) $this->errors);
 
         if ($answer->response) {
             $xml = new SimpleXmlElement($answer->xml);
