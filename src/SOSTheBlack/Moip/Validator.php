@@ -339,7 +339,7 @@ class Validator
 		}
 
 		foreach ($data->billet->instructions as $keyInstructions => $valueInstructions) {
-			if (! is_string($valueInstructions) || strlen($valueInstructions) > 63) {
+			if (strlen($valueInstructions) > 63) {
 				throw new UnexpectedValueException("Menssagens do boleto deve ser string e devem conter apenas 63 caractesres");		
 			}
 		}
