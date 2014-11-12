@@ -334,20 +334,14 @@ class Validator
  		$data->billet->instructions->lastLine = $this->getParams($data->billet, $config->billet, 'instructions', 'lastLine');
  		$data->billet->urlLogo = $this->getParams($data, $config, 'billet', 'urlLogo');
 
-		if (! is_integer($data->billet->expiration) && ! is_string($data->billet->expiration)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->billet->expiration) . ", esperava-se integer ou string de data");
-		}
 		if (! is_bool($data->billet->workingDays)) {
 			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->billet->workingDays) . ", esperava-se boleean");
 		}
-		if (! is_string($data->billet->urlLogo) || ! is_string($data->billet->instructions->firstLine) || ! is_string($data->billet->instructions->secondLine) || ! is_string($data->billet->instructions->lastLine)) {
-			throw new UnexpectedValueException("Menssagens do boleto devem ser alfanuméricos");	
-		}
-		if (strlen($data->billet->instructions->firstLine) > 63 || strlen($data->billet->instructions->secondLine) > 63 || strlen($data->billet->instructions->lastLine) > 63) {
-			throw new InvalidArgumentException("Menssagens e URL do boleto não devem conter mais de 63 caracteres");	
-		}
-		if (strlen($data->billet->urlLogo) > 256) {
-			throw new InvalidArgumentException("Menssagens do boleto não devem conter mais de 256 caracteres");	
+
+		foreach ($data->billet->instructions as $keyInstructions => $valueInstructions) {
+			if (! is_string($valueInstructions) || strlen($valueInstructions) > 63) {
+				throw new UnexpectedValueException("Menssagens do boleto deve ser string e devem conter apenas 63 caractesres");		
+			}
 		}
 	}
 
@@ -368,12 +362,9 @@ class Validator
 		if (! is_numeric($data->comission->value)) {
 			throw new UnexpectedValueException("Parâmetro $data->comission->value dever ser numérico");
 		}
-		if (! is_bool($data->comission->percentageValue)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->comission->percentageValue) . ", esperava-se boolean");
+		if (! is_bool($data->comission->percentageValue) || ! is_bool($data->comission->ratePayer)) {
+			throw new UnexpectedValueException("PercentageValue e ratePayer devem ser do tipo boolean");
 		}
-		if (! is_bool($data->comission->ratePayer)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->comission->ratePayer) . ", esperava-se boolean");
-		}	
 	}
 
 	/**
