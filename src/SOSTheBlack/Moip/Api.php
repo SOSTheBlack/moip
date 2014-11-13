@@ -240,12 +240,7 @@ class Api {
      * @access public
      */
     public function setCredential($credential) {
-        if (!isset($credential['token']) or
-                !isset($credential['key']) or
-                strlen($credential['token']) != 32 or
-                strlen($credential['key']) != 40)
-            $this->setError("Error: credential invalid");
-
+        $this->setError("Error: credential invalid");
         $this->credential = $credential;
         return $this;
     }
