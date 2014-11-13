@@ -121,6 +121,24 @@ class Validator
 		}		
 	}
 
+	private function validatorValuesAdds($adds)
+	{
+		if (! isset($adds)) {
+			$adds = 0.0;
+		} elseif (! is_numeric($adds)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($deduct) . ", esperava-se float");
+		}
+	}
+
+	private function validatorValuesDecut($decut)
+	{
+		if (! isset($deduct)) {
+			$deduct = 0.0;
+		} elseif (! is_numeric($deduct)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($deduct) . ", esperava-se float");
+		}
+	}
+
 	/**
 	 * Validation for the parameter values ( prices )
 	 * @param  object $values prices of request
@@ -128,17 +146,8 @@ class Validator
 	 */
 	private function validatorValues($values)
 	{
-		if (! isset($values->adds)) {
-			$values->adds = 0.0;
-		} elseif (! is_numeric($values->adds)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($values->deduct) . ", esperava-se float");
-		}
-
-		if (! isset($values->deduct)) {
-			$values->deduct = 0.0;
-		} elseif (! is_numeric($values->deduct)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($values->deduct) . ", esperava-se float");
-		}
+		$this->validatorValuesAdds($values->adds);
+		$this->validatorValuesDecut($values->deduct);
 	}
 
 
