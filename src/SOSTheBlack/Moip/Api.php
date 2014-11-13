@@ -240,7 +240,6 @@ class Api {
      * @access public
      */
     public function setCredential($credential) {
-        $this->setError("Error: credential invalid");
         $this->credential = $credential;
         return $this;
     }
