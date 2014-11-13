@@ -99,7 +99,7 @@ class Validator
 			if (! isset($data->$value) && $required === true) {
 				throw new LogicException("É obrigatório enviar ". $value, 1);
 			} elseif (! isset($data->$value) && $required === false) {
-				return (object) $data->$value = new stdClass();
+				return (object) $data->$value = new \stdClass();
 			} else {
 				return (object) $data->$value;
 			}
