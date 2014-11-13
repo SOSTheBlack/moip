@@ -263,7 +263,7 @@ class Validator
 	            'phone'   => ''  
 	        ]
 		];
-		
+
 		foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
 			if (! isset($payer->$keyPayerArray)) {
 				throw new InvalidArgumentException("é obrigatório informar $keyPayerArray do pagador");		
@@ -380,6 +380,12 @@ class Validator
 
 		if (! is_bool($data->parcel->transfer)) {
 			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($data->parcel->transfer));
+		}
+		if (! is_numeric($data->parcel->rate) || ! is_numeric($data->parcel->min) || ! is_numeric($data->parcel->max)) {
+			throw new Exception("Espera-se numeric");
+		}
+		if ($data->parcel->min > 12 || $data->parcel->max > 12) {
+			throw new Exception("Parcelas devem ser inferiores a 12");	
 		}
 	}
 

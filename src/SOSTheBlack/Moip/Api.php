@@ -601,30 +601,14 @@ class Api {
         }
 
         $parcela = $this->xml->InstrucaoUnica->Parcelamentos->addChild('Parcelamento');
-        if (is_numeric($min) && $min <= 12)
-            $parcela->addChild('MinimoParcelas', $min);
-        else
-            $this->setError('Error: Minimum parcel can not be greater than 12.');
-
-        if (is_numeric($max) && $max <= 12)
-            $parcela->addChild('MaximoParcelas', $max);
-        else
-            $this->setError('Error: Maximum amount can not be greater than 12.');
-
+        $parcela->addChild('MinimoParcelas', $min);
+        $parcela->addChild('MaximoParcelas', $max);
         $parcela->addChild('Recebimento', 'AVista');
 
         if ($transfer === false) {
-            if (isset($rate)) {
-                if (is_numeric($rate))
-                    $parcela->addChild('Juros', $rate);
-                else
-                    $this->setError('Error: Rate must be numeric');
-            }
+            $parcela->addChild('Juros', $rate);
         }else {
-            if (is_bool($transfer))
-                $parcela->addChild('Repassar', $transfer);
-            else
-                $this->setError('Error: Transfer must be boolean');
+            $parcela->addChild('Repassar', $transfer);
         }
 
         return $this;
