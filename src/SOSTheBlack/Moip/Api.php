@@ -755,24 +755,28 @@ class Api {
      * Method getAnswer()
      *
      * Gets the server's answer
-     * @param boolean $return_xml_as_string Return the answer XMl string
      * @return Response|string
      * @access public
      */
-    public function getAnswer($return_xml_as_string = false) {
+    public function getAnswer() {
         if ($this->answer->response == true) {
-            if ($return_xml_as_string) {
-                return $this->answer->xml;
-            }
-
             $xml = new SimpleXmlElement($this->answer->xml);
 
-            return new Response(array(
-				'response' => $xml->Resposta->Status == 'Sucesso' ? true : false,
-    			'error' => $xml->Resposta->Status == 'Falha' ? $this->convert_encoding((string)$xml->Resposta->Erro) : false,
-    			'token' => (string) $xml->Resposta->Token,
-    			'payment_url' => $xml->Resposta->Status == 'Sucesso' ? (string) $this->environment->base_url . "/Instrucao.do?token=" . (string) $xml->Resposta->Token : false,
-			));
+            if ($xml->Resposta->Status == 'Sucesso') {
+                return new Response(array(
+                    'response' => true,
+                    'error' => false,
+                    'token' => (string) $xml->Resposta->Token,
+                    'payment_url' => (string) $this->environment->base_url . "/Instrucao.do?token=" . (string) $xml->Resposta->Token,
+                ));
+            } else {
+                return new Response(array(
+                    'response' => false,
+                    'error' => $this->convert_encoding((string)$xml->Resposta->Erro),
+                    'token' => (string) $xml->Resposta->Token,
+                    'payment_url' => false,
+                ));   
+            }
         } else {
             return $this->answer->error;
         }
