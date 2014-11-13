@@ -50,7 +50,7 @@ class Client {
 	 * @param string $xml url request
 	 * @param string $url url request
 	 * @param string $error errors
-	 * @return SOSTheBlack\Moip\Cliente
+	 * @return Response
      */
     function curlPost($credentials, $xml, $url, $error=null) 
     {
@@ -59,9 +59,9 @@ class Client {
 
     /**
      * @param string $credentials token / key authentication Moip
-     * @param string|object $url url request
+     * @param string $url url request
      * @param string $error errors
-     * @return SOSTheBlack\Moip\Cliente
+     * @return Response
      */
     function curlGet($credentials, $url, $error=null) 
     {

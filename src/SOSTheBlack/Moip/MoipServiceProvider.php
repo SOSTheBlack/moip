@@ -1,8 +1,6 @@
 <?php namespace SOSTheBlack\Moip;
 
 use Illuminate\Support\ServiceProvider;
-use View;
-use Config;
 
 /**
  * Moip Service Provider
@@ -45,7 +43,7 @@ class MoipServiceProvider extends ServiceProvider {
 	/**
 	 * Get the services provided by the provider.
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	public function provides()
 	{
