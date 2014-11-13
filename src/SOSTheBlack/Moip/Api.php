@@ -1,7 +1,6 @@
 <?php namespace SOSTheBlack\Moip;
 
 use SimpleXmlElement;
-use StdClass;
 use App;
 
 /**
@@ -175,7 +174,7 @@ class Api {
      * encoding converting
      * @param  string  $text 
      * @param  boolean $post 
-     * @return void
+     * @return string
      */
 	private function convert_encoding($text, $post = false)
 	{
@@ -217,7 +216,7 @@ class Api {
      * Define the payment's type between 'Basic' or 'Identification'
      *
      * @param string $tipo Can be 'Basic' or 'Identification'
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setPaymentType($tipo) {
@@ -236,7 +235,7 @@ class Api {
      * Set the credentials(key,token) required for the API authentication.
      *
      * @param array $credential Array with the credentials token and key
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setCredential($credential) {
@@ -256,7 +255,7 @@ class Api {
      * Define the environment for the API utilization.
      *
      * @param bool $testing If true, will use the sandbox environment
-	 * @return Moip
+	 * @return Api
      */
     public function setEnvironment($testing = false) {
 		if (empty($this->environment))
@@ -281,7 +280,7 @@ class Api {
      * Make the data validation
 	 *
      * @param string $validateType Identification or Basic, defaults to Basic
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function validate($validateType = "Basic") {
@@ -338,7 +337,7 @@ class Api {
      * Set the unique ID for the transaction
      *
      * @param int $id Unique ID for each transaction
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setUniqueID($id) {
@@ -354,7 +353,7 @@ class Api {
      * Set the short description of transaction. eg. Order Number.
      *
      * @param string $reason The reason fo transaction
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setReason($reason) {
@@ -370,7 +369,7 @@ class Api {
      * Add a payment's method
      *
      * @param string $way The payment method. Options: 'billet','financing','debit','creditCard','debitCard'.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function addPaymentWay($way) {
@@ -400,7 +399,7 @@ class Api {
      * @param boolean $workingDays expiration should be counted in working days?
      * @param array $instructions Additional payment instructions can be array of message or a message in string
      * @param string $uriLogo URL of the image to be displayed on docket (75x40)
-     * @return void
+     * @return Api
      * @access public
      */
     public function setBilletConf($expiration, $workingDays=false, $instructions = null, $uriLogo = null) {
@@ -444,7 +443,7 @@ class Api {
      * Set contacts informations for the payer.
      *
      * @param array $payer Contact information for the payer.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setPayer($payer) {
@@ -489,7 +488,7 @@ class Api {
      * Set the transaction's value
      *
      * @param float $value The transaction's value
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setValue($value) {
@@ -511,7 +510,7 @@ class Api {
      * Adds a value on payment. Can be used for collecting fines, shipping and other
      *
      * @param float $value The value to add.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setAdds($value) {
@@ -520,6 +519,9 @@ class Api {
         return $this;
     }
 
+    /**
+     * @param boolean $adds
+     */
     public function values($adds)
     {
         if ($adds === true) {
@@ -538,7 +540,7 @@ class Api {
      * Deducts a payment amount. It is mainly used for discounts.
      *
      * @param float $value The value to deduct
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setDeduct($value) {
@@ -553,7 +555,7 @@ class Api {
      * Add a message in the instruction to be displayed to the payer.
      *
      * @param string $msg Message to be displayed.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function addMessage($msg) {
@@ -571,7 +573,7 @@ class Api {
      * Set the return URL, which redirects the client after payment.
      *
      * @param string $url Return URL
-	 * @return Moip
+	 * @return Api
      * @access public
      */
     public function setReturnURL($url) {
@@ -601,7 +603,7 @@ class Api {
      * Set Erroe alert
      *
      * @param String $error Error alert
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setError($error) {
@@ -620,7 +622,7 @@ class Api {
      * @param number $value value of the division of payment
      * @param boolean $percentageValue percentage value should be
      * @param boolean $ratePayer this secondary recipient will pay the fee Moip
-	 * @return Moip
+	 * @return Api
      * @access public
      */
     public function addComission($reason, $receiver, $value, $percentageValue=false, $ratePayer=false) {
@@ -656,7 +658,7 @@ class Api {
      * @param int $max The maximum number of parcels.
      * @param float $rate The percentual value of rates
      * @param boolean $transfer "true" defines the amount of interest charged by MoIP installment to be paid by the payer
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function addParcel($min, $max, $rate=null, $transfer=false) {
@@ -700,7 +702,7 @@ class Api {
      * Allows to add a order to parceling.
      *
      * @param string $receiver login Moip the secondary receiver
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setReceiver($receiver) {

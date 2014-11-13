@@ -5,7 +5,6 @@ use InvalidArgumentException;
 use LengthException;
 use LogicException;
 use Exception;
-use StdClass;
 
 /**
  * Class to validate all data Moip
@@ -109,7 +108,6 @@ class Validator
 
 	/**
 	 * Validation for the parameter unqiue_id
-	 * @param  string $unique_id indentification unique for request
 	 * @return void
 	 */
 	private function validatorUniqueID($data)
@@ -320,7 +318,6 @@ class Validator
 
 	/**
 	 * Validation of billet
-	 * @param  object $billet billet info
 	 * @return void
 	 */
 	private function validatorBillet($data, $config)
@@ -347,7 +344,6 @@ class Validator
 
 	/**
 	 * Validation of comission
-	 * @param  object $comission comission info
 	 * @return void
 	 */
 	private function validatorComission($data, $config)
@@ -369,7 +365,6 @@ class Validator
 
 	/**
 	 * Validation of params for parcel
-	 * @param  object $parcel 
 	 * @return void
 	 */
 	private function validatorParcel($data, $config)
@@ -470,7 +465,6 @@ class Validator
 
 	/**
 	 * Validate token
-	 * @param  string $token
 	 * @return boolean       true
 	 */
 	private function validatorTokenKey($credential)
