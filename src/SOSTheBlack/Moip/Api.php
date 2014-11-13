@@ -394,31 +394,22 @@ class Api {
         if (!empty($this->payer)) {
             $p = $this->payer;
             $this->xml->InstrucaoUnica->addChild('Pagador');
-            (isset($p->name)) ? $this->xml->InstrucaoUnica->Pagador->addChild('Nome', $this->payer->name) : null;
-            (isset($p->email)) ? $this->xml->InstrucaoUnica->Pagador->addChild('Email', $this->payer->email) : null;
-            (isset($p->payerId)) ? $this->xml->InstrucaoUnica->Pagador->addChild('IdPagador', $this->payer->payerId) : null;
-            (isset($p->identity)) ? $this->xml->InstrucaoUnica->Pagador->addChild('Identidade', $this->payer->identity) : null;
-            (isset($p->phone)) ? $this->xml->InstrucaoUnica->Pagador->addChild('TelefoneCelular', $this->payer->phone) : null;
+            $p->name = $this->xml->InstrucaoUnica->Pagador->addChild('Nome', $this->payer->name);
+            $p->email = $this->xml->InstrucaoUnica->Pagador->addChild('Email', $this->payer->email);
+            $p->payerId = $this->xml->InstrucaoUnica->Pagador->addChild('IdPagador', $this->payer->payerId);
+            $p->identity = $this->xml->InstrucaoUnica->Pagador->addChild('Identidade', $this->payer->identity);
+            $p->phone = $this->xml->InstrucaoUnica->Pagador->addChild('TelefoneCelular', $this->payer->phone);
 
             $p = $this->payer->billingAddress;
             $this->xml->InstrucaoUnica->Pagador->addChild('EnderecoCobranca');
-            (isset($p->address)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Logradouro', $this->payer->billingAddress->address) : null;
-
-            (isset($p->number)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Numero', $this->payer->billingAddress->number) : null;
-
-            (isset($p->complement)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Complemento', $this->payer->billingAddress->complement) : null;
-
-            (isset($p->neighborhood)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Bairro', $this->payer->billingAddress->neighborhood) : null;
-
-            (isset($p->city)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer->billingAddress->city) : null;
-
-            (isset($p->state)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer->billingAddress->state) : null;
-
-            (isset($p->country)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer->billingAddress->country) : null;
-
-            (isset($p->zipCode)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('CEP', $this->payer->billingAddress->zipCode) : null;
-
-            (isset($p->phone)) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer->billingAddress->phone) : null;
+            $p->address = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Logradouro', $this->payer->billingAddress->address);
+            $p->number = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Numero', $this->payer->billingAddress->number);
+            $p->complement = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Complemento', $this->payer->billingAddress->complement);
+            $p->neighborhood = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Bairro', $this->payer->billingAddress->neighborhood);
+            $p->city = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer->billingAddress->city);
+            $p->state = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer->billingAddress->state);
+            $p->country = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer->billingAddress->country);
+            $p->phone = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer->billingAddress->phone);
         }
 
         return $this;

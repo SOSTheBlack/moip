@@ -70,6 +70,7 @@ class Validator
 			$this->validatorPayer($data->payer);
 		} else {
 			$this->validatorBasic($data, $config);
+			$this->validatorPayerBasic($data->payer);
 		}
 		$this->validatorUniqueID($data);
 		$this->validatorValues($data->values);
@@ -277,6 +278,32 @@ class Validator
 		}
 	}
 
+	/**
+	 * Validation for data of payer
+	 * @param  object $payer  data of payer
+	 * @return void
+	 */
+	private function validatorPayerBasic($payer)
+	{
+		$payerArray = [
+			'name'  => '','email'  => '','payerId'  => '','identity' => '','phone' => '','billingAddress' => [
+				'address'  => '','number'   => '','complement'=> '','city'   => '','neighborhood'=> '','state'    => '','country'  => '','zipCode'  => '','phone'   => ''  
+	        ]
+		];
+
+		foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
+			if (! isset($payer->$keyPayerArray)) {
+				$payer->$keyPayerArray = '';
+			}
+		}
+
+		foreach ($payerArray['billingAddress'] as $keyArrayBillingAddress => $valueArrayBillingAddress) {
+		 	if (! isset($payer->billingAddress->$keyArrayBillingAddress)) {
+				$payer->billingAddress->$keyArrayBillingAddress = '';
+			}	
+		}
+	}
+
 	private function getParamsValue($data, $config, $key, $value)
 	{
 		if (! isset($data->$key->$value)) {
@@ -289,6 +316,7 @@ class Validator
 			return $data->$key->$value;
 		}
 	}
+
 	private function getParamsKey($data, $config, $key)
 	{
 		if (! isset($data->$key)) {
