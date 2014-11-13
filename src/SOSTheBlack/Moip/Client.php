@@ -101,19 +101,20 @@ class Client {
             $info = curl_getinfo($ch);
             curl_close($ch);            
 
+            var_dump($info['http_code']);
             if ($info['http_code'] == "200"){
-                return $this->returnResponse(null, $ret);
+                return $this->returnResponse(null, $ret, true);
             }
             else{
-                return $this->returnResponse("Errors $info['http_code']". $err, null);
+                return $this->returnResponse('Errors $info["http_code"]'.$err, null);
             }
         } else {
             return $this->returnResponse($error, null);
         }
     }
 
-    private function returnResponse($error, $ret)
+    private function returnResponse($error, $ret, $response = false)
     {
-        return return new Response(array('response' => false, 'error' => $error, 'xml' => $ret));
+        return new Response(array('response' => $response, 'error' => $error, 'xml' => $ret));
     }
 }
