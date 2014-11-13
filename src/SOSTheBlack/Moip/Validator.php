@@ -98,7 +98,7 @@ class Validator
 		} else {
 			if (! isset($data->$value) && $required === true) {
 				throw new LogicException("É obrigatório enviar ". $value, 1);
-			} elseif (! isset($data->$value) && $required === false) {
+			} elseif (! isset($data->$value)) {
 				return (object) $data->$value = new \stdClass();
 			} else {
 				return (object) $data->$value;
@@ -283,6 +283,31 @@ class Validator
 		}
 	}
 
+	private function getParamsValue($data, $config, $key, $value)
+	{
+		if (! isset($data->$key->$value)) {
+			if (! isset($config->$key->$value)) {
+				throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+			} else {
+				return $config->$key->$value;
+			}
+		} else {
+			return $data->$key->$value;
+		}
+	}
+	private function getParamsKey($data, $config, $key)
+	{
+		if (! isset($data->$key)) {
+			if (! isset($config->$key)) {
+				throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+			} else {
+				return $config->$key;
+			}
+		} else {
+			return $data->$key;
+		}			
+	}
+
 	/**
 	 * Search all parameters
 	 * @param  object $data   
@@ -294,25 +319,9 @@ class Validator
 	private function getParams($data, $config, $key, $value = '')
 	{
 		if (! empty($value)) {
-			if (! isset($data->$key->$value)) {
-				if (! isset($config->$key->$value)) {
-					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
-				} else {
-					return $config->$key->$value;
-				}
-			} else {
-				return $data->$key->$value;
-			}
+			return $this->getParamsValue($data, $config, $key, $value);
 		} else {
-			if (! isset($data->$key)) {
-				if (! isset($config->$key)) {
-					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
-				} else {
-					return $config->$key;
-				}
-			} else {
-				return $data->$key;
-			}			
+			return $this->getParamsKey($data, $config, $key);
 		}
 	}
 
