@@ -34,15 +34,14 @@ class Client {
         curl_setopt($curl, CURLOPT_USERPWD, $credentials);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/4.0");
-
-        if ($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
-
+        if ($method == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, true);
+        }
 		if ($xml != '') curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-
         return new Response(array('resposta' => $ret, 'erro' => $err));
     }
 

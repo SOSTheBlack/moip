@@ -619,23 +619,15 @@ class Api {
      */
     public function addComission($reason, $receiver, $value, $percentageValue=false, $ratePayer=false) {
 
-        if (!isset($this->xml->InstrucaoUnica->Comissoes))
+        if (!isset($this->xml->InstrucaoUnica->Comissoes)) {
             $this->xml->InstrucaoUnica->addChild('Comissoes');
-
-        if (is_numeric($value)) {
-
-            $split = $this->xml->InstrucaoUnica->Comissoes->addChild('Comissionamento');
-            $split->addChild('Comissionado')->addChild('LoginMoIP', $receiver);
-            $split->addChild('Razao', $reason);
-
-            if ($percentageValue == false)
-                $split->addChild('ValorFixo', $value);
-            if ($percentageValue == true)
-                $split->addChild('ValorPercentual', $value);
-            if ($ratePayer == true)
-                $this->xml->InstrucaoUnica->Comissoes->addChild('PagadorTaxa')->addChild('LoginMoIP', $receiver);
-        }else {
-            $this->setError('Error: Value must be numeric.');
+        }
+        $split = $this->xml->InstrucaoUnica->Comissoes->addChild('Comissionamento');
+        $split->addChild('Comissionado')->addChild('LoginMoIP', $receiver);
+        $split->addChild('Razao', $reason);
+        $split->addChild( $percentageValue == false ? 'ValorFixo' : 'ValorPercentual' , $value);
+        if ($ratePayer == true){
+            $this->xml->InstrucaoUnica->Comissoes->addChild('PagadorTaxa')->addChild('LoginMoIP', $receiver);
         }
 
         return $this;
