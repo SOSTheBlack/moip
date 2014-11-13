@@ -101,7 +101,6 @@ class Client {
             $info = curl_getinfo($ch);
             curl_close($ch);            
 
-            var_dump($info['http_code']);
             if ($info['http_code'] == "200"){
                 return $this->returnResponse(null, $ret, true);
             }

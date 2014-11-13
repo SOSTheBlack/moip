@@ -403,29 +403,19 @@ class Api {
             $this->xml->InstrucaoUnica->Boleto = (object) $this->xml->InstrucaoUnica->Boleto;
             if (is_numeric($expiration)) {
                 $this->xml->InstrucaoUnica->Boleto->addChild('DiasExpiracao', $expiration);
-
-                if ($workingDays)
-                    $this->xml->InstrucaoUnica->Boleto->DiasExpiracao->addAttribute('Tipo', 'Uteis');
-                else
-                    $this->xml->InstrucaoUnica->Boleto->DiasExpiracao->addAttribute('Tipo', 'Corridos');
-            }else {
+                $this->xml->InstrucaoUnica->Boleto->DiasExpiracao->addAttribute('Tipo', $workingDays ? 'Uteis' : 'Corridos');
                 $this->xml->InstrucaoUnica->Boleto->addChild('DataVencimento', $expiration);
             }
 
-            if (isset($instructions)) {
-                if (is_array($instructions)) {
-                    $numeroInstrucoes = 1;
-                    foreach ($instructions as $instrucaostr) {
-                        $this->xml->InstrucaoUnica->Boleto->addChild('Instrucao' . $numeroInstrucoes, $instrucaostr);
-                        $numeroInstrucoes++;
-                    }
-                } else {
-                    $this->xml->InstrucaoUnica->Boleto->addChild('Instrucao1', $instructions);
-                }
+            $numeroInstrucoes = 1;
+            foreach ($instructions as $instrucaostr) {
+                $this->xml->InstrucaoUnica->Boleto->addChild('Instrucao' . $numeroInstrucoes, $instrucaostr);
+                $numeroInstrucoes++;
             }
-
-            if (isset($uriLogo))
+             
+            if (isset($uriLogo)) {
                 $this->xml->InstrucaoUnica->Boleto->addChild('URLLogo', $uriLogo);
+            }
         }
 
         return $this;
