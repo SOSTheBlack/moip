@@ -103,12 +103,8 @@ class Client {
 
             if ($info['http_code'] == "200")
                 return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
-            else if ($info['http_code'] == "500")
-                return new Response(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
-            else if ($info['http_code'] == "401")
-                return new Response(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
             else
-                return new Response(array('response' => false, 'error' => $err, 'xml' => null));
+                return new Response(array('response' => false, 'error' => "Errors $info['http_code']". $err, 'xml' => null));
         } else {
             return new Response(array('response' => false, 'error' => $error, 'xml' => null));
         }
