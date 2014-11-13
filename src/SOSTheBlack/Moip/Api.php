@@ -783,8 +783,9 @@ class Api {
      * @access public
      */
     public function queryParcel($login, $maxParcel, $rate, $simulatedValue) {
-        if (!isset($this->credential))
+        if (!isset($this->credential)) {
             $this->setError("You must specify the credentials (token / key) and enriroment");
+        }
 
 
         $client = new Client();
@@ -795,13 +796,7 @@ class Api {
 
         if ($answer->response) {
             $xml = new SimpleXmlElement($answer->xml);
-
-            if ($xml->Resposta->Status == "Sucesso")
-                $response = true;
-            else
-                $response = false;
-
-            $return = array('response' => $response,
+            $return = array('response' => $xml->Resposta->Status == "Sucesso" ? true : false,
                 'installment' => array());
 
             $i = 1;
