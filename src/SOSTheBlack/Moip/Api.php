@@ -278,50 +278,8 @@ class Api {
      * @access public
      */
     public function validate($validateType = "Basic") {
-
         $this->setPaymentType($validateType);
-
-        if (!isset($this->credential) or
-                !isset($this->reason) or
-                !isset($this->uniqueID))
-            $this->setError("[setCredential], [setReason] and [setUniqueID] are required");
-
         $payer = $this->payer;
-
-        if ($this->payment_type == 'Identification') {
-			$varNotSeted = '';
-
-            $dataValidate = array('name',
-                'email',
-                'payerId',
-                'billingAddress');
-
-            $dataValidateAddress = array('address',
-                'number',
-                'complement',
-                'neighborhood',
-                'city',
-                'state',
-                'country',
-                'zipCode',
-                'phone');
-
-            foreach ($dataValidate as $key) {
-                if (!isset($payer->$key)) {
-                    $varNotSeted .= ' [' . $key . '] ';
-                }
-            }
-
-            foreach ($dataValidateAddress as $key) {
-                if (!isset($payer->billingAddress->$key)) {
-                    $varNotSeted .= ' [' . $key . '] ';
-                }
-            }
-
-            if ($varNotSeted !== '') {
-                $this->setError('Error: The following data required were not informed: ' . $varNotSeted . '.');
-			}
-        }
         return $this;
     }
 

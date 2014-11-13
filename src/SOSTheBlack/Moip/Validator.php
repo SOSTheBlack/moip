@@ -263,32 +263,17 @@ class Validator
 	            'phone'   => ''  
 	        ]
 		];
-		if (empty($payer->billingAddress)) {
-			throw new InvalidArgumentException("é obrigatório informar os todos os dados para pagador");	
-		} else {
-			foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
-				if (array_key_exists($keyPayerArray, $payer) === false) {
-					throw new InvalidArgumentException("é obrigatório informar $keyPayerArray do pagador");		
-				}
-				if (empty($payer->$keyPayerArray)) {
-					throw new InvalidArgumentException($keyPayerArray . " não pode estar vazio");
-				}
-
-				if ($keyPayerArray === 'billingAddress') {
-					foreach ($payerArray['billingAddress'] as $keyBillingAddress => $valueBillingAddress) {
-						if (array_key_exists($keyBillingAddress, $payer->billingAddress) === false) {
-							throw new InvalidArgumentException("é obrigatório informar $keyBillingAddress do pagador");		
-						}
-						if (empty($payer->billingAddress->$keyBillingAddress)) {
-							throw new InvalidArgumentException($keyBillingAddress . " não pode estar vazio");
-						}
-
-						if ($keyBillingAddress === 'state' && strlen($payer->billingAddress->state) > 2 ) {
-							throw new InvalidArgumentException("Estado deve estar no formado ISO-CODE(2)");
-						}
-					}
-				}
+		
+		foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
+			if (! isset($payer->$keyPayerArray)) {
+				throw new InvalidArgumentException("é obrigatório informar $keyPayerArray do pagador");		
 			}
+		}
+
+		foreach ($payerArray['billingAddress'] as $keyArrayBillingAddress => $valueArrayBillingAddress) {
+		 	if (! isset($payer->billingAddress->$keyArrayBillingAddress)) {
+				throw new InvalidArgumentException("é obrigatório informar $keyArrayBillingAddress do pagador");		
+			}	
 		}
 	}
 
