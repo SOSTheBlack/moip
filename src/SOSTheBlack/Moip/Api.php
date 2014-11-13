@@ -279,7 +279,6 @@ class Api {
      */
     public function validate($validateType = "Basic") {
         $this->setPaymentType($validateType);
-        $payer = $this->payer;
         return $this;
     }
 
