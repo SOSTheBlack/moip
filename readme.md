@@ -34,7 +34,7 @@ Begin by installing this package through Composer. Edit your project's `composer
 soon in version v1.*
 
 ```
-"require-dev": {
+"require": {
     "sostheblack/moip": "1.*"
 }
 ```
@@ -78,10 +78,6 @@ Add a new item to the facades array.
     'Moip'       => 'SOSTheBlack\Moip\Facade',
 ),
 ```
-
-### Laravel 5 and Abouve
-
-coming soon
 
 ## Usage
 
