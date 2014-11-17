@@ -5,7 +5,6 @@ use InvalidArgumentException;
 use LengthException;
 use LogicException;
 use Exception;
-use StdClass;
 
 /**
  * Class to validate all data Moip
@@ -71,6 +70,7 @@ class Validator
 			$this->validatorPayer($data->payer);
 		} else {
 			$this->validatorBasic($data, $config);
+			$this->validatorPayerBasic($data->payer);
 		}
 		$this->validatorUniqueID($data);
 		$this->validatorValues($data->values);
@@ -99,8 +99,8 @@ class Validator
 		} else {
 			if (! isset($data->$value) && $required === true) {
 				throw new LogicException("É obrigatório enviar ". $value, 1);
-			} elseif (! isset($data->$value) && $required === false) {
-				return (object) $data->$value = new stdClass();
+			} elseif (! isset($data->$value)) {
+				return (object) $data->$value = new \stdClass();
 			} else {
 				return (object) $data->$value;
 			}
@@ -109,7 +109,6 @@ class Validator
 
 	/**
 	 * Validation for the parameter unqiue_id
-	 * @param  string $unique_id indentification unique for request
 	 * @return void
 	 */
 	private function validatorUniqueID($data)
@@ -123,6 +122,24 @@ class Validator
 		}		
 	}
 
+	private function validatorValuesAdds($adds)
+	{
+		if (! isset($adds)) {
+			$adds = 0.0;
+		} elseif (! is_numeric($adds)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($deduct) . ", esperava-se float");
+		}
+	}
+
+	private function validatorValuesDecut($decut)
+	{
+		if (! isset($deduct)) {
+			$deduct = 0.0;
+		} elseif (! is_numeric($deduct)) {
+			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($deduct) . ", esperava-se float");
+		}
+	}
+
 	/**
 	 * Validation for the parameter values ( prices )
 	 * @param  object $values prices of request
@@ -130,17 +147,8 @@ class Validator
 	 */
 	private function validatorValues($values)
 	{
-		if (! isset($values->adds)) {
-			$values->adds = 0.0;
-		} elseif (! is_numeric($values->adds)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($values->deduct) . ", esperava-se float");
-		}
-
-		if (! isset($values->deduct)) {
-			$values->deduct = 0.0;
-		} elseif (! is_numeric($values->deduct)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($values->deduct) . ", esperava-se float");
-		}
+		$this->validatorValuesAdds($values->adds);
+		$this->validatorValuesDecut($values->deduct);
 	}
 
 
@@ -256,33 +264,70 @@ class Validator
 	            'phone'   => ''  
 	        ]
 		];
-		if (empty($payer->billingAddress)) {
-			throw new InvalidArgumentException("é obrigatório informar os todos os dados para pagador");	
-		} else {
-			foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
-				if (array_key_exists($keyPayerArray, $payer) === false) {
-					throw new InvalidArgumentException("é obrigatório informar $keyPayerArray do pagador");		
-				}
-				if (empty($payer->$keyPayerArray)) {
-					throw new InvalidArgumentException($keyPayerArray . " não pode estar vazio");
-				}
 
-				if ($keyPayerArray === 'billingAddress') {
-					foreach ($payerArray['billingAddress'] as $keyBillingAddress => $valueBillingAddress) {
-						if (array_key_exists($keyBillingAddress, $payer->billingAddress) === false) {
-							throw new InvalidArgumentException("é obrigatório informar $keyBillingAddress do pagador");		
-						}
-						if (empty($payer->billingAddress->$keyBillingAddress)) {
-							throw new InvalidArgumentException($keyBillingAddress . " não pode estar vazio");
-						}
-
-						if ($keyBillingAddress === 'state' && strlen($payer->billingAddress->state) > 2 ) {
-							throw new InvalidArgumentException("Estado deve estar no formado ISO-CODE(2)");
-						}
-					}
-				}
+		foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
+			if (! isset($payer->$keyPayerArray)) {
+				throw new InvalidArgumentException("é obrigatório informar $keyPayerArray do pagador");		
 			}
 		}
+
+		foreach ($payerArray['billingAddress'] as $keyArrayBillingAddress => $valueArrayBillingAddress) {
+		 	if (! isset($payer->billingAddress->$keyArrayBillingAddress)) {
+				throw new InvalidArgumentException("é obrigatório informar $keyArrayBillingAddress do pagador");		
+			}	
+		}
+	}
+
+	/**
+	 * Validation for data of payer
+	 * @param  object $payer  data of payer
+	 * @return void
+	 */
+	private function validatorPayerBasic($payer)
+	{
+		$payerArray = [
+			'name'  => '','email'  => '','payerId'  => '','identity' => '','phone' => '','billingAddress' => [
+				'address'  => '','number'   => '','complement'=> '','city'   => '','neighborhood'=> '','state'    => '','country'  => '','zipCode'  => '','phone'   => ''  
+	        ]
+		];
+
+		foreach ($payerArray as $keyPayerArray => $valuePayerArray) {
+			if (! isset($payer->$keyPayerArray)) {
+				$payer->$keyPayerArray = '';
+			}
+		}
+
+		foreach ($payerArray['billingAddress'] as $keyArrayBillingAddress => $valueArrayBillingAddress) {
+		 	if (! isset($payer->billingAddress->$keyArrayBillingAddress)) {
+				$payer->billingAddress->$keyArrayBillingAddress = '';
+			}	
+		}
+	}
+
+	private function getParamsValue($data, $config, $key, $value)
+	{
+		if (! isset($data->$key->$value)) {
+			if (! isset($config->$key->$value)) {
+				throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+			} else {
+				return $config->$key->$value;
+			}
+		} else {
+			return $data->$key->$value;
+		}
+	}
+
+	private function getParamsKey($data, $config, $key)
+	{
+		if (! isset($data->$key)) {
+			if (! isset($config->$key)) {
+				throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
+			} else {
+				return $config->$key;
+			}
+		} else {
+			return $data->$key;
+		}			
 	}
 
 	/**
@@ -296,31 +341,14 @@ class Validator
 	private function getParams($data, $config, $key, $value = '')
 	{
 		if (! empty($value)) {
-			if (! isset($data->$key->$value)) {
-				if (! isset($config->$key->$value)) {
-					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
-				} else {
-					return $config->$key->$value;
-				}
-			} else {
-				return $data->$key->$value;
-			}
+			return $this->getParamsValue($data, $config, $key, $value);
 		} else {
-			if (! isset($data->$key)) {
-				if (! isset($config->$key)) {
-					throw new InvalidArgumentException("Não existe o parâmetro $value no arquivo de configuração moip.php");
-				} else {
-					return $config->$key;
-				}
-			} else {
-				return $data->$key;
-			}			
+			return $this->getParamsKey($data, $config, $key);
 		}
 	}
 
 	/**
 	 * Validation of billet
-	 * @param  object $billet billet info
 	 * @return void
 	 */
 	private function validatorBillet($data, $config)
@@ -334,26 +362,19 @@ class Validator
  		$data->billet->instructions->lastLine = $this->getParams($data->billet, $config->billet, 'instructions', 'lastLine');
  		$data->billet->urlLogo = $this->getParams($data, $config, 'billet', 'urlLogo');
 
-		if (! is_integer($data->billet->expiration) && ! is_string($data->billet->expiration)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->billet->expiration) . ", esperava-se integer ou string de data");
-		}
 		if (! is_bool($data->billet->workingDays)) {
 			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->billet->workingDays) . ", esperava-se boleean");
 		}
-		if (! is_string($data->billet->urlLogo) || ! is_string($data->billet->instructions->firstLine) || ! is_string($data->billet->instructions->secondLine) || ! is_string($data->billet->instructions->lastLine)) {
-			throw new UnexpectedValueException("Menssagens do boleto devem ser alfanuméricos");	
-		}
-		if (strlen($data->billet->instructions->firstLine) > 63 || strlen($data->billet->instructions->secondLine) > 63 || strlen($data->billet->instructions->lastLine) > 63) {
-			throw new InvalidArgumentException("Menssagens e URL do boleto não devem conter mais de 63 caracteres");	
-		}
-		if (strlen($data->billet->urlLogo) > 256) {
-			throw new InvalidArgumentException("Menssagens do boleto não devem conter mais de 256 caracteres");	
+
+		foreach ($data->billet->instructions as $keyInstructions => $valueInstructions) {
+			if (strlen($valueInstructions) > 63) {
+				throw new UnexpectedValueException("Menssagens do boleto deve ser string e devem conter apenas 63 caractesres");		
+			}
 		}
 	}
 
 	/**
 	 * Validation of comission
-	 * @param  object $comission comission info
 	 * @return void
 	 */
 	private function validatorComission($data, $config)
@@ -368,17 +389,13 @@ class Validator
 		if (! is_numeric($data->comission->value)) {
 			throw new UnexpectedValueException("Parâmetro $data->comission->value dever ser numérico");
 		}
-		if (! is_bool($data->comission->percentageValue)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->comission->percentageValue) . ", esperava-se boolean");
+		if (! is_bool($data->comission->percentageValue) || ! is_bool($data->comission->ratePayer)) {
+			throw new UnexpectedValueException("PercentageValue e ratePayer devem ser do tipo boolean");
 		}
-		if (! is_bool($data->comission->ratePayer)) {
-			throw new UnexpectedValueException("Parametro passado é do tipo ". gettype($data->comission->ratePayer) . ", esperava-se boolean");
-		}	
 	}
 
 	/**
 	 * Validation of params for parcel
-	 * @param  object $parcel 
 	 * @return void
 	 */
 	private function validatorParcel($data, $config)
@@ -391,6 +408,12 @@ class Validator
 
 		if (! is_bool($data->parcel->transfer)) {
 			throw new UnexpectedValueException("Espera-se boolean, foi passado ". gettype($data->parcel->transfer));
+		}
+		if (! is_numeric($data->parcel->rate) || ! is_numeric($data->parcel->min) || ! is_numeric($data->parcel->max)) {
+			throw new Exception("Espera-se numeric");
+		}
+		if ($data->parcel->min > 12 || $data->parcel->max > 12) {
+			throw new Exception("Parcelas devem ser inferiores a 12");	
 		}
 	}
 
@@ -479,7 +502,6 @@ class Validator
 
 	/**
 	 * Validate token
-	 * @param  string $token
 	 * @return boolean       true
 	 */
 	private function validatorTokenKey($credential)

@@ -34,15 +34,14 @@ class Client {
         curl_setopt($curl, CURLOPT_USERPWD, $credentials);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/4.0");
-
-        if ($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
-
+        if ($method == 'POST') {
+            curl_setopt($curl, CURLOPT_POST, true);
+        }
 		if ($xml != '') curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-
         return new Response(array('resposta' => $ret, 'erro' => $err));
     }
 
@@ -51,7 +50,7 @@ class Client {
 	 * @param string $xml url request
 	 * @param string $url url request
 	 * @param string $error errors
-	 * @return SOSTheBlack\Moip\Cliente
+	 * @return Response
      */
     function curlPost($credentials, $xml, $url, $error=null) 
     {
@@ -60,9 +59,9 @@ class Client {
 
     /**
      * @param string $credentials token / key authentication Moip
-     * @param string|object $url url request
+     * @param string $url url request
      * @param string $error errors
-     * @return SOSTheBlack\Moip\Cliente
+     * @return Response
      */
     function curlGet($credentials, $url, $error=null) 
     {
@@ -102,16 +101,19 @@ class Client {
             $info = curl_getinfo($ch);
             curl_close($ch);            
 
-            if ($info['http_code'] == "200")
-                return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
-            else if ($info['http_code'] == "500")
-                return new Response(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
-            else if ($info['http_code'] == "401")
-                return new Response(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
-            else
-                return new Response(array('response' => false, 'error' => $err, 'xml' => null));
+            if ($info['http_code'] == "200"){
+                return $this->returnResponse(null, $ret, true);
+            }
+            else{
+                return $this->returnResponse('Errors $info["http_code"]'.$err, null);
+            }
         } else {
-            return new Response(array('response' => false, 'error' => $error, 'xml' => null));
+            return $this->returnResponse($error, null);
         }
+    }
+
+    private function returnResponse($error, $ret, $response = false)
+    {
+        return new Response(array('response' => $response, 'error' => $error, 'xml' => $ret));
     }
 }
