@@ -175,7 +175,7 @@ class Moip extends Validator
 	{
 		if (! empty($send)) {
 			$answer = $this->moip->getAnswer();
-			$this->validatorResponseError($answer->error);
+			$this->validatorResponseError(isset($answer->error) ? $answer->error : $answer);
 			$this->response = new StdClass;
 			$this->response->response 	 = $answer->response;
 			$this->response->error 		 = $answer->error;

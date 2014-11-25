@@ -101,19 +101,16 @@ class Client {
             $info = curl_getinfo($ch);
             curl_close($ch);            
 
-            if ($info['http_code'] == "200"){
-                return $this->returnResponse(null, $ret, true);
-            }
-            else{
-                return $this->returnResponse('Errors $info["http_code"]'.$err, null);
-            }
+            if ($info['http_code'] == "200")
+                return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
+            else if ($info['http_code'] == "500")
+                return new Response(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
+            else if ($info['http_code'] == "401")
+                return new Response(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
+            else
+                return new Response(array('response' => false, 'error' => $err, 'xml' => null));
         } else {
-            return $this->returnResponse($error, null);
+            return new Response(array('response' => false, 'error' => $error, 'xml' => null));
         }
-    }
-
-    private function returnResponse($error, $ret, $response = false)
-    {
-        return new Response(array('response' => $response, 'error' => $error, 'xml' => $ret));
     }
 }
