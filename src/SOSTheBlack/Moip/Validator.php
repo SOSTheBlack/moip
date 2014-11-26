@@ -434,8 +434,14 @@ class Validator
 	 */
 	protected function validatorResponseError($error)
 	{
-		if ($error !== false) {
+		if (is_string($error)) {
 			throw new Exception($error);
+		} else {
+			if (isset($error->error)) {
+				if (($error !== false)) {
+					throw new Exception($error);
+				}
+			}
 		}
 	}
 
