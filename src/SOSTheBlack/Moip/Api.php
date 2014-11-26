@@ -754,12 +754,12 @@ class Api {
 
             $xml = new SimpleXmlElement($this->answer->xml);
 
-            return new MoipResponse(array(
-				'response' => $xml->Resposta->Status == 'Sucesso' ? true : false,
-    			'error' => $xml->Resposta->Status == 'Falha' ? $this->convert_encoding((string)$xml->Resposta->Erro) : false,
-    			'token' => (string) $xml->Resposta->Token,
-    			'payment_url' => $xml->Resposta->Status == 'Sucesso' ? (string) $this->environment->base_url . "/Instrucao.do?token=" . (string) $xml->Resposta->Token : false,
-			));
+            return App::make('\SOSTheBlack\Moip\Response',[[
+                'response' => $xml->Resposta->Status == 'Sucesso' ? true : false,
+                'error' => $xml->Resposta->Status == 'Falha' ? $this->convert_encoding((string)$xml->Resposta->Erro) : false,
+                'token' => (string) $xml->Resposta->Token,
+                'payment_url' => $xml->Resposta->Status == 'Sucesso' ? (string) $this->environment->base_url . "/Instrucao.do?token=" . (string) $xml->Resposta->Token : false,
+            ]]);
         } else {
             return $this->answer->error;
         }
