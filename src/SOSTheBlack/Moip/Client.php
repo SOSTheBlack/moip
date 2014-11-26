@@ -1,5 +1,7 @@
 <?php namespace SOSTheBlack\Moip;
 
+use App;
+
 /**
  * MoIP's API connection class
  *
@@ -20,10 +22,9 @@ class Client {
      * @param string $url The server's URL
      * @param string $method Method used to send the request
 	 * @throws Exception
-	 * @return Response
+	 * @return \SOSTheBlack\Moip\Response
      */
     public function send($credentials, $xml, $url='https://desenvolvedor.moip.com.br/sandbox/ws/alpha/EnviarInstrucao/Unica', $method='POST') {
-        $header = [];
         $header[] = "Authorization: Basic " . base64_encode($credentials);
         if (!function_exists('curl_init')){
             throw new Exception('This library needs cURL extension');
@@ -34,15 +35,16 @@ class Client {
         curl_setopt($curl, CURLOPT_USERPWD, $credentials);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/4.0");
-        if ($method == 'POST') {
-            curl_setopt($curl, CURLOPT_POST, true);
-        }
+
+        if ($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
+
 		if ($xml != '') curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $ret = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-        return new Response(array('resposta' => $ret, 'erro' => $err));
+
+        return App::make('\SOSTheBlack\Moip\Response', [['resposta' => $ret, 'erro' => $err]]);
     }
 
     /**
@@ -50,67 +52,82 @@ class Client {
 	 * @param string $xml url request
 	 * @param string $url url request
 	 * @param string $error errors
-	 * @return Response
+	 * @return \SOSTheBlack\Moip\Response
      */
-    function curlPost($credentials, $xml, $url, $error=null) 
-    {
-        return $this->initialCurl($credentials, $xml, $url, $error);   
-    }
+    function curlPost($credentials, $xml, $url, $error=null) {
 
-    /**
-     * @param string $credentials token / key authentication Moip
-     * @param string $url url request
-     * @param string $error errors
-     * @return Response
-     */
-    function curlGet($credentials, $url, $error=null) 
-    {
-        return $this->initialCurl($credentials, null, (string) $url, $error);
-    }
-
-   /**
-     * @param string $credentials token / key authentication Moip
-     * @param string $xml url request
-     * @param string $url url request
-     * @param string $error errors
-     * @return Response
-     */
-    public function initialCurl($credentials, $xml, $url, $error)
-    {
         if (!$error) {
-            $header   = [];
             $header[] = "Expect:";
             $header[] = "Authorization: Basic " . base64_encode($credentials);
 
             $ch = curl_init();
-            $options = [];
-            $options[CURLOPT_URL] = $url;
-            $options[CURLOPT_HTTPHEADER] = $header;
-            $options[CURLOPT_SSL_VERIFYPEER] = false;
-            $options[CURLOPT_RETURNTRANSFER] = true;
-
-            if ($xml !== null) {
-                $options[CURLOPT_POST] = true ;
-                $options[CURLOPT_POSTFIELDS] =  $xml;
-                $options[CURLINFO_HEADER_OUT] =   true;
-            }
+            $options = array(CURLOPT_URL => $url,
+                CURLOPT_HTTPHEADER => $header,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $xml,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLINFO_HEADER_OUT => true
+            );
 
             curl_setopt_array($ch, $options);
             $ret = curl_exec($ch);
             $err = curl_error($ch);
             $info = curl_getinfo($ch);
-            curl_close($ch);            
+            curl_close($ch);
+
 
             if ($info['http_code'] == "200")
-                return new Response(array('response' => true, 'error' => null, 'xml' => $ret));
-            else if ($info['http_code'] == "500")
-                return new Response(array('response' => false, 'error' => 'Error processing XML', 'xml' => null));
-            else if ($info['http_code'] == "401")
-                return new Response(array('response' => false, 'error' => 'Authentication failed', 'xml' => null));
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => true, 'error' => null, 'xml' => $ret]]);
+            elseif ($info['http_code'] == "500")
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => 'Error processing XML', 'xml' => null]]);
+            elseif ($info['http_code'] == "401")
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => 'Authentication failed', 'xml' => null]]);
             else
-                return new Response(array('response' => false, 'error' => $err, 'xml' => null));
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => $err, 'xml' => null]]);
         } else {
-            return new Response(array('response' => false, 'error' => $error, 'xml' => null));
+            return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => $error, 'xml' => null]]);
         }
     }
+
+
+    /**
+     * @param string $credentials token / key authentication Moip
+     * @param string $url url request
+     * @param string $error errors
+     * @return \SOSTheBlack\Moip\Response
+     */
+    function curlGet($credentials, $url, $error=null) {
+
+        if (!$error) {
+            $header[] = "Expect:";
+            $header[] = "Authorization: Basic " . base64_encode($credentials);
+
+            $ch = curl_init();
+            $options = array(CURLOPT_URL => $url,
+                CURLOPT_HTTPHEADER => $header,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_RETURNTRANSFER => true
+                );
+
+            curl_setopt_array($ch, $options);
+            $ret = curl_exec($ch);
+            $err = curl_error($ch);
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+
+
+            if ($info['http_code'] == "200")
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => true, 'error' => null, 'xml' => $ret]]);
+            else if ($info['http_code'] == "500")
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => 'Error processing XML', 'xml' => null]]);
+            else if ($info['http_code'] == "401")
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => 'Authentication failed', 'xml' => null]]);
+            else
+                return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => $err, 'xml' => null]]);
+        } else {
+            return App::make('\SOSTheBlack\Moip\Response', [['response' => false, 'error' => $error, 'xml' => null]]);
+        }
+    }
+
 }
