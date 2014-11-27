@@ -1,4 +1,4 @@
-# MoIP (Laravel Package)
+# MoIP Package For API v1 (Laravel 4 Package)
 ----------------------
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SOSTheBlack/moip/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/SOSTheBlack/moip/?branch=develop) 
@@ -9,3 +9,7 @@
 [![License](https://poser.pugx.org/sostheblack/moip/license.svg)](https://packagist.org/packages/sostheblack/moip)
 
 Novo package Homologado pela equipe de desenvolviemntos do MoIP
+
+```
+Moip::postOrder([]);
+```

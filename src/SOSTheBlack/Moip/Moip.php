@@ -1,6 +1,7 @@
 <?php namespace SOSTheBlack\Moip;
 
 use App;
+use DB;
 
 /**
 * Moip's API abstraction class
@@ -13,6 +14,19 @@ use App;
 */
 class Moip
 {
+	/**
+	 * undocumented class variable
+	 *
+	 * @var \SOSTheBlack\Moip\Api
+	 **/
+	private $api;
+
+	/**
+	 * undocumented class variable
+	 *
+	 * @var table moip
+	 **/
+	private $moip;
 
 	/**
 	 * Create order
@@ -22,35 +36,29 @@ class Moip
 	 */
 	public function postOrder(array $order)
 	{
-		$moip = App::make('\SOSTheBlack\Moip\Api');
-		$moip->setEnvironment('test');
-		$moip->setCredential(array(
-		    'key' => 'ABABABABABABABABABABABABABABABABABABABAB',
-		    'token' => '01010101010101010101010101010101'
-		    ));
-		$moip->setUniqueID(false);
-		$moip->setValue('100.00');
-		$moip->setReason('Teste do Moip-PHP');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->addMessage('Seu pedido contem os produtos X,Y e Z.');
-		$moip->validate('Basic');
+		$this->initialize()
+			->setUniqueID(false)
+			->setValue('100.00')
+			->setReason('Teste do Moip-PHP')
+			->validate('Basic')
+			->send();
+		return $this->api->getAnswer();
+	}
 
-		var_dump($moip->send());
-		var_dump($moip->getAnswer());
+	/**
+	 * initialize()
+	 * 
+	 * @return \SOSTheBlack\Moip\Api
+	 */
+	private function initialize()
+	{
+		$this->moip = DB::table('moip')->first();
+		$this->api 	= App::make('\SOSTheBlack\Moip\Api');
+		$this->api->setEnvironment(! $this->moip->environment);
+		$this->api->setCredential([
+		    'key' 	=> $this->moip->key,
+		    'token' => $this->moip->token
+		]);
+		return $this->api;
 	}
 }
