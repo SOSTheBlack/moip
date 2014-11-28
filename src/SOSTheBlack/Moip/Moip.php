@@ -1,8 +1,5 @@
 <?php namespace SOSTheBlack\Moip;
 
-use App;
-use DB;
-
 /**
  * Moip's API abstraction class
  *
@@ -22,11 +19,12 @@ class Moip extends MoipAbstract implements MoipInterface
 	 */
 	public function postOrder(array $order)
 	{
+		$this->setData($order);
 		$this->initialize();
-		$this->api->setUniqueID(false);
-		$this->api->setValue('100.00');
-		$this->api->setReason('Teste do Moip-PHP');
-		$this->api->validate('Basic');
+		$this->api->setUniqueID($this->getUniqueId());
+		$this->api->setValue($this->data['prices']['value']);
+		$this->api->setReason($this->getReason());
+		$this->api->validate($this->getValidate());
 		$this->api->send();
 		return $this->api->getAnswer();
 	}
