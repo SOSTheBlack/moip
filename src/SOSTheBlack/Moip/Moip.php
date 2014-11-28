@@ -28,4 +28,16 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->api->send();
 		return $this->api->getAnswer();
 	}
+
+	/**
+	 * getXML 
+	 * 
+	 * return the generated XML with all the attributes you set
+	 * 
+	 * @return string
+	 */
+	public function getXML()
+	{
+		return $this->api->getXML();
+	}
 }
