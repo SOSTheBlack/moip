@@ -9,11 +9,22 @@ use Exception;
  * @version 0.0.2
  * @package MoIP
  */
-
 class Status
 {
+    /**
+     * url for login
+     * 
+     * @var string
+     */
     private $url_login = "https://www.moip.com.br/j_acegi_security_check";
 
+    /**
+     * setCredennciais
+     * 
+     * @param type $username 
+     * @param type $password 
+     * @return \SOSTheBlack\Moip\Status
+     */
     function setCredenciais($username,$password)
     {
         $this->username = $username;
@@ -21,6 +32,11 @@ class Status
         return $this;
     }
 
+    /**
+     * getStatus
+     * 
+     * @return \SOSTheBlack\Moip\Status
+     */
     function getStatus()
     {
         if (!isset($this->username) or !isset($this->password))
@@ -54,6 +70,12 @@ class Status
         return $this;
     }
 
+    /**
+     * getLastTransactions
+     * 
+     * @param  string $page 
+     * @return array
+     */
     private function getLastTransactions($page)
     {
         $selector = 'div.conteudo>div:eq(1)>div:eq(1)>div:eq(1)>div:eq(0) div.box table[cellpadding=5]>tbody tr';

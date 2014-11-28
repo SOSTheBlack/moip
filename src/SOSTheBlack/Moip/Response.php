@@ -17,9 +17,10 @@ class Response {
 	private $response;
 
 	/**
-	 * Description
-	 * @param type array $response 
-	 * @return type
+	 * __construct
+	 * 
+	 * @param string[]
+	 * @return void
 	 */
 	function __construct(array $response)
 	{
@@ -27,9 +28,10 @@ class Response {
 	}
 
 	/**
-	 * Description
-	 * @param type $name 
-	 * @return type
+	 * __get
+	 * 
+	 * @param string $name 
+	 * @return null
 	 */
 	function __get($name)
 	{

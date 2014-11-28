@@ -15,24 +15,24 @@ use DB;
 class Moip
 {
 	/**
-	 * undocumented class variable
+	 * Api of MoIP
 	 *
 	 * @var \SOSTheBlack\Moip\Api
 	 **/
 	private $api;
 
 	/**
-	 * undocumented class variable
+	 * data of configuration of the MoIP
 	 *
-	 * @var table moip
+	 * @var array moip
 	 **/
 	private $moip;
 
 	/**
 	 * Create order
 	 * 
-	 * @param type array $order 
-	 * @return type
+	 * @param string[] $order 
+	 * @return \SOSTheBlack\Moip\Api\getAnswer
 	 */
 	public function postOrder(array $order)
 	{

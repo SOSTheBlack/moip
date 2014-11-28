@@ -122,7 +122,7 @@ class Api {
     /**
      * Server's answer
      *
-     * @var MoipResponse
+     * @var \SOSTheBlack\Moip\Response
      */
     public $answer;
     /**

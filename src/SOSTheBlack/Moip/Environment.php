@@ -2,22 +2,25 @@
 
 class Environment {
 	/**
-	 * [$base_url description]
-	 * @var [type]
+	 * base url
+	 * 
+	 * @var string
 	 */
 	public $base_url;
 
 	/**
-	 * [$name description]
-	 * @var [type]
+	 * name of environment, sandbox or production
+	 * 
+	 * @var string
 	 */
 	public $name;
 
 	/**
-	 * Description
-	 * @param type $base_url 
-	 * @param type $name 
-	 * @return type
+	 * __construct()
+	 * 
+	 * @param string $base_url 
+	 * @param string $name 
+	 * @return void
 	 */
 	function __construct($base_url = '', $name = '')
 	{
