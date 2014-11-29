@@ -408,6 +408,7 @@ class Api {
             $p->city = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer->billingAddress->city);
             $p->state = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer->billingAddress->state);
             $p->country = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer->billingAddress->country);
+            $p->zipCode = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('CEP', $this->payer->billingAddress->zipCode);
             $p->phone = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer->billingAddress->phone);
         }
 
