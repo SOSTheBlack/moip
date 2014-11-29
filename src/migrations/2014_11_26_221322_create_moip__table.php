@@ -34,6 +34,12 @@ class CreateMoipTable extends Migration {
 			$table->boolean('payment_credit_card')->default(1)->comment('Para disponibilizar a opção Cartão de Crédito como forma de pagamento no checkout Moip');
 			$table->boolean('payment_debit_card')->default(1)->comment('Para disponibilizar a opção Cartão de débito como forma de pagamento no checkout Moip');
 		});
+
+		//$this->command->info('Moip table created!');
+		DB::table('moip')->insert([
+			'id' => 1
+		]);
+		//$this->command->info('Moip table seeded!');
 	}
 
 	/**
