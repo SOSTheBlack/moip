@@ -28,9 +28,12 @@ $data = [
     ]
 ];
 
-try {
-	$moip = Moip::postOrder($data);	
-} catch (Exception $e) {
-	echo $e->getMessage();
-}
+```
+Moip::postOrder($data);
+Moip::response();
+Moip::response()->getXML;
+Moip::response()->replyXML;
+Moip::response()->token;
+Moip::response()->url;
+
 ```

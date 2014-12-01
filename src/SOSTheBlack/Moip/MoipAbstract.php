@@ -130,7 +130,7 @@ abstract class MoipAbstract
 		if (! isset($this->data['paymentWay'])) {
 			return false;
 		} else {
-			$payment = $this->data['paymentWay'];
+			$payment  = $this->data['paymentWay'];
 			$arrayWay = [
 				'creditCard',
 		    	'billet'	,

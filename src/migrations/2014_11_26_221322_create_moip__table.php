@@ -28,11 +28,11 @@ class CreateMoipTable extends Migration {
 			$table->string('billet_urlLogo')->comment('URL de sua logomarca, dimenções máximas 75px largura por 40px altura');
 			$table->string('url_return')->comment('definir a URL que o comprador será redirecionado ao finalizar um pagamento através do checkout Moip');
 			$table->string('url_notification')->comment('responsável por definir a URL ao qual o Moip deverá notificar com o NASP');
-			$table->boolean('payment_billet')->default(1)->comment('Para disponibilizar a opção Boleto Bancário como forma de pagamento no checkout Moip');
-			$table->boolean('payment_financing')->default(1)->comment('Para disponibilizar a opção Financiamento como forma de pagamento no checkout Moip');
-			$table->boolean('payment_debit')->default(1)->comment('Para disponibilizar a opção Debito em conta como forma de pagamento no checkout Moip');
-			$table->boolean('payment_credit_card')->default(1)->comment('Para disponibilizar a opção Cartão de Crédito como forma de pagamento no checkout Moip');
-			$table->boolean('payment_debit_card')->default(1)->comment('Para disponibilizar a opção Cartão de débito como forma de pagamento no checkout Moip');
+			$table->boolean('billet')->default(1)->comment('Para disponibilizar a opção Boleto Bancário como forma de pagamento no checkout Moip');
+			$table->boolean('financing')->default(1)->comment('Para disponibilizar a opção Financiamento como forma de pagamento no checkout Moip');
+			$table->boolean('debit')->default(1)->comment('Para disponibilizar a opção Debito em conta como forma de pagamento no checkout Moip');
+			$table->boolean('creditCard')->default(1)->comment('Para disponibilizar a opção Cartão de Crédito como forma de pagamento no checkout Moip');
+			$table->boolean('debitCard')->default(1)->comment('Para disponibilizar a opção Cartão de débito como forma de pagamento no checkout Moip');
 		});
 
 		//$this->command->info('Moip table created!');

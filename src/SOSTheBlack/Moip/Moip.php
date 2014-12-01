@@ -1,5 +1,8 @@
 <?php namespace SOSTheBlack\Moip;
 
+use App;
+use Exception;
+
 /**
  * Moip's API abstraction class
  *
@@ -12,10 +15,17 @@
 class Moip extends MoipAbstract implements MoipInterface
 {
 	/**
-	 * Create order
+	 * undocumented class variable
+	 *
+	 * @var string
+	 **/
+	private $response;
+
+	/**
+	 * postOrder
 	 * 
 	 * @param string[] $order 
-	 * @return \SOSTheBlack\Moip\Api\getAnswer
+	 * @return \SOSTheBlack\Moip\Moip\response
 	 */
 	public function postOrder(array $order)
 	{
@@ -28,19 +38,30 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->api->setReason($this->getReason());
 		$this->getPaymentWay();
 		$this->api->validate($this->getValidate());
-		$this->api->send();
-		return $this->api->getAnswer();
+		return $this->response($this->api->send());
 	}
 
 	/**
-	 * getXML 
+	 * response
 	 * 
-	 * return the generated XML with all the attributes you set
-	 * 
-	 * @return string
+	 * @param type $send 
+	 * @return string[]|Exception
 	 */
-	public function getXML()
+	public function response($send = null)
 	{
-		return $this->api->getXML();
+		if ($send) {
+			if ($send->error != false) {
+				throw new Exception($send->error);
+			}
+
+			$answer 					= $this->api->getAnswer();
+			$this->response 			= App::make('stdClass');
+			$this->response->getXML 	= $this->api->getXML();
+			$this->response->replyXML 	= $send->xml;
+			$this->response->token 		= $answer->token;
+			$this->response->url 		= $answer->payment_url;
+		}
+		
+		return $this->response;
 	}
 }

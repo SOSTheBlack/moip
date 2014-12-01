@@ -10,7 +10,7 @@
 interface MoipInterface
 {
 	/**
-	 * Create order
+	 * postOrder
 	 * 
 	 * @param string[] $order 
 	 * @return \SOSTheBlack\Moip\Api\getAnswer
@@ -24,5 +24,5 @@ interface MoipInterface
 	 * 
 	 * @return string
 	 */
-	public function getXML();
+	public function response($send = null);
 }
