@@ -35,11 +35,12 @@ $data = [
         ],
         'uriLogo' => 'http://seusite.com.br/logo.gif',
     ],
-    message' => [
+    'message' => [
         'message 01',
         'message 02',
         'message 03'
-    ]
+    ],
+    'url_return' => 'https://meusite.com.br/cliente/pedido/bemvindodevolta',
 ];
 
 Moip::postOrder($data);

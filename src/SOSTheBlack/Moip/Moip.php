@@ -44,6 +44,7 @@ class Moip extends MoipAbstract implements MoipInterface
 			$this->getBilletInstructions(),
 			$this->getParams('billet', 'uriLogo', true)
 		);
+		$this->api->setReturnURL($this->getParams('url_return'));
 		$this->api->validate($this->getValidate());
 		return $this->response($this->api->send());
 	}
