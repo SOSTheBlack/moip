@@ -41,6 +41,7 @@ $data = [
         'message 03'
     ],
     'url_return' => 'https://meusite.com.br/cliente/pedido/bemvindodevolta',
+    'url_notification' => 'https://meusite.com.br/nasp'
 ];
 
 Moip::postOrder($data);
