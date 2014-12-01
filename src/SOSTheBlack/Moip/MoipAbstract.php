@@ -64,7 +64,7 @@ abstract class MoipAbstract
 	/**
 	 * getValidate()
 	 * 
-	 * @return boolean
+	 * @return string
 	 */
 	protected function getValidate()
 	{
@@ -73,6 +73,8 @@ abstract class MoipAbstract
 
 	/**
 	 * getUniqueId()
+	 * 
+	 * adds unique id in the order
 	 * 
 	 * @return boolean|string
 	 */
@@ -83,6 +85,8 @@ abstract class MoipAbstract
 
 	/**
 	 * getReason()
+	 * 
+	 * adds payment reason in the order
 	 * 
 	 * @return string
 	 */
@@ -111,6 +115,39 @@ abstract class MoipAbstract
 			}
 		} else {
 			return isset($this->data[$oneParam][$twoParam]) ? $this->data[$oneParam][$twoParam] : '';
+		}
+	}
+
+	/**
+	 * getPaymentWay
+	 * 
+	 * Adds payment way in the order
+	 * 
+	 * @return false|\SOSTheBlack\Moip\Api\
+	 */
+	protected function getPaymentWay()
+	{
+		if (! isset($this->data['paymentWay'])) {
+			return false;
+		} else {
+			$payment = $this->data['paymentWay'];
+			$arrayWay = [
+				'creditCard',
+		    	'billet'	,
+		    	'financing'	,
+		    	'debit'		,
+		    	'debitCard'	
+		    ];
+
+			foreach ($arrayWay as $arrayWayKey => $arrayWayValue) {
+				if (isset($payment[$arrayWayKey]) && $payment[$arrayWayKey] == $arrayWayValue) {
+					$this->api->addPaymentWay($arrayWayValue);
+				} else {
+					if ($this->moip->$arrayWayValue === 1) {
+						$this->api->addPaymentWay($arrayWayValue);
+					}
+				}
+			}
 		}
 	}
 }

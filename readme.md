@@ -16,9 +16,16 @@ $data = [
     'reason'    => 'market of Natal 01',
     'prices'    => [
         'value' => 100,
-        'adds'	=> 30,
+        'adds'  => 30,
         'deduct'=> 10
     ],
+    'paymentWay' => [
+    	'creditCard',
+    	'billet',
+    	'financing',
+    	'debit'	,
+    	'debitCard'
+    ]
 ];
 
 try {

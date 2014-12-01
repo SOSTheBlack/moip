@@ -24,9 +24,9 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->api->setUniqueID($this->getUniqueId());
 		$this->api->setValue($this->data['prices']['value']);
 		$this->api->setAdds($this->getParams('prices', 'adds'));
-		
 		$this->api->setDeduct($this->getParams('prices','deduct'));
 		$this->api->setReason($this->getReason());
+		$this->getPaymentWay();
 		$this->api->validate($this->getValidate());
 		$this->api->send();
 		return $this->api->getAnswer();
