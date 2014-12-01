@@ -175,4 +175,18 @@ abstract class MoipAbstract
 			}
 		}
 	}
+
+	/**
+	 * getMessage
+	 * 
+	 * @return void
+	 */
+	protected function getMessage()
+	{
+		if (isset($this->data['message'])) {
+			foreach ($this->data['message'] as $keyMessage => $valueMessage) {
+				$this->api->addMessage($valueMessage);
+			}
+		}
+	}
 }

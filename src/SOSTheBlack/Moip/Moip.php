@@ -33,16 +33,17 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->initialize();
 		$this->api->setUniqueID($this->getUniqueId());
 		$this->api->setValue($this->data['prices']['value']);
+		$this->api->setAdds($this->getParams('prices', 'adds'));
+		$this->api->setDeduct($this->getParams('prices','deduct'));
+		$this->api->setReason($this->getReason());
+		$this->getPaymentWay();
+		$this->getMessage();
 		$this->api->setBilletConf(
 			$this->getParams('billet', 'expiration', true),
 			(boolean) $this->getParams('billet', 'workingDays', true),
 			$this->getBilletInstructions(),
 			$this->getParams('billet', 'uriLogo', true)
 		);
-		$this->api->setAdds($this->getParams('prices', 'adds'));
-		$this->api->setDeduct($this->getParams('prices','deduct'));
-		$this->api->setReason($this->getReason());
-		$this->getPaymentWay();
 		$this->api->validate($this->getValidate());
 		return $this->response($this->api->send());
 	}

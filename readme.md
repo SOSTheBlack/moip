@@ -34,6 +34,11 @@ $data = [
             'secondLine'
         ],
         'uriLogo' => 'http://seusite.com.br/logo.gif',
+    ],
+    message' => [
+        'message 01',
+        'message 02',
+        'message 03'
     ]
 ];
 
