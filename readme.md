@@ -25,6 +25,15 @@ $data = [
     	'financing',
     	'debit'	,
     	'debitCard'
+    ],
+    'billet' => [
+        'expiration'    => '2011-11-11 ',
+        'workingDays'   => false,
+        'instructions'  => [
+            'firstLine',
+            'secondLine'
+        ],
+        'uriLogo' => 'http://seusite.com.br/logo.gif',
     ]
 ];
 

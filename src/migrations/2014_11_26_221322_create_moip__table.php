@@ -20,12 +20,12 @@ class CreateMoipTable extends Migration {
 			$table->boolean('environment')->default(0)->comment('Método que define o ambiente em qual o requisição será processada. False: desenvolvimento, True: produção');
 			$table->boolean('validate')->default(0)->comment('False: Basic, True: Identification');
 			$table->string('reason')->comment('Responsável por definir o motivo do pagamento');
-			$table->string('billet_expiration')->default(3)->comment('Data em formato AAAA-MM-DD ou quantidade de dias');
-			$table->boolean('billet_working_days')->default(0)->comment('Caso billet_expiration seja quantidade de dias você pode definir com true para que seja contado em dias úteis, o padrão será dias corridos');
-			$table->string('billet_firstLine')->comment('Mensagem adicionais a ser impresso no boleto');
-			$table->string('billet_secondLine')->comment('Mensagem adicionais a ser impresso no boleto');
-			$table->string('billet_lastLine')->comment('Mensagem adicionais a ser impresso no boleto');
-			$table->string('billet_urlLogo')->comment('URL de sua logomarca, dimenções máximas 75px largura por 40px altura');
+			$table->string('expiration')->default(3)->comment('Data em formato AAAA-MM-DD ou quantidade de dias');
+			$table->boolean('workingDays')->default(0)->comment('Caso expiration seja quantidade de dias você pode definir com true para que seja contado em dias úteis, o padrão será dias corridos');
+			$table->string('firstLine')->comment('Mensagem adicionais a ser impresso no boleto');
+			$table->string('secondLine')->comment('Mensagem adicionais a ser impresso no boleto');
+			$table->string('lastLine')->comment('Mensagem adicionais a ser impresso no boleto');
+			$table->string('uriLogo')->comment('URL de sua logomarca, dimenções máximas 75px largura por 40px altura');
 			$table->string('url_return')->comment('definir a URL que o comprador será redirecionado ao finalizar um pagamento através do checkout Moip');
 			$table->string('url_notification')->comment('responsável por definir a URL ao qual o Moip deverá notificar com o NASP');
 			$table->boolean('billet')->default(1)->comment('Para disponibilizar a opção Boleto Bancário como forma de pagamento no checkout Moip');
@@ -35,11 +35,9 @@ class CreateMoipTable extends Migration {
 			$table->boolean('debitCard')->default(1)->comment('Para disponibilizar a opção Cartão de débito como forma de pagamento no checkout Moip');
 		});
 
-		//$this->command->info('Moip table created!');
 		DB::table('moip')->insert([
 			'id' => 1
 		]);
-		//$this->command->info('Moip table seeded!');
 	}
 
 	/**
@@ -51,5 +49,4 @@ class CreateMoipTable extends Migration {
 	{
 		Schema::drop('moip');
 	}
-
 }

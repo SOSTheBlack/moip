@@ -119,6 +119,31 @@ abstract class MoipAbstract
 	}
 
 	/**
+	 * getBilletInstructions
+	 * 
+	 * @return array
+	 */
+	protected function getBilletInstructions()
+	{
+		$billet = [
+	    	'instructions' => [
+	    		'firstLine',
+				'secondLine',
+				'lastLine'
+	    	]
+		];
+		
+		foreach ($billet['instructions'] as $keyInstructions => $valueInstructions) {
+			$billet['instructions'][$keyInstructions] =
+				isset($this->data['billet']['instructions'][$keyInstructions]) ? 
+				$this->data['billet']['instructions'][$keyInstructions] :
+				$this->moip->$valueInstructions;
+		}
+		
+		return $billet['instructions'];
+	}
+
+	/**
 	 * getPaymentWay
 	 * 
 	 * Adds payment way in the order
