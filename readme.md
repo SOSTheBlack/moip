@@ -28,7 +28,6 @@ $data = [
     ]
 ];
 
-```
 Moip::postOrder($data);
 Moip::response();
 Moip::response()->getXML;
