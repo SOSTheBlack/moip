@@ -11,5 +11,19 @@
 Novo package Homologado pela equipe de desenvolviemntos do MoIP
 
 ```
-Moip::postOrder([]);
+$data = [
+    'unique_id' => false,
+    'reason'    => 'market of Natal 01',
+    'prices'    => [
+        'value' => 100,
+        'adds'	=> 30,
+        'deduct'=> 10
+    ],
+];
+
+try {
+	$moip = Moip::postOrder($data);	
+} catch (Exception $e) {
+	echo $e->getMessage();
+}
 ```

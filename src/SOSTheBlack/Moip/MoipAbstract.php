@@ -90,4 +90,27 @@ abstract class MoipAbstract
 	{
 		return isset($this->data['reason']) ? $this->data['reason'] : $this->moip->reason;
 	}
+
+	/**
+	 * getParams
+	 * 
+	 * Validation of the params sent
+	 * 
+	 * @param string $oneParam 
+	 * @param string $twoParam 
+	 * @param boolean $db 
+	 * @return string
+	 */
+	protected function getParams($oneParam, $twoParam = null, $db = false)
+	{
+		if (! $twoParam) {
+			if ($db === true) {
+				return isset($this->data[$oneParam]) ? $this->data[$oneParam] : $this->moip->$oneParam;
+			} else {
+				return isset($this->data[$oneParam]) ? $this->data[$oneParam] : '';
+			}
+		} else {
+			return isset($this->data[$oneParam][$twoParam]) ? $this->data[$oneParam][$twoParam] : '';
+		}
+	}
 }

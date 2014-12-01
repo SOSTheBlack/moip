@@ -16,4 +16,13 @@ interface MoipInterface
 	 * @return \SOSTheBlack\Moip\Api\getAnswer
 	 */
 	public function postOrder(array $order);
+
+	/**
+	 * getXML 
+	 * 
+	 * return the generated XML with all the attributes you set
+	 * 
+	 * @return string
+	 */
+	public function getXML();
 }
