@@ -215,10 +215,10 @@ abstract class MoipAbstract
 		if (isset($this->data['parcel'])) {
 			foreach ($this->data['parcel'] as $keyParcel => $valueParcel) {
 				$this->api->addParcel(
-					isset($valueParcel[0]) ? $valueParcel[0] : null,
-					isset($valueParcel[1]) ? $valueParcel[1] : null,
-					isset($valueParcel[2]) ? $valueParcel[2] : null,
-					isset($valueParcel[3]) ? $valueParcel[3] : false
+					isset($valueParcel['min']) ? $valueParcel['min'] : null,
+					isset($valueParcel['max']) ? $valueParcel['max'] : null,
+					isset($valueParcel['rate']) ? $valueParcel['rate'] : null,
+					isset($valueParcel['transfer']) ? $valueParcel['transfer'] : false
 				);
 			}
 		}

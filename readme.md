@@ -48,9 +48,9 @@ $data = [
         ['reason', 'login_receiver', 12.00, true, true]
     ],
     'parcel' => [
-        ['2', '4'],
-        ['5', '7', '1.00'],
-        ['8', '12', null, true]
+        ['min' => '2', 'max' => '4'],
+        ['min' => '5', 'max' => '7', 'rate' => '1.00'],
+        ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true]
     ]
 ];
 

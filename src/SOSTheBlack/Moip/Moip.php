@@ -82,6 +82,14 @@ class Moip extends MoipAbstract implements MoipInterface
 		return $this->response;
 	}
 
+	/**
+	 * parcel
+	 * 
+	 * Generete parcel
+	 * 
+	 * @param  array  $parcel
+	 * @return array
+	 */
 	public function parcel(array $parcel)
 	{
 		
@@ -95,7 +103,7 @@ class Moip extends MoipAbstract implements MoipInterface
 		if ($query['response'] !== true) {
 			throw new Exception('Error: Não foi possível gerar query');
 		}
-		
+
 		return $query['installment'];
 	}
 }
