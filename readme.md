@@ -14,6 +14,22 @@ Novo package Homologado pela equipe de desenvolviemntos do MoIP
 $data = [
     'unique_id' => false,
     'reason'    => 'market of Natal 01',
+    'payer' => [
+        'name'      => 'Nome Sobrenome',
+        'email'     => 'email@cliente.com.br',
+        'payerId'   => 'id_usuario',
+        'billingAddress' => [
+            'address'       => 'Rua do Zézinho Coração',
+            'number'        => '45',
+            'complement'    => 'z',
+            'city'          => 'São Paulo',
+            'neighborhood'  => 'Palhaço Jão',
+            'state'         => 'SP',
+            'country'       => 'BRA',
+            'zipCode'       => '01230-000',
+            'phone'         => '(11)8888-8888'
+        ]
+    ],
     'prices'    => [
         'value' => 100,
         'adds'  => 30,

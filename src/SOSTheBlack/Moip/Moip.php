@@ -40,6 +40,7 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->getMessage();
 		$this->getComission();
 		$this->getParcel();
+		$this->api->setPayer($this->getParams('payer'));
 		$this->api->setBilletConf(
 			$this->getParams('billet', 'expiration', true),
 			(boolean) $this->getParams('billet', 'workingDays', true),
