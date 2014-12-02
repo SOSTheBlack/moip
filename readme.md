@@ -46,6 +46,11 @@ $data = [
     'comission' => [
         ['reason', 'login_receiver', 5.00],
         ['reason', 'login_receiver', 12.00, true, true]
+    ],
+    'parcel' => [
+        ['2', '4'],
+        ['5', '7', '1.00'],
+        ['8', '12', null, true]
     ]
 ];
 

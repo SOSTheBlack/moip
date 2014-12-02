@@ -39,6 +39,7 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->getPaymentWay();
 		$this->getMessage();
 		$this->getComission();
+		$this->getParcel();
 		$this->api->setBilletConf(
 			$this->getParams('billet', 'expiration', true),
 			(boolean) $this->getParams('billet', 'workingDays', true),
@@ -62,7 +63,7 @@ class Moip extends MoipAbstract implements MoipInterface
 	{
 		if ($send) {
 			$answer = $this->api->getAnswer();
-						
+
 			if ($send->error != false) {
 				throw new Exception($send->error);
 			} elseif (is_string($answer)) {

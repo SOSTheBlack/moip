@@ -209,4 +209,18 @@ abstract class MoipAbstract
 			}
 		}
 	}
+
+	protected function getParcel()
+	{
+		if (isset($this->data['parcel'])) {
+			foreach ($this->data['parcel'] as $keyParcel => $valueParcel) {
+				$this->api->addParcel(
+					isset($valueParcel[0]) ? $valueParcel[0] : null,
+					isset($valueParcel[1]) ? $valueParcel[1] : null,
+					isset($valueParcel[2]) ? $valueParcel[2] : null,
+					isset($valueParcel[3]) ? $valueParcel[3] : false
+				);
+			}
+		}
+	}
 }
