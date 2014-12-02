@@ -44,8 +44,8 @@ $data = [
     'url_notification' => 'https://meusite.com.br/nasp',
     'receiver' => 'jean@comunicaweb.com.br',
     'comission' => [
-        ['reason', 'login_receiver', 5.00],
-        ['reason', 'login_receiver', 12.00, true, true]
+        ['reason' => 'comission reason', 'receiver' => 'integracao@moip.com.br', 'value' => 5.00],
+        ['reason' => 'comission reason', 'receiver' => 'integracao@moip.com.br', 'value' => 12.00, 'percentageValue' => true, 'ratePayer' => true]
     ],
     'parcel' => [
         ['min' => '2', 'max' => '4'],

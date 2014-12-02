@@ -198,13 +198,14 @@ abstract class MoipAbstract
 	protected function getComission()
 	{
 		if (isset($this->data['comission'])) {
+			//dd($this->data['comission']);
 			foreach ($this->data['comission'] as $keyComission => $valueComission) {
 				$this->api->addComission(
-					isset($valueComission[0]) ? $valueComission[0] : null,
-					isset($valueComission[1]) ? $valueComission[1] : null,
-					isset($valueComission[2]) ? $valueComission[2] : null,
-					isset($valueComission[3]) ? $valueComission[3] : null,
-					isset($valueComission[4]) ? $valueComission[4] : null
+					isset($valueComission['reason']) 			? $valueComission['reason'] 		 : null,
+					isset($valueComission['receiver']) 			? $valueComission['receiver'] 		 : null,
+					isset($valueComission['value']) 			? $valueComission['value'] 			 : null,
+					isset($valueComission['percentageValue']) 	? $valueComission['percentageValue'] : null,
+					isset($valueComission['ratePayer']) 		? $valueComission['ratePayer'] 		 : null
 				);
 			}
 		}
@@ -215,10 +216,10 @@ abstract class MoipAbstract
 		if (isset($this->data['parcel'])) {
 			foreach ($this->data['parcel'] as $keyParcel => $valueParcel) {
 				$this->api->addParcel(
-					isset($valueParcel['min']) ? $valueParcel['min'] : null,
-					isset($valueParcel['max']) ? $valueParcel['max'] : null,
-					isset($valueParcel['rate']) ? $valueParcel['rate'] : null,
-					isset($valueParcel['transfer']) ? $valueParcel['transfer'] : false
+					isset($valueParcel['min']) 		? $valueParcel['min'] 		: null,
+					isset($valueParcel['max']) 		? $valueParcel['max'] 		: null,
+					isset($valueParcel['rate']) 	? $valueParcel['rate'] 		: null,
+					isset($valueParcel['transfer']) ? $valueParcel['transfer'] 	: false
 				);
 			}
 		}
