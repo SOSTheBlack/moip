@@ -27,7 +27,7 @@ $data = [
     	'debitCard'
     ],
     'billet' => [
-        'expiration'    => '2011-11-11 ',
+        'expiration'    => 3,
         'workingDays'   => false,
         'instructions'  => [
             'firstLine',
@@ -41,7 +41,8 @@ $data = [
         'message 03'
     ],
     'url_return' => 'https://meusite.com.br/cliente/pedido/bemvindodevolta',
-    'url_notification' => 'https://meusite.com.br/nasp'
+    'url_notification' => 'https://meusite.com.br/nasp',
+    'receiver' => 'jean@comunicaweb.com.br'
 ];
 
 Moip::postOrder($data);

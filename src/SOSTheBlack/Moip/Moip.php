@@ -47,6 +47,7 @@ class Moip extends MoipAbstract implements MoipInterface
 		$this->api->setReturnURL($this->getParams('url_return'));
 		$this->api->setNotificationURL($this->getParams('url_notification'));
 		$this->api->validate($this->getValidate());
+		$this->api->setReceiver($this->getParams('receiver'));
 		return $this->response($this->api->send());
 	}
 
