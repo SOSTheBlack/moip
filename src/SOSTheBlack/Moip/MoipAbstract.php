@@ -189,4 +189,24 @@ abstract class MoipAbstract
 			}
 		}
 	}
+
+	/**
+	 * getComission
+	 * 
+	 * @return void
+	 */
+	protected function getComission()
+	{
+		if (isset($this->data['comission'])) {
+			foreach ($this->data['comission'] as $keyComission => $valueComission) {
+				$this->api->addComission(
+					isset($valueComission[0]) ? $valueComission[0] : null,
+					isset($valueComission[1]) ? $valueComission[1] : null,
+					isset($valueComission[2]) ? $valueComission[2] : null,
+					isset($valueComission[3]) ? $valueComission[3] : null,
+					isset($valueComission[4]) ? $valueComission[4] : null
+				);
+			}
+		}
+	}
 }

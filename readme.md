@@ -42,7 +42,11 @@ $data = [
     ],
     'url_return' => 'https://meusite.com.br/cliente/pedido/bemvindodevolta',
     'url_notification' => 'https://meusite.com.br/nasp',
-    'receiver' => 'jean@comunicaweb.com.br'
+    'receiver' => 'jean@comunicaweb.com.br',
+    'comission' => [
+        ['reason', 'login_receiver', 5.00],
+        ['reason', 'login_receiver', 12.00, true, true]
+    ]
 ];
 
 Moip::postOrder($data);
