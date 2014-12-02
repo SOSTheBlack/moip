@@ -119,11 +119,25 @@ abstract class MoipAbstract
 	}
 
 	/**
+	 * billetConf
+	 * @return void
+	 */
+	protected function billetConf()
+	{
+		$this->api->setBilletConf(
+			$this->getParams('billet', 'expiration', true),
+			(boolean) $this->getParams('billet', 'workingDays', true),
+			$this->getBilletInstructions(),
+			$this->getParams('billet', 'uriLogo', true)
+		);
+	}
+
+	/**
 	 * getBilletInstructions
 	 * 
 	 * @return array
 	 */
-	protected function getBilletInstructions()
+	private function getBilletInstructions()
 	{
 		$billet = [
 	    	'instructions' => [
@@ -211,6 +225,10 @@ abstract class MoipAbstract
 		}
 	}
 
+	/**
+	 * getParcel
+	 * @return void
+	 */
 	protected function getParcel()
 	{
 		if (isset($this->data['parcel'])) {

@@ -31,26 +31,21 @@ class Moip extends MoipAbstract implements MoipInterface
 	{
 		$this->setData($order);
 		$this->initialize();
+		$this->getParcel();
+		$this->billetConf();
+		$this->getMessage();
+		$this->getComission();
+		$this->getPaymentWay();
+		$this->api->setReason($this->getReason());
 		$this->api->setUniqueID($this->getUniqueId());
+		$this->api->setPayer($this->getParams('payer'));
 		$this->api->setValue($this->data['prices']['value']);
 		$this->api->setAdds($this->getParams('prices', 'adds'));
 		$this->api->setDeduct($this->getParams('prices','deduct'));
-		$this->api->setReason($this->getReason());
-		$this->getPaymentWay();
-		$this->getMessage();
-		$this->getComission();
-		$this->getParcel();
-		$this->api->setPayer($this->getParams('payer'));
-		$this->api->setBilletConf(
-			$this->getParams('billet', 'expiration', true),
-			(boolean) $this->getParams('billet', 'workingDays', true),
-			$this->getBilletInstructions(),
-			$this->getParams('billet', 'uriLogo', true)
-		);
+		$this->api->setReceiver($this->getParams('receiver', null, true));
 		$this->api->setReturnURL($this->getParams('url_return', null, true));
 		$this->api->setNotificationURL($this->getParams('url_notification', null, true));
 		$this->api->validate($this->getValidate());
-		$this->api->setReceiver($this->getParams('receiver', null, true));
 		return $this->response($this->api->send());
 	}
 
@@ -93,7 +88,6 @@ class Moip extends MoipAbstract implements MoipInterface
 	 */
 	public function parcel(array $parcel)
 	{
-		
 		$query = $this->api->queryParcel(
 			$parcel['login'],
 			$parcel['maxParcel'],
