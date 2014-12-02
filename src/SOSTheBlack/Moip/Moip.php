@@ -59,15 +59,7 @@ class Moip extends MoipAbstract implements MoipInterface
 	{
 		if ($send) {
 			$answer = $this->api->getAnswer();
-
-			if ($send->error != false) {
-				throw new Exception($send->error);
-			} elseif (is_string($answer)) {
-				throw new Exception($answer);
-			} elseif ($answer->error !== false) {
-				throw new Exception($answer->error);
-			}
-
+			$this->responseValidation($send, $answer);
 			$this->response 			= App::make('stdClass');
 			$this->response->getXML 	= $this->api->getXML();
 			$this->response->replyXML 	= $send->xml;

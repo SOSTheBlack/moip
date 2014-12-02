@@ -2,6 +2,7 @@
 
 use App;
 use DB;
+use Exception;
 
 /**
  * MoipAbstract
@@ -227,6 +228,7 @@ abstract class MoipAbstract
 
 	/**
 	 * getParcel
+	 * 
 	 * @return void
 	 */
 	protected function getParcel()
@@ -240,6 +242,24 @@ abstract class MoipAbstract
 					isset($valueParcel['transfer']) ? $valueParcel['transfer'] 	: false
 				);
 			}
+		}
+	}
+
+	/**
+	 * responseValidation
+	 * 
+	 * @param  array $send
+	 * @param  array|string $answer
+	 * @return void
+	 */
+	protected function responseValidation($send, $answer)
+	{
+		if ($send->error != false) {
+			throw new Exception($send->error);
+		} elseif (is_string($answer)) {
+			throw new Exception($answer);
+		} elseif ($answer->error !== false) {
+			throw new Exception($answer->error);
 		}
 	}
 }
