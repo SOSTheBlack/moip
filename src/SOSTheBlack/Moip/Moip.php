@@ -81,4 +81,21 @@ class Moip extends MoipAbstract implements MoipInterface
 		
 		return $this->response;
 	}
+
+	public function parcel(array $parcel)
+	{
+		
+		$query = $this->api->queryParcel(
+			$parcel['login'],
+			$parcel['maxParcel'],
+			$parcel['rate'],
+			$parcel['simulatedValue']
+		);
+
+		if ($query['response'] !== true) {
+			throw new Exception('Error: Não foi possível gerar query');
+		}
+		
+		return $query['installment'];
+	}
 }

@@ -60,5 +60,15 @@ Moip::response()->getXML;
 Moip::response()->replyXML;
 Moip::response()->token;
 Moip::response()->url;
+```
 
 ```
+$parcel = [
+    'login'         => 'jean@comunicaweb.com.br',
+    'maxParcel'     => 12,
+    'rate'          => 1.99,
+    'simulatedValue'=> 100
+];
+
+Moip::parcel($parcel);
+``
