@@ -81,7 +81,7 @@ Moip::sendMoip($data);
 E tera um checkout semelhante a este.
 
 
-![Moip](https://dl-web.dropbox.com/get/Laravel/simple.PNG?_subject_uid=203218147&w=AAAOAumSrqI4H04PhOuUHNhZkvGp2Wj9PrgW31d3y9GH6g)
+![Moip](https://lh4.googleusercontent.com/B1bCyBLrBBVjf_8Vvoxziy_oSU2Cd3YiNm1DWxOdh5UiL3h74OK2TOrwI9yhKCYLf_xnp5vZnzY=w1646-h791)
 
 ### Advanced
 Aqui é criado um checkout totalmente customizado, se for enviado todos os dados referente ao cliente o mesmo não precisará se cadastrar na tela intermediadora de pagamento
@@ -149,9 +149,9 @@ $data = [
 Moip::postOrder($data);
 ```
 
-E tera um checkout semelhante a este
+E tera um checkout semelhante a este.
 
-![Moip](https://dl-web.dropbox.com/get/Laravel/advence.PNG?_subject_uid=203218147&w=AAC9SG9HUcMHf7jEiXDLxJ_yIHf-Zkb2JCwodsZipe2cmw)
+![Moip](https://lh4.googleusercontent.com/KMAVQD5K6QdTethFUaaTV9kX7SeqU3EuK8voTxOFnw9aCsXfRi6UYxQ0r51QMwmCLAAEN9rfr2I=w1646-h791)
 
 ## Parametros enviados
 Agora vamos ver detalhadamente o que cada informação sigunifica.
