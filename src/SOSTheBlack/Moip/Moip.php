@@ -1,254 +1,96 @@
 <?php namespace SOSTheBlack\Moip;
 
 use App;
-use Config;
-use StdClass;
+use Exception;
 
 /**
  * Moip's API abstraction class
  *
  * Class to use for all abstraction of Moip's API
- * 
- * @author Jean Cesar Garcia <jeancesargarcia@gmail.com>
- * @version v1.6.0
+ * @package SOSTheBlack\Moip
+ * @author Jean Cesar Garcia <jeancesargarcia@gmail.com> <SOSTheBlack>
+ * @version 1.*
  * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
- */
-class Moip extends Validator
+ **/
+class Moip extends MoipAbstract implements MoipInterface
 {
 	/**
-	 * Use for all abstraction of Moip's API
+	 * undocumented class variable
 	 *
-	 * @var new Api
-	 **/
-	private $moip;
-
-	/**
-	 * Settings required for integration
-	 *
-	 * @var object
-	 **/
-	private $config;
-
-	/**
-	 * Response
-	 *
-	 * @var object
+	 * @var string
 	 **/
 	private $response;
 
 	/**
-	 * Data wil be sent to MoIP
-	 *
-	 * @var string
-	 **/
-	private $data;
-
-	/**
-	 * Method that sends data to Moip and creates op chekout
-	 * @param array or object $data
-	 * @return response moip
-	 */
-	public function sendMoip( array $data)
-	{
-		$data = $this->initialize($data);
-		$this->validatorSend($data, $this->config);
-		$this->moip->setReason($data->reason);
-		$this->moip->setValue($data->values->value);
-		$this->moip->setAdds($data->values->adds);
-		$this->moip->setDeduct($data->values->deduct);
-		$this->moip->setUniqueID( $data->unique_id);
-		$this->getPayment($data->payment);
-		$this->getParcel($data->parcel);
-		$this->getComission($data->comission, $this->config);
-		$this->getBilletConfig($data->billet);
-		$this->getMessage($data->message);
-		$this->getNotificationURL($data->notificationURL);
-		$this->moip->setReturnURL($data->returnURL);
-		$this->moip->setPayer($data->payer);
-		$this->getReceiver($data);
-		$this->getValidate();
-		return $this->response($this->moip->send());
-	}
-
-	/**
-	 * Method that sends data payment for the MoIP
-	 * @param  object $payment forms of payment
-	 * @return void
-	 */
-	private function getPayment($payment)
-	{
-		foreach ($payment as $key => $value) {
-			if ($value === true) {
-				$this->moip->addPaymentWay($key);
-			}
-		}
-	}
-
-	/**
-	 * Method that sends data parcel for the MoIP
-	 * @param object $parcel data of parcel
-	 * @return void
-	 */
-	private function getParcel($parcel)
-	{
-		$this->moip->addParcel(
-			$parcel->min, 
-			$parcel->max, 
-			$parcel->rate, 
-			$parcel->transfer
-		);
-	}
-
-	/**
-	 * Method that sends data comission for the MoIP
-	 * @param object $comission 
-	 * @param object $config 
-	 * @return void
-	 */
-	private function getComission($comission, $config)
-	{
-		if ($config->comission->active === true) {
-			$this->moip->addComission(
-				$comission->reason,
-				$comission->receiver,
-				$comission->value,
-				$comission->percentageValue,
-				$comission->ratePayer
-			);
-		}		
-	}
-
-	/**
-	 * Method taht sends data billet for the MoIP
-	 * @param  object $billet data of billet
-	 * @return void         
-	 */
-	private function getBilletConfig($billet)
-	{
-		$this->moip->setBilletConf(
-			$billet->expiration,
-			$billet->workingDays,
-			[
-				$billet->instructions->firstLine,
-				$billet->instructions->secondLine,
-				$billet->instructions->lastLine
-			],
-			$billet->urlLogo
-		);
-	}
-
-	/**
-	 * Sends messages for ads in checkout MoIP
-	 * @param  object $message Messges for ads
-	 * @return void
-	 */
-	private function getMessage($message)
-	{
-		foreach ($message as $keyMessage => $valueMessage) {
-			if (! empty($valueMessage)) {
-				$this->moip->addMessage($valueMessage);
-			}
-		}		
-	}
-
-	/**
-	 * Sends notification URL for MoIP
+	 * postOrder
 	 * 
-	 * @param  string $notificationURL notification URL
-	 * @return void
+	 * @param string[] $order 
+	 * @return \SOSTheBlack\Moip\Moip\response
 	 */
-	private function getNotificationURL($notificationURL)
+	public function postOrder(array $order)
 	{
-		if (! empty($notificationURL)) {
-			$this->moip->setNotificationURL($notificationURL);
-		}
+		$this->setData($order);
+		$this->initialize();
+		$this->getParcel();
+		$this->billetConf();
+		$this->getMessage();
+		$this->getComission();
+		$this->getPaymentWay();
+		$this->api->setReason($this->getReason());
+		$this->api->setUniqueID($this->getUniqueId());
+		$this->api->setPayer($this->getParams('payer'));
+		$this->api->setValue($this->data['prices']['value']);
+		$this->api->setAdds($this->getParams('prices', 'adds'));
+		$this->api->setDeduct($this->getParams('prices','deduct'));
+		$this->api->setReceiver($this->getParams('receiver', null, true));
+		$this->api->setReturnURL($this->getParams('url_return', null, true));
+		$this->api->setNotificationURL($this->getParams('url_notification', null, true));
+		$this->api->validate($this->getValidate());
+		return $this->response($this->api->send());
 	}
 
 	/**
-	 * Method that returns an object with the token request,
-	 * link, sending XML and XML return
-	 * @param  object $send Return of sendMoip method
-	 * @return object token request, link, sending XML
-	 * and XML return
+	 * response
+	 * 
+	 * @param type $send 
+	 * @return string[]|Exception
 	 */
-	public function response($send = '')
+	public function response($send = null)
 	{
-		if (! empty($send)) {
-			$answer = $this->moip->getAnswer();			
-			$this->validatorResponseError($answer);
-			$this->response = new StdClass;
-			$this->response->response 	 = $answer->response;
-			$this->response->error 		 = $answer->error;
-			$this->response->token 		 = $answer->token;
-			$this->response->payment_url = $answer->payment_url;
-			$this->response->xmlSend 	 = $this->moip->getXML();
-			$this->response->xmlGet  	 = $send->xml;
+		if ($send) {
+			$answer = $this->api->getAnswer();
+			$this->responseValidation($send, $answer);
+			$this->response 			= App::make('stdClass');
+			$this->response->getXML 	= $this->api->getXML();
+			$this->response->replyXML 	= $send->xml;
+			$this->response->token 		= $answer->token;
+			$this->response->url 		= $answer->payment_url;
 		}
-
+		
 		return $this->response;
 	}
 
 	/**
-	 * Checks if the recipient sends login MoIP
-	 * @param  object $data 
-	 * @return $this
+	 * parcel
+	 * 
+	 * Generete parcel
+	 * 
+	 * @param  array  $parcel
+	 * @return array
 	 */
-	private function getReceiver($data)
+	public function parcel(array $parcel)
 	{
-		if (! empty($data->receiver)) {
-			$this->moip->setReceiver($data->receiver);
+		$query = $this->api->queryParcel(
+			$parcel['login'],
+			$parcel['maxParcel'],
+			$parcel['rate'],
+			$parcel['simulatedValue']
+		);
+
+		if ($query['response'] !== true) {
+			throw new Exception('Error: Não foi possível gerar query');
 		}
 
-		return $this;
-	}	
-
-	/**
-	 * Method required to start integration.
-	 * Authentication and environment that the request will be sent
-	 * @return object \SOSTheBlack\Moip\Validator
-	 */
-	private function initialize($data)
-	{
-		$this->moip = App::make('\SOSTheBlack\Moip\Api');
-		$this->config = $this->validatorConfig(Config::get('sostheblack::moip'));
-		$this->getEnvironment();
-		$this->authentication();
-		return $this->validatorData($data);
-	}
-
-	/**
-	 * Authentication credentials and key token
-	 * @return $this
-	 */
-	private function authentication()
-	{
-		if ($this->validatorCredential($this->config->credentials) === true) {
-			$this->moip->setCredential([
-				'key'	=> $this->config->credentials->key,
-				'token' => $this->config->credentials->token,
-			]);
-		}
-		return $this;
-	}
-
-	/**
-	 * Validation to determine whether the data sent will be basic,
-	 * or for identifying user
-	 * @return $this
-	 */
-	private function getValidate()
-	{
-		$this->moip->validate($this->validatorValidate($this->config->validate));
-		return $this;
-	}
-
-	/**
-	 * Which validation environment for the requisition is sent MOIP
-	 * Development environment and Production environment
-	 * @return $this
-	 */
-	private function getEnvironment()
-	{
-		return $this->moip->setEnvironment($this->config->environment);;
+		return $query['installment'];
 	}
 }

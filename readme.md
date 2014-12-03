@@ -1,4 +1,4 @@
-# MoIP (Laravel Package)
+# MoIP Package For API v1
 ----------------------
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SOSTheBlack/moip/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/SOSTheBlack/moip/?branch=develop) 
@@ -8,57 +8,48 @@
 [![Latest Unstable Version](https://poser.pugx.org/sostheblack/moip/v/unstable.svg)](https://packagist.org/packages/sostheblack/moip) 
 [![License](https://poser.pugx.org/sostheblack/moip/license.svg)](https://packagist.org/packages/sostheblack/moip)
 
-Package for integrating its platform with the intermediary payment MoIP.
+Package para integrar o seu negócio com MoIP. Neste Package está incluso:
 
-- `Moip::sendMoip($data);`
-- `Moip::response()`;
+- Dados do comprador (evita a necessidade do comprador se cadastrar na tela intermediária)
+- Valores: Total, Desconto, Acréscimo
+- Identificador Único
+- Motivo da Venda
+- Quem ira resceber o pagamento no MoIP
+- Parcelas: Min, Max, Juros por parcela (a.m), se o comprador irá pagar o juros MoIP
+- Comissão: Valor, motivo, se o valor é porcentagem, conta que irá receber a comissão.
+- Boleto: data de vencimento, mensagens do boleto (max 3), logo no boleto
+- Mensagem no checkout (max 3)
+- URL de retorno após finalizar o checkout
+- URL de notificação na qual recebera NASP
+- Formas de pagamento: Cartão de crédito e débito, boleto, financiamento, debito em conta
 
-and response
+Fazer tudo isso é simples... Muito simples
+```
+Moip::postOrder($data);
+```
 
-- `$moip->error`
-- `$moip->response`
-- `$moip->token`
-- `$moip->payment_url`
-- `$moip->xmlSend`
-- `$moip->xmlGet`
-- `Moip::response()`
-
-![Moip](http://www.tickimg.com.br/uploads/_captura_de_tela_de.png)
-
-## Instalation
-
-### Laravel 4.2 and Blow
-
-Begin by installing this package through Composer. Edit your project's `composer.json` file to require `sostheblack/moip`.
-
-soon in version v1.*
-
+## Instalação - Laravel 4.2 ou inferior
+Comece a instalar este pacote através Composer. Edite `composer.json` do seu projeto para exigir `sostheblack/moip` na verssão v1.*
 ```
 "require": {
     "sostheblack/moip": "1.*"
 }
 ```
 
-Next, update Composer from the Terminal:
-
+Em seguida atualize o seu composer pelo terminal:
 ```
 $ composer update
 ```
 
-Once that's been completed, the next step operation is run this command in terminal
-
+Uma vez que tenha sido concluída a operação, o próximo passo é executar este comando no sei terminal
 ```
-$ php artisan config:publish sostheblack/moip
+$ php artisan migrate --package="vendor/package"
 ```
+Será criada uma tabela chamada moip em seu banco de dados, faça os ajustes necessários e siga para o próximo passo.
 
-A configuration file will be created in `app/config/packages/sostheblack/moip/moip.php`
+O último passo é adicionar o Service Provider e o Facade no seu arquivo `app/config/app.php`
 
-Make the necessary settings and proceed to the next step
-
-Once this operation completes, the final step is to add the service provider and facade. Open `app/config/app.php`.
-
-Add a new item to the providers array.
-
+Adicionando um novo item no seu provider
 ```
 'providers' => array(
     'Illuminate\Foundation\Providers\ArtisanServiceProvider',
@@ -68,8 +59,7 @@ Add a new item to the providers array.
 ),
 ```
 
-Add a new item to the facades array.
-
+Adicionando um novo item no seu facade
 ```
 'aliases' => array(
     'App'        => 'Illuminate\Support\Facades\App',
@@ -79,165 +69,157 @@ Add a new item to the facades array.
 ),
 ```
 
-## Usage
+## Usando
 
-### simple
+### Simples
+Para cria um simples checkout basta enviar o valor total da compra, outras informações pertinente para criação do mesmo, serão resgatas do banco de dados
 
-Sent only the total sale, is configured to send data in `app/config/moip.php`
 ```
-$data = ['values' => ['value' => $full_price_products] ];
-try {
-    $moip = Moip::sendMoip($data);
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+$data = ['prices' => ['value' => 100] ];
+Moip::sendMoip($data);
 ```
+E tera um checkout semelhante a este.
+
+
+![Moip](https://lh4.googleusercontent.com/B1bCyBLrBBVjf_8Vvoxziy_oSU2Cd3YiNm1DWxOdh5UiL3h74OK2TOrwI9yhKCYLf_xnp5vZnzY=w1646-h791)
 
 ### Advanced
+Aqui é criado um checkout totalmente customizado, se for enviado todos os dados referente ao cliente o mesmo não precisará se cadastrar na tela intermediadora de pagamento
 
-Fully customize the data sent!
 ```
 $data = [
-    'unique_id' => 100000001,
-    'reason'    => 'market of Natal 01',
-    'receiver'  => 'integracao@moip.com.br',
-    'returnURL' => 'https://meusite.com.br/cliente/$id/pedido/pedidorealizado',
-    'notificationURL' => 'https://meusite.com.br/nasp',
-    'payer'     => [
-        'name'      => 'user name',
-        'email'     => 'integracao@moip.com.br',
-        'payerId'   => 'id_user',
-        'identity'  => '111.111.111-11',
-        'phone'     => '(11) 1111-1111)',
+    'unique_id' => false,
+    'reason'    => 'Black Friday',
+    'receiver' => 'jeancesargarcia@gmail.com',
+    'url_notification' => 'https://meusite.com.br/nasp',
+    'url_return' => 'https://meusite.com.br/cliente/pedido/bemvindodevolta',
+    'payer' => [
+        'name'      => 'Nome Sobrenome',
+        'email'     => 'email@cliente.com.br',
+        'payerId'   => 'id_usuario',
         'billingAddress' => [
-            'address'   => 'Street Love',
-            'number'    => 45,
-            'complement'=> 'plaza',
-            'city'      => 'São Paulo',
-            'neighborhood' => 'Love',
-            'state'     => 'SP',
-            'country'   => 'BRA',
-            'zipCode'   => '01230-000',
-            'phone'     => '(11) 1 1111-1111)'
+            'address'       => 'Rua do Zézinho Coração',
+            'number'        => '45',
+            'complement'    => 'z',
+            'city'          => 'São Paulo',
+            'neighborhood'  => 'Palhaço Jão',
+            'state'         => 'SP',
+            'country'       => 'BRA',
+            'zipCode'       => '01230-000',
+            'phone'         => '(11)8888-8888'
         ]
-    ],    
-    'parcel'    => [
-        'min'       => 2, 
-        'max'       => 12, 
-        'rate'      => 1.5, 
-        'transfer'  => true
     ],
-    'values'    => [
-        'value' => $full_price_products , 
-        'adds'  => $freight, 
-        'deduct'=> $coupon
+    'prices'    => [
+        'value' => 100,
+        'adds'  => 30,
+        'deduct'=> 10
     ],
-    'comission' => [
-        'value'           => 7, 
-        'reason'          => 'Taxa MoIP', 
-        'ratePayer'       => true,
-        'percentageValue' => true,
-        'receiver'        => 'suporte@moip.com.br',
+    'paymentWay' => [
+    	'creditCard',
+    	'billet',
+    	'financing',
+    	'debit'	,
+    	'debitCard'
     ],
     'billet' => [
-        'expiration' => 3,
-        'workingDays'=> true,
-        'instructions' => [
-            'firstLine' => 'First line of comment of billet',
-            'secondLine'=> 'Second line of comment of billet',
-            'lastLine'  => 'Last line of comment of billet'
+        'expiration'    => 3,
+        'workingDays'   => false,
+        'instructions'  => [
+            'firstLine',
+            'secondLine'
         ],
-        'urlLogo' => 'http://seutie.com.br/logo.png'
+        'uriLogo' => 'http://seusite.com.br/logo.gif',
     ],
     'message' => [
-        'firstLine' => 'First comment of checkout',
-        'secondLine'=> 'Second comment of checkout',
-        'lastLine'  => 'Last comment of checkout'
+        'message 01',
+        'message 02',
+        'message 03'
     ],
-    'payment' => [
-        'creditCard'=> true,
-        'billet'    => false,
-        'financing' => false,
-        'debit'     => false,
-        'debitCard' => false
+    'comission' => [
+        ['reason' => 'comission reason', 'receiver' => 'adm.the_black@hotmail.com', 'value' => 5.00],
+        ['reason' => 'comission reason', 'receiver' => 'adm.the_black@hotmail.com', 'value' => 12.00, 'percentageValue' => true, 'ratePayer' => true]
+    ],
+    'parcel' => [
+        ['min' => '2', 'max' => '4'],
+        ['min' => '5', 'max' => '7', 'rate' => '1.00'],
+        ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true]
     ]
 ];
-try {
-    $moip = Moip::sendMoip($data);
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+
+Moip::postOrder($data);
 ```
 
-## Sending parameters
+E tera um checkout semelhante a este.
 
-#### payer
-----------------------
-Send to MoIP data payer
+![Moip](https://lh4.googleusercontent.com/KMAVQD5K6QdTethFUaaTV9kX7SeqU3EuK8voTxOFnw9aCsXfRi6UYxQ0r51QMwmCLAAEN9rfr2I=w1646-h791)
 
-```
-$data['payer'] = [
-    'payer'     => [
-        'name'      => 'user name',
-        'email'     => 'integracao@moip.com.br',
-        'payerId'   => 'id_user',
-        'identity'  => '111.111.111-11',
-        'phone'     => '(11) 1111-1111)',
-        'billingAddress' => [
-            'address'   => 'Street Love',
-            'number'    => 45,
-            'complement'=> 'plaza',
-            'city'      => 'São Paulo',
-            'neighborhood' => 'Love',
-            'state'     => 'SP',
-            'country'   => 'BRA',
-            'zipCode'   => '01230-000',
-            'phone'     => '(11) 1 1111-1111)'
-        ]
-    ],    
-];
-```
-
-#### values
-----------------------
-##### $full_price_products: Number, $freight: Number, $coupon: Number
-
-1. $full_price_products: Responsible for setting the value that should be paid.
-2. $freigth: Responsible for defining the additional amount to be paid.
-3. $deduct: Responsible for defining the value of discount will be subtracted from the total to be paid.
-```
-$data['values'] = [
-    'value'     => $full_price_products,
-    'adds'      => $freigth,
-    'dedudct'   => $deduct
-];
-```
+## Parametros enviados
+Agora vamos ver detalhadamente o que cada informação sigunifica.
 
 #### unique_id
 ----------------------
 ##### $id: String
 
-Its unique identifier request this same information will be sent to you on our notification of changes in status so that you can identify and treat your application status.
+1. $id: Seu identificador único de pedido, essa mesma informações será enviada para você em nossas notificações de alterações de status para que você possa identificar o pedido e tratar seu status.
 
 ```
 $data['unique_id'] = $id;
 ```
 
+#### payer
+----------------------
+##### $value : ['name','email','payerId','identity', 'phone','billingAddress' => ['address','number','complement','city','neighborhood','state','country','zipCode','phone']]
+
+Envia os dados do comprador, obrigatório se você for utilizar checkout tranparente
+```
+$data['payer'] = [
+    'name'      => 'Nome Sobrenome',
+    'email'     => 'email@cliente.com.br',
+    'payerId'   => 'id_usuario',
+    'billingAddress' => [
+        'address'       => 'Rua do Zézinho Coração',
+        'number'        => '45',
+        'complement'    => 'z',
+        'city'          => 'São Paulo',
+        'neighborhood'  => 'Palhaço Jão',
+        'state'         => 'SP',
+        'country'       => 'BRA',
+        'zipCode'       => '01230-000',
+        'phone'         => '(11)8888-8888'
+    ]
+],
+```
+
+#### prices
+----------------------
+##### $prices ['value', 'adds', 'deduct']
+
+1. $value: Responsável por definir o valor que deverá ser pago.
+2. $adds: Responsável por definir o valor adicional que deverá ser pago.
+3. $deduct:  Responsável por definir o valor de desconto que será subtraído do total a ser pago.
+```
+$data['prices'] = [
+    'value'     => 100,
+    'adds'      => 30,
+    'dedudct'   => 10
+];
+```
+
 #### reason
 ----------------------
-##### $value: String
+##### $reason: String
 
-Responsible for defining the reason for the payment
+1. $reason: Responsável por definir o motivo do pagamento.
 
 ```
-$data['reason'] = $value;
+$data['reason'] = $reason;
 ```
 
 #### receiver
 ----------------------
 ##### $receiver String
 
-Identifies the user who will receive payment in MoIP
+1. $receiver: Login Moip do recebedor primario.
 
 ```
 $data['receiver'] = $receiver;
@@ -245,88 +227,81 @@ $data['receiver'] = $receiver;
 
 #### parcel
 ----------------------
-##### $min: Number, $max: Number, $rate : Number, $transfer : Boolean
+##### $parcel [$min, $max, $rate , $transfer]
 
 Responsible for the installment which will be available to the paying options.
 
-1. $min : Minimum number of plots available to the paying.
-2. $max : Maximum amount of shares available to the paying.
-3. $rate : Amount of interest a.m per parcel.
-4. $transfer : If `true` sets the default value of the interest will be paid by the paying MOIP.
+1. $min : Quantidade mÃ­nima de parcelas disponível ao pagador.
+2. $max : Quantidade máxima de parcelas disponíveis ao pagador.
+3. $rate : Valor de juros a.m por parcela.
+4. $transfer : Caso "true" define que o valor de juros padrão do Moip será pago pelo pagador.
 ```
 $data['parcel'] = [
-    'min'       => 2, 
-    'max'       => 12, 
-    'rate'      => 1.5, 
-    'transfer'  => false
+    ['min' => '2', 'max' => '4'],
+    ['min' => '5', 'max' => '7', 'rate' => '1.00'],
+    ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true]
 ];
 ```
 
 #### comission
 ----------------------
-##### $reason: String, $receiver: String, $value: Number, $percentageValue: Boolean, $ratePayer: Boolean
+##### $comission  [$reason, $receiver, $value, $percentageValue, $ratePayer]
 
-1. $reason: Reason / Motif to which the secondary recipient will receive the set value.
-2. $receiver: Login MOIP the User to receive the value.
-3. $value: Value which will be allocated to the secondary receiver.
-4. $percentageValue: If "true" sets that value will be calculated in relation to the percentage of
-the total value of the transaction.
-5. $ratepayer: If "true" sets that secondary recipient will pay the MOIP with
-value received.
+1. $reason: Razão/Motivo ao qual o recebedor secundário receberá o valor definido
+2. $receiver: Login Moip do usuario que receberá o valor
+3. $value: Valor ao qual será destinado ao recebedor secundário
+4. $percentageValue: Caso "true" define que valor será calculado em relação ao percentual sobre o valor total da transação
+5. $ratepayer: Caso "true" define que esse recebedor secundário irá pagar a Taxa Moip com o valor recebido
 
 ```
-$data['comission'] = [ 
-    'value' => 7, 
-    'reason' => 'Taxa MoIP', 
-    'ratePayer' => true, 
-    'percentageValue' => true, 
-    'receiver' => 'suporte@moip.com.br'
+$data['comission'] = [
+    ['reason' => 'comission reason', 'receiver' => 'adm.the_black@hotmail.com', 'value' => 5.00],
+    ['reason' => 'comission reason', 'receiver' => 'adm.the_black@hotmail.com', 'value' => 12.00, 'percentageValue' => true, 'ratePayer' => true]
 ];
 ```
 
 #### billet
 ----------------------
-##### $expiration: Int ou Date, $workingDays: Boolean, $instructions: Array(), $uriLogo: String
+##### $billet [$expiration, $workingDays, $instructions, $uriLogo]
 
-1. $expiration: Date in "YYYY-MM-DD" format or number of days.
-2. $workingDays: If "expiration" is the amount of days you can set to. "true" to that is counted in business days, the default is calendar days.
-3. $instructions: Additional Message to be printed on the ticket, up to three messages.
-4. $urlLogo: URL of your logo maximum dimensions 75px wide by 40px high.
+1. $expiration: Data em formato "AAAA-MM-DD" ou quantidade de dias.
+2. $workingDays: Caso "$expiration" seja quantidade de dias você pode definir com "true" para que seja contado em dias Ãºteis, o padrão será dias corridos.
+3. $instructions: Mensagem adicionais a ser impresso no boleto, até três mensagens.
+4. $urlLogo: URL de sua logomarca, dimensÃµes máximas 75px largura por 40px altura.
 
 ```
 $data['billet'] = [
-    'billet' => [
-        'expiration' => 3,
-        'workingDays'=> true,
-        'instructions' => [
-            'firstLine' => 'First line of comment of billet'',
-            'secondLine'=> 'Second line of comment of billet'',
-            'lastLine'  => 'Last line of comment of billet'
-        ],
-        'urlLogo' => 'http://seutie.com.br/logo.png'
-    ]
+    'expiration'    => 3,
+    'workingDays'   => false,
+    'instructions'  => [
+        'firstLine',
+        'secondLine',
+        'lastLine'
+    ],
+    'uriLogo' => 'http://seusite.com.br/logo.gif',
 ];
 ```
 
 #### message
 ----------------------
-##### $msg: String
+##### $message []
 
-1. $msg: Display additional messages at checkout MOIP to your buyer.
+1. $message: Define mensagem adicional a ser exibida no checkout Moip.
 
 ```
 $data['message'] = [
-    'firstLine' => 'comment of checkout'',
-    'secondLine'=> 'comment of checkout'',
-    'lastLine'  => 'comment of checkout'
+    'message 01',
+    'message 02',
+    'message 03',
+    ...
 ];
 ```
 
 #### returnURL
 ----------------------
-##### $url : String
+##### $returnURL String
 
-1. $url: responsible for defining the URL that the buyer will be redirected to finalize a payment through checkout MoIP
+1. $returnURL: Responsável por definir a URL que o comprador será redirecionado ao finalizar um pagamento através do checkout Moip.
 
 ```
 $data['returnURL'] = 'https://meusite.com.br/pedidofinalizado';
@@ -334,47 +309,87 @@ $data['returnURL'] = 'https://meusite.com.br/pedidofinalizado';
 
 #### notificationURL
 ----------------------
-##### $url : String
+##### $notificationURL String
 
-1. $url: responsible for defining the URL to which the MOIP shall notify to the NASP (Notification of Change in Status of Payment) the change of status.
+1. $notificationURL: Responsável por definir a URL ao qual o Moip deverá notificar com o NASP (Notificação de Alteração de Status de Pagamento) as mudança de status.
 
 ```
 $data['notificationURL'] = 'https://meusite.com.br/nasp';
 ```
 
-#### payment
+#### paymentWay
 ----------------------
-##### $payment : String
+##### $paymentWay [creditCard, billet, financing, debit, debitCard]
 
-1. $payment: Defines which forms of payment that will be displayed to the payer in Checkout MOIP
-billet: To provide a "Billet Banking" as payment option at checkout.
-financing: To enable the "Financing" as payment option at checkout.
-debit: To provide the "Debit account" as a payment method at checkout.
-creditCard: To provide a "Credit Card" as payment option in checkout.
-debitCard: To provide a "Debit Card" as payment option in checkout.
+1. $paymentWay: Define quais as formas de pagamento que serão exibidas ao pagador no Checkout Moip. 
 
 ```
-$data['payment'] = [
-    'creditCard'=> true,
-    'billet'    => false,
-    'financing' => false,
-    'debit'     => false,
-    'debitCard' => false
-]
+$data['paymentWay'] = [
+    'creditCard',
+    'billet',
+    'financing',
+    'debit' ,
+    'debitCard'
+];
 ```
 
-### Data Response
+### Retorno
+O método `Moip::postOrder($data)` retorna o método `Moip::response()`
+```
+stdClass Object
+(
+    [getXML]
+    [replyXML]
+    [token]
+    [url]
+)
+```
 
 Method | Response
 -------|----------
-$moip->error | false or error message
-$moip->response | true or false
-$moip->token | token request
-$moip->payment_url | payment url
-$moip->xmlSend | xml sent
-$moip->xmlGet | xml reponse
-Moip::response() | object equal to all previous methods
+Moip::response()->getXML | XML que  é enviado
+Moip::response()->replyXML | XML de resposta
+Moip::response()->token | Token do checkout
+$Moip::response()->url | URL do checkout
 
-### License
 
-The MoIP pakacge is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+### Gerando Parcelas
+----------------------
+O método `Moip::parcel($parcel)` retorna um array contendo as informações de parcelas e seus respectivos valores cobrados por parcela e o valor total a ser pago referente a taxa de juros simulada
+
+$parcel [ $login $maxParcel $rate $simulatedValue ]
+
+1. RESQUEST.
+    * $login: Login Moip do usuario.
+    * $maxParcel: Máximo de parcelar a ser consultado.
+    * $rate: Taxa de juros para simulação.
+    * $simulatedValue: Valor pago ao qual será simulado.
+
+```
+$parcel = [
+    'login'         => 'jean@comunicaweb.com.br',
+    'maxParcel'     => 2,
+    'rate'          => 1.99,
+    'simulatedValue'=> 100
+];
+```
+
+2. RESPONSE.
+    * Total a ser pago.
+    * Total a ser pago.
+    * Valor por parcela.
+
+```
+[1] => [
+    [total] => 100.00
+    [rate] => 1.99
+    [value] => 100.00
+]
+
+
+[2] => [
+    [total] => 103.00
+    [rate] => 1.99
+    [value] => 51.50
+]
+```

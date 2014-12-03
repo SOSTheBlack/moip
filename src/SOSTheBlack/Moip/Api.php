@@ -1,7 +1,7 @@
 <?php namespace SOSTheBlack\Moip;
 
-use SimpleXmlElement;
 use App;
+use SimpleXmlElement;
 
 /**
  * Library to help PHP users of Moip's API
@@ -11,7 +11,7 @@ use App;
  * @author Alê Borba
  * @author Vagner Fiuza Vieira
  * @author Paulo Cesar
- * @version 1.6.2
+ * @version 1.*
  * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
 
@@ -44,7 +44,7 @@ class Api {
     /**
      * The application's environment
      *
-     * @var Environment
+     * @var SOSTheBlack\Moip\Environment
      */
     protected $environment = null;
     /**
@@ -122,7 +122,7 @@ class Api {
     /**
      * Server's answer
      *
-     * @var Response
+     * @var \SOSTheBlack\Moip\Response
      */
     public $answer;
     /**
@@ -136,7 +136,7 @@ class Api {
      *
      * @var SimpleXMLElement
      */
-    protected $xml = null;
+    protected $xml;
     /**
      * Simple XML object
      *
@@ -170,12 +170,6 @@ class Api {
         $this->initXMLObject();
     }
 
-    /**
-     * encoding converting
-     * @param  string  $text 
-     * @param  boolean $post 
-     * @return string
-     */
 	private function convert_encoding($text, $post = false)
 	{
 		if ($post)
@@ -202,11 +196,7 @@ class Api {
      * @access private
      */
     private function initXMLObject() {
-        App::singleton('SimpleXmlElement', function(){
-            $initializeXML = '<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>';
-            return new \SimpleXmlElement($initializeXML);
-        });
-        $this->xml = App::make('SimpleXmlElement');
+        $this->xml = new SimpleXmlElement('<?xml version="1.0" encoding="utf-8" ?><EnviarInstrucao></EnviarInstrucao>');
         $this->xml->addChild('InstrucaoUnica');
     }
 
@@ -216,7 +206,7 @@ class Api {
      * Define the payment's type between 'Basic' or 'Identification'
      *
      * @param string $tipo Can be 'Basic' or 'Identification'
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setPaymentType($tipo) {
@@ -235,26 +225,32 @@ class Api {
      * Set the credentials(key,token) required for the API authentication.
      *
      * @param array $credential Array with the credentials token and key
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setCredential($credential) {
+        if (!isset($credential['token']) or
+                !isset($credential['key']) or
+                strlen($credential['token']) != 32 or
+                strlen($credential['key']) != 40)
+            $this->setError("Error: credential invalid");
+
         $this->credential = $credential;
         return $this;
     }
 
     /**
-     * Method setEnvironment()
+     * Method \SOSTheBlack\Moip\Environment setEnvironment()
      *
      * Define the environment for the API utilization.
      *
      * @param bool $testing If true, will use the sandbox environment
-	 * @return Api
+	 * @return Moip
      */
     public function setEnvironment($testing = false) {
 		if (empty($this->environment))
 		{
-			$this->environment = new Environment();
+			$this->environment = App::make('\SOSTheBlack\Moip\Environment');
 		}
 
         if ($testing) {
@@ -274,11 +270,54 @@ class Api {
      * Make the data validation
 	 *
      * @param string $validateType Identification or Basic, defaults to Basic
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function validate($validateType = "Basic") {
+
         $this->setPaymentType($validateType);
+
+        if (!isset($this->credential) or
+                !isset($this->reason) or
+                !isset($this->uniqueID))
+            $this->setError("[setCredential], [setReason] and [setUniqueID] are required");
+
+        $payer = $this->payer;
+
+        if ($this->payment_type == 'Identification') {
+			$varNotSeted = '';
+
+            $dataValidate = array('name',
+                'email',
+                'payerId',
+                'billingAddress');
+
+            $dataValidateAddress = array('address',
+                'number',
+                'complement',
+                'neighborhood',
+                'city',
+                'state',
+                'country',
+                'zipCode',
+                'phone');
+
+            foreach ($dataValidate as $key) {
+                if (!isset($payer[$key])) {
+                    $varNotSeted .= ' [' . $key . '] ';
+                }
+            }
+
+            foreach ($dataValidateAddress as $key) {
+                if (!isset($payer['billingAddress'][$key])) {
+                    $varNotSeted .= ' [' . $key . '] ';
+                }
+            }
+
+            if ($varNotSeted !== '') {
+                $this->setError('Error: The following data required were not informed: ' . $varNotSeted . '.');
+			}
+        }
         return $this;
     }
 
@@ -288,11 +327,11 @@ class Api {
      * Set the unique ID for the transaction
      *
      * @param int $id Unique ID for each transaction
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setUniqueID($id) {
-        $this->uniqueID = (string) $id;
+        $this->uniqueID = $id;
         $this->xml->InstrucaoUnica->addChild('IdProprio', $this->uniqueID);
 
         return $this;
@@ -304,7 +343,7 @@ class Api {
      * Set the short description of transaction. eg. Order Number.
      *
      * @param string $reason The reason fo transaction
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setReason($reason) {
@@ -320,7 +359,7 @@ class Api {
      * Add a payment's method
      *
      * @param string $way The payment method. Options: 'billet','financing','debit','creditCard','debitCard'.
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function addPaymentWay($way) {
@@ -350,29 +389,38 @@ class Api {
      * @param boolean $workingDays expiration should be counted in working days?
      * @param array $instructions Additional payment instructions can be array of message or a message in string
      * @param string $uriLogo URL of the image to be displayed on docket (75x40)
-     * @return Api
+     * @return void
      * @access public
      */
     public function setBilletConf($expiration, $workingDays=false, $instructions = null, $uriLogo = null) {
 
         if (!isset($this->xml->InstrucaoUnica->Boleto)) {
             $this->xml->InstrucaoUnica->addChild('Boleto');
-            $this->xml->InstrucaoUnica->Boleto = (object) $this->xml->InstrucaoUnica->Boleto;
             if (is_numeric($expiration)) {
                 $this->xml->InstrucaoUnica->Boleto->addChild('DiasExpiracao', $expiration);
-                $this->xml->InstrucaoUnica->Boleto->DiasExpiracao->addAttribute('Tipo', $workingDays ? 'Uteis' : 'Corridos');
+
+                if ($workingDays)
+                    $this->xml->InstrucaoUnica->Boleto->DiasExpiracao->addAttribute('Tipo', 'Uteis');
+                else
+                    $this->xml->InstrucaoUnica->Boleto->DiasExpiracao->addAttribute('Tipo', 'Corridos');
+            }else {
                 $this->xml->InstrucaoUnica->Boleto->addChild('DataVencimento', $expiration);
             }
 
-            $numeroInstrucoes = 1;
-            foreach ($instructions as $instrucaostr) {
-                $this->xml->InstrucaoUnica->Boleto->addChild('Instrucao' . $numeroInstrucoes, $instrucaostr);
-                $numeroInstrucoes++;
+            if (isset($instructions)) {
+                if (is_array($instructions)) {
+                    $numeroInstrucoes = 1;
+                    foreach ($instructions as $instrucaostr) {
+                        $this->xml->InstrucaoUnica->Boleto->addChild('Instrucao' . $numeroInstrucoes, $instrucaostr);
+                        $numeroInstrucoes++;
+                    }
+                } else {
+                    $this->xml->InstrucaoUnica->Boleto->addChild('Instrucao1', $instructions);
+                }
             }
-             
-            if (isset($uriLogo)) {
+
+            if (isset($uriLogo))
                 $this->xml->InstrucaoUnica->Boleto->addChild('URLLogo', $uriLogo);
-            }
         }
 
         return $this;
@@ -384,7 +432,7 @@ class Api {
      * Set contacts informations for the payer.
      *
      * @param array $payer Contact information for the payer.
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setPayer($payer) {
@@ -393,23 +441,31 @@ class Api {
         if (!empty($this->payer)) {
             $p = $this->payer;
             $this->xml->InstrucaoUnica->addChild('Pagador');
-            $p->name = $this->xml->InstrucaoUnica->Pagador->addChild('Nome', $this->payer->name);
-            $p->email = $this->xml->InstrucaoUnica->Pagador->addChild('Email', $this->payer->email);
-            $p->payerId = $this->xml->InstrucaoUnica->Pagador->addChild('IdPagador', $this->payer->payerId);
-            $p->identity = $this->xml->InstrucaoUnica->Pagador->addChild('Identidade', $this->payer->identity);
-            $p->phone = $this->xml->InstrucaoUnica->Pagador->addChild('TelefoneCelular', $this->payer->phone);
+            (isset($p['name'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('Nome', $this->payer['name']) : null;
+            (isset($p['email'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('Email', $this->payer['email']) : null;
+            (isset($p['payerId'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('IdPagador', $this->payer['payerId']) : null;
+            (isset($p['identity'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('Identidade', $this->payer['identity']) : null;
+            (isset($p['phone'])) ? $this->xml->InstrucaoUnica->Pagador->addChild('TelefoneCelular', $this->payer['phone']) : null;
 
-            $p = $this->payer->billingAddress;
+            $p = $this->payer['billingAddress'];
             $this->xml->InstrucaoUnica->Pagador->addChild('EnderecoCobranca');
-            $p->address = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Logradouro', $this->payer->billingAddress->address);
-            $p->number = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Numero', $this->payer->billingAddress->number);
-            $p->complement = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Complemento', $this->payer->billingAddress->complement);
-            $p->neighborhood = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Bairro', $this->payer->billingAddress->neighborhood);
-            $p->city = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer->billingAddress->city);
-            $p->state = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer->billingAddress->state);
-            $p->country = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer->billingAddress->country);
-            $p->zipCode = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('CEP', $this->payer->billingAddress->zipCode);
-            $p->phone = $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer->billingAddress->phone);
+            (isset($p['address'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Logradouro', $this->payer['billingAddress']['address']) : null;
+
+            (isset($p['number'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Numero', $this->payer['billingAddress']['number']) : null;
+
+            (isset($p['complement'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Complemento', $this->payer['billingAddress']['complement']) : null;
+
+            (isset($p['neighborhood'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Bairro', $this->payer['billingAddress']['neighborhood']) : null;
+
+            (isset($p['city'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Cidade', $this->payer['billingAddress']['city']) : null;
+
+            (isset($p['state'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Estado', $this->payer['billingAddress']['state']) : null;
+
+            (isset($p['country'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('Pais', $this->payer['billingAddress']['country']) : null;
+
+            (isset($p['zipCode'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('CEP', $this->payer['billingAddress']['zipCode']) : null;
+
+            (isset($p['phone'])) ? $this->xml->InstrucaoUnica->Pagador->EnderecoCobranca->addChild('TelefoneFixo', $this->payer['billingAddress']['phone']) : null;
         }
 
         return $this;
@@ -421,7 +477,7 @@ class Api {
      * Set the transaction's value
      *
      * @param float $value The transaction's value
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setValue($value) {
@@ -443,28 +499,18 @@ class Api {
      * Adds a value on payment. Can be used for collecting fines, shipping and other
      *
      * @param float $value The value to add.
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setAdds($value) {
         $this->adds = $value;
-        $this->values(true);
-        return $this;
-    }
 
-    /**
-     * @param boolean $adds
-     */
-    public function values($adds)
-    {
-        if ($adds === true) {
+        if (isset($this->adds)) {
             $this->xml->InstrucaoUnica->Valores->addChild('Acrescimo', $this->adds)
                     ->addAttribute('moeda', 'BRL');
-        } else {
-            $this->xml->InstrucaoUnica->Valores->addChild('Deducao', $this->deduction)
-                    ->addAttribute('moeda', 'BRL');
         }
-        
+
+        return $this;
     }
 
     /**
@@ -473,12 +519,17 @@ class Api {
      * Deducts a payment amount. It is mainly used for discounts.
      *
      * @param float $value The value to deduct
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setDeduct($value) {
         $this->deduction = $value;
-        $this->values(false);
+
+        if (isset($this->deduction)) {
+            $this->xml->InstrucaoUnica->Valores->addChild('Deducao', $this->deduction)
+                    ->addAttribute('moeda', 'BRL');
+        }
+
         return $this;
     }
 
@@ -488,7 +539,7 @@ class Api {
      * Add a message in the instruction to be displayed to the payer.
      *
      * @param string $msg Message to be displayed.
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function addMessage($msg) {
@@ -506,7 +557,7 @@ class Api {
      * Set the return URL, which redirects the client after payment.
      *
      * @param string $url Return URL
-	 * @return Api
+	 * @return Moip
      * @access public
      */
     public function setReturnURL($url) {
@@ -536,11 +587,11 @@ class Api {
      * Set Erroe alert
      *
      * @param String $error Error alert
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setError($error) {
-        $this->errors = (object) $error;
+        $this->errors = $error;
 
         return $this;
     }
@@ -555,20 +606,28 @@ class Api {
      * @param number $value value of the division of payment
      * @param boolean $percentageValue percentage value should be
      * @param boolean $ratePayer this secondary recipient will pay the fee Moip
-	 * @return Api
+	 * @return Moip
      * @access public
      */
     public function addComission($reason, $receiver, $value, $percentageValue=false, $ratePayer=false) {
 
-        if (!isset($this->xml->InstrucaoUnica->Comissoes)) {
+        if (!isset($this->xml->InstrucaoUnica->Comissoes))
             $this->xml->InstrucaoUnica->addChild('Comissoes');
-        }
-        $split = $this->xml->InstrucaoUnica->Comissoes->addChild('Comissionamento');
-        $split->addChild('Comissionado')->addChild('LoginMoIP', $receiver);
-        $split->addChild('Razao', $reason);
-        $split->addChild( $percentageValue == false ? 'ValorFixo' : 'ValorPercentual' , $value);
-        if ($ratePayer == true){
-            $this->xml->InstrucaoUnica->Comissoes->addChild('PagadorTaxa')->addChild('LoginMoIP', $receiver);
+
+        if (is_numeric($value)) {
+
+            $split = $this->xml->InstrucaoUnica->Comissoes->addChild('Comissionamento');
+            $split->addChild('Comissionado')->addChild('LoginMoIP', $receiver);
+            $split->addChild('Razao', $reason);
+
+            if ($percentageValue == false)
+                $split->addChild('ValorFixo', $value);
+            if ($percentageValue == true)
+                $split->addChild('ValorPercentual', $value);
+            if ($ratePayer == true)
+                $this->xml->InstrucaoUnica->Comissoes->addChild('PagadorTaxa')->addChild('LoginMoIP', $receiver);
+        }else {
+            $this->setError('Error: Value must be numeric.');
         }
 
         return $this;
@@ -583,7 +642,7 @@ class Api {
      * @param int $max The maximum number of parcels.
      * @param float $rate The percentual value of rates
      * @param boolean $transfer "true" defines the amount of interest charged by MoIP installment to be paid by the payer
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function addParcel($min, $max, $rate=null, $transfer=false) {
@@ -592,14 +651,30 @@ class Api {
         }
 
         $parcela = $this->xml->InstrucaoUnica->Parcelamentos->addChild('Parcelamento');
-        $parcela->addChild('MinimoParcelas', $min);
-        $parcela->addChild('MaximoParcelas', $max);
+        if (is_numeric($min) && $min <= 12)
+            $parcela->addChild('MinimoParcelas', $min);
+        else
+            $this->setError('Error: Minimum parcel can not be greater than 12.');
+
+        if (is_numeric($max) && $max <= 12)
+            $parcela->addChild('MaximoParcelas', $max);
+        else
+            $this->setError('Error: Maximum amount can not be greater than 12.');
+
         $parcela->addChild('Recebimento', 'AVista');
 
         if ($transfer === false) {
-            $parcela->addChild('Juros', $rate);
+            if (isset($rate)) {
+                if (is_numeric($rate))
+                    $parcela->addChild('Juros', $rate);
+                else
+                    $this->setError('Error: Rate must be numeric');
+            }
         }else {
-            $parcela->addChild('Repassar', $transfer);
+            if (is_bool($transfer))
+                $parcela->addChild('Repassar', $transfer);
+            else
+                $this->setError('Error: Transfer must be boolean');
         }
 
         return $this;
@@ -611,7 +686,7 @@ class Api {
      * Allows to add a order to parceling.
      *
      * @param string $receiver login Moip the secondary receiver
-     * @return Api
+     * @return Moip
      * @access public
      */
     public function setReceiver($receiver) {
@@ -646,14 +721,14 @@ class Api {
      * Send the request to the server
      *
      * @param object $client The server's connection
-     * @return Response
+     * @return MoipResponse
      * @access public
      */
     public function send($client=null) {
         $this->validate();
 
         if ($client == null)
-            $client = new Client();
+            $client = App::make('\SOSTheBlack\Moip\Client');
 
         $url = $this->environment->base_url . '/ws/alpha/EnviarInstrucao/Unica';
 
@@ -666,28 +741,24 @@ class Api {
      * Method getAnswer()
      *
      * Gets the server's answer
-     * @return Response|string
+     * @param boolean $return_xml_as_string Return the answer XMl string
+     * @return MoipResponse|string
      * @access public
      */
-    public function getAnswer() {
+    public function getAnswer($return_xml_as_string = false) {
         if ($this->answer->response == true) {
+            if ($return_xml_as_string) {
+                return $this->answer->xml;
+            }
+
             $xml = new SimpleXmlElement($this->answer->xml);
 
-            if ($xml->Resposta->Status == 'Sucesso') {
-                return new Response(array(
-                    'response' => true,
-                    'error' => false,
-                    'token' => (string) $xml->Resposta->Token,
-                    'payment_url' => (string) $this->environment->base_url . "/Instrucao.do?token=" . (string) $xml->Resposta->Token,
-                ));
-            } else {
-                return new Response(array(
-                    'response' => false,
-                    'error' => $this->convert_encoding((string)$xml->Resposta->Erro),
-                    'token' => (string) $xml->Resposta->Token,
-                    'payment_url' => false,
-                ));   
-            }
+            return App::make('\SOSTheBlack\Moip\Response',[[
+                'response' => $xml->Resposta->Status == 'Sucesso' ? true : false,
+                'error' => $xml->Resposta->Status == 'Falha' ? $this->convert_encoding((string)$xml->Resposta->Erro) : false,
+                'token' => (string) $xml->Resposta->Token,
+                'payment_url' => $xml->Resposta->Status == 'Sucesso' ? (string) $this->environment->base_url . "/Instrucao.do?token=" . (string) $xml->Resposta->Token : false,
+            ]]);
         } else {
             return $this->answer->error;
         }
@@ -706,20 +777,25 @@ class Api {
      * @access public
      */
     public function queryParcel($login, $maxParcel, $rate, $simulatedValue) {
-        if (!isset($this->credential)) {
+        if (!isset($this->credential))
             $this->setError("You must specify the credentials (token / key) and enriroment");
-        }
 
 
-        $client = new Client();
+        $client = App::make('\SOSTheBlack\Moip\Client');
 
         $url = $this->environment->base_url . "/ws/alpha/ChecarValoresParcelamento/$login/$maxParcel/$rate/$simulatedValue";
         $credential = $this->credential['token'] . ':' . $this->credential['key'];
-        $answer = $client->curlGet($credential, $url, (string) $this->errors);
+        $answer = $client->curlGet($credential, $url, $this->errors);
 
         if ($answer->response) {
             $xml = new SimpleXmlElement($answer->xml);
-            $return = array('response' => $xml->Resposta->Status == "Sucesso" ? true : false,
+
+            if ($xml->Resposta->Status == "Sucesso")
+                $response = true;
+            else
+                $response = false;
+
+            $return = array('response' => $response,
                 'installment' => array());
 
             $i = 1;
