@@ -14,7 +14,7 @@ class CreateMoipTable extends Migration {
 	{
 		Schema::create('moip', function($table){
 			$table->increments('id');
-			$table->string('receiver', 50)->comment('Identifica o usuário Moip que irá receber o pagamento no Moip');
+			$table->string('receiver', 50)->default('jeancesargarcia@gmail.com')->comment('Identifica o usuário Moip que irá receber o pagamento no Moip');
 			$table->string('key', 40)->default('ABABABABABABABABABABABABABABABABABABABAB');
 			$table->string('token', 32)->default('01010101010101010101010101010101');
 			$table->boolean('environment')->default(0)->comment('Método que define o ambiente em qual o requisição será processada. False: desenvolvimento, True: produção');
