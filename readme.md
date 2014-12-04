@@ -61,7 +61,8 @@ Adicionando um novo item no seu facade
     'App'        => 'Illuminate\Support\Facades\App',
     'Artisan'    => 'Illuminate\Support\Facades\Artisan',
     ...
-    'Moip'       => 'SOSTheBlack\Moip\Facade',
+    'Moip'              => 'SOSTheBlack\Moip\Facades\Moip',
+    'MoipController'    => 'SOSTheBlack\Moip\Facades\Controller',
 ),
 ```
 

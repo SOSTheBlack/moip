@@ -38,6 +38,10 @@ class MoipServiceProvider extends ServiceProvider {
 		$this->app->singleton('moip', function(){
 			return new \SOSTheBlack\Moip\Moip;
 		});
+
+		$this->app->singleton('controller', function(){
+			return new \SOSTheBlack\Moip\Controllers\MoipController;
+		});
 	}
 
 	/**

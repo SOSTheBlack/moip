@@ -1,4 +1,4 @@
-<?php namespace SOSTheBlack\Moip;
+<?php namespace SOSTheBlack\Moip\Facades;
 
 use Illuminate\Support\Facades\Facade as BaseFacade;
 
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade as BaseFacade;
  * @version v1.*
  * @license <a href="http://www.opensource.org/licenses/bsd-license.php">BSD License</a>
  */
-class Facade extends BaseFacade
+class Controller extends BaseFacade
 {
 	/**
 	 * getFacadeAccessor()
@@ -18,6 +18,6 @@ class Facade extends BaseFacade
 	 */
 	protected static function getFacadeAccessor()
 	{
-		return 'moip';
+		return 'controller';
 	}
 }
