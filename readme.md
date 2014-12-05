@@ -390,3 +390,28 @@ $parcel = [
     [value] => 51.50
 ]
 ```
+
+
+## Checkout transparent (Teste)
+
+```
+$pgto = [
+	"Forma" 		=> "CartaoCredito",
+	"Instituicao" 	=> "Visa",
+    "Parcelas"		=> "1",
+    "CartaoCredito" => [
+        "Numero" 		 => "4073020000000002",
+        "Expiracao" 	 => "12/15",
+        "Cofre"			 => "0b2118bc-fdca-4a57-9886-366326a8a647",
+        "CodigoSeguranca"=> "123",
+        "Portador" 		 => [
+        	"Nome" 			=> "Nome Sobrenome",
+            "DataNascimento"=> "30/12/1987",
+            "Telefone" 		=> "(11)3165-4020",
+            "Identidade" 	=> "222.222.222-22"
+        ]
+    ]
+];
+
+return MoipController::transparent($pgto);
+```
