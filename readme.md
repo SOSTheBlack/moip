@@ -393,7 +393,9 @@ $parcel = [
 
 
 ## Checkout transparent (Teste)
-
+```
+php artisan asset:publish vendor/package
+```
 ```
 $pgto = [
 	"Forma" 		=> "CartaoCredito",

@@ -1,49 +1,42 @@
-@if ($moip['environment'] === true)
-	{{ HTML::script(
-		'https://www.moip.com.br/transparente/MoipWidget-v2.js', 
-		['charset' => 'ISO-8859-1', 'type' => 'text/javascript']) 
-	}}
-@else
-	{{ HTML::script(
-		'https://desenvolvedor.moip.com.br/sandbox/transparente/MoipWidget-v2.js', 
-		['charset' => 'ISO-8859-1', 'type' => 'text/javascript']) 
-	}}
-@endif
-
- {{ var_dump($moip) }}
+{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.js") }}
+{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.min.js") }}
+{{ HTML::script($moip['environment'], ["charset" => "ISO-8859-1", "type" => "text/javascript"])}}
+{{ var_dump($moip) }}
 <script type="text/javascript">
-  	payment = function()
+	payment = function()
   	{
       	var settings = 
       	{
-			"Forma": "{{ $moip['Forma'] }}",
-			"Instituicao": "{{ $moip['Instituicao'] }}",
-		    "Parcelas": "{{ $moip['Parcelas'] }}",
+			"Forma": "{{$moip['Forma']}}",
+			"Instituicao": "{{$moip['Instituicao']}}",
+		    "Parcelas": "{{$moip['Parcelas']}}",
 		    "CartaoCredito": {
-		        "Numero": "{{ $moip['CartaoCredito']['Numero'] }}",
-		        "Expiracao": "{{ $moip['CartaoCredito']['Expiracao'] }}",
-		        "CodigoSeguranca": "{{ $moip['CartaoCredito']['CodigoSeguranca'] }}",
+		        "Numero": "{{$moip['CartaoCredito']['Numero']}}",
+		        "Expiracao": "{{$moip['CartaoCredito']['Expiracao']}}",
+		        "CodigoSeguranca": "{{$moip['CartaoCredito']['CodigoSeguranca']}}",
 		        "Portador": {
-		            "Nome": "{{ $moip['CartaoCredito']['Portador']['Nome'] }}",
-		            "DataNascimento": "{{ $moip['CartaoCredito']['Portador']['DataNascimento'] }}",
-		            "Telefone": "{{ $moip['CartaoCredito']['Portador']['Telefone'] }}",
-		            "Identidade": "{{ $moip['CartaoCredito']['Portador']['Identidade'] }}"
+		            "Nome": "{{$moip['CartaoCredito']['Portador']['Nome']}}",
+		            "DataNascimento": "{{$moip['CartaoCredito']['Portador']['DataNascimento']}}",
+		            "Telefone": "{{$moip['CartaoCredito']['Portador']['Telefone']}}",
+		            "Identidade": "{{$moip['CartaoCredito']['Portador']['Identidade']}}"
 		        }
 		    }
         }
 
     	MoipWidget(settings);
   	}
-</script>
 
-<script type="text/javascript">
-    var callbackSuccess = function(data){
-    	console.log('Sucesso\n' + JSON.stringify(data));
+  	var callbackSuccess = function(data){
+    	console.log("Sucesso\n" + JSON.stringify(data));
     };
 
     var callbackFaill = function(data){
-        console.log('Falha\n' + JSON.stringify(data));
+        console.log("Falha\n" + JSON.stringify(data));
     };
+
+    $(document).ready(function(){
+		payment();
+	}); 
 </script>
 
 <div id="MoipWidget"
@@ -51,7 +44,3 @@
     callback-method-error="callbackFaill"
     callback-method-success="callbackSuccess">
 </div>
-
-<a href="javascript:payment();">
- 	Imprimir Boleto
-</a>

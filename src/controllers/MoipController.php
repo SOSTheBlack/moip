@@ -1,11 +1,19 @@
 <?php namespace SOSTheBlack\Moip\Controllers;
 
-use DB;
 use View;
 use Moip;
+use MoipModel;
 
 class MoipController
 {
+	/**
+	 * undocumented class variable
+	 *
+	 * @var string
+	 **/
+
+	private $moip;
+
 	/**
 	 * undocumented class variable
 	 *
@@ -31,27 +39,19 @@ class MoipController
 	];
 
 	/**
-	 * undocumented class variable
-	 *
-	 * @var string
-	 **/
-
-	var $moip;
-
-	/**
 	 * initialize
 	 * 
 	 * @return void
 	 */
 	private function initialize(array $data)
 	{
-		$this->moip = DB::table('moip')->first();
+		$this->moip = MoipModel::firstOrFail();
 		$this->data = array_replace_recursive($this->data, $data);
 		if (empty($this->data['CartaoCredito']['Cofre'])) {
 			unset($this->data['CartaoCredito']['Cofre']);
 		}
 		$this->data['token'] 		= Moip::response()->token;
-		$this->data['environment'] 	= (boolean) $this->moip->environment;
+		$this->data['environment'] 	= $this->environment();
 	}
 
 	/**
@@ -66,5 +66,21 @@ class MoipController
 		return View::make('sostheblack::moip')->withMoip($this->data);
 	}
 
-	
+	/**
+	 * environment
+	 * 
+	 * @return string
+	 */
+	private function environment()
+	{
+		$environment = "";
+
+		if ((boolean) $this->moip->environment === true) {
+			$environment = "https://www.moip.com.br/transparente/MoipWidget-v2.js";
+		} else {
+			$environment = "https://desenvolvedor.moip.com.br/sandbox/transparente/MoipWidget-v2.js";
+		}
+
+		return $environment;
+	}
 }

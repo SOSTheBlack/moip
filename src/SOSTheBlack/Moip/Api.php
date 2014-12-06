@@ -333,7 +333,6 @@ class Api {
     public function setUniqueID($id) {
         $this->uniqueID = $id;
         $this->xml->InstrucaoUnica->addChild('IdProprio', $this->uniqueID);
-
         return $this;
     }
 
