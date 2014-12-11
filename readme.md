@@ -394,7 +394,7 @@ $parcel = [
 
 ## Checkout transparent (Teste)
 ```
-php artisan asset:publish vendor/package
+php artisan asset:publish sostheblack/moip
 ```
 ```
 $pgto = [
