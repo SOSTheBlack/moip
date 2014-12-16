@@ -2,7 +2,7 @@
 
 use \Illuminate\Database\Eloquent\Model as Eloquent;
 
-class MoipModel extends Eloquent
+class Moip extends Eloquent
 {
 	/**
 	 * The database table used by the model.

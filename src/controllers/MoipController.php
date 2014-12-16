@@ -1,8 +1,8 @@
 <?php namespace SOSTheBlack\Moip\Controllers;
 
 use View;
+use MoipApi;
 use Moip;
-use MoipModel;
 
 class MoipController
 {
@@ -45,12 +45,12 @@ class MoipController
 	 */
 	private function initialize(array $data)
 	{
-		$this->moip = MoipModel::firstOrFail();
+		$this->moip = Moip::firstOrFail();
 		$this->data = array_replace_recursive($this->data, $data);
 		if (empty($this->data['CartaoCredito']['Cofre'])) {
 			unset($this->data['CartaoCredito']['Cofre']);
 		}
-		$this->data['token'] 		= Moip::response()->token;
+		$this->data['token'] 		= MoipApi::response()->token;
 		$this->data['environment'] 	= $this->environment();
 	}
 
@@ -58,7 +58,7 @@ class MoipController
 	 * transparent
 	 * 
 	 * @param array $data 
-	 * @return void
+	 * @return Illuminate\View\Factory
 	 */
 	public function transparent(array $data)
 	{

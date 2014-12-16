@@ -21,7 +21,7 @@ Package para integrar o seu negócio com MoIP. Neste Package está incluso:
 
 Fazer tudo isso é simples... Muito simples
 ```
-Moip::postOrder($data);
+MoipApi::postOrder($data);
 ```
 
 ## Instalação - Laravel 4.2 ou inferior
@@ -61,7 +61,7 @@ Adicionando um novo item no seu facade
     'App'        => 'Illuminate\Support\Facades\App',
     'Artisan'    => 'Illuminate\Support\Facades\Artisan',
     ...
-    'Moip'              => 'SOSTheBlack\Moip\Facades\Moip',
+    'MoipApi'           => 'SOSTheBlack\Moip\Facades\Moip',
     'MoipController'    => 'SOSTheBlack\Moip\Facades\Controller',
 ),
 ```
@@ -76,9 +76,6 @@ $data = ['prices' => ['value' => 100] ];
 Moip::sendMoip($data);
 ```
 E tera um checkout semelhante a este.
-
-
-![Moip](https://lh6.googleusercontent.com/TgaOpEzBUJb9xOXrAGLF_VPRdS-A_R1BdHqAMa3sITu_-zIiPhepIUF1jbVaodOtOKQzbSYtFOs=w1646-h791)
 
 ### Advanced
 Aqui é criado um checkout totalmente customizado, se for enviado todos os dados referente ao cliente o mesmo não precisará se cadastrar na tela intermediadora de pagamento
@@ -147,8 +144,6 @@ Moip::postOrder($data);
 ```
 
 E tera um checkout semelhante a este.
-
-![Moip](https://lh5.googleusercontent.com/z5QlXoi_lA9oWu1CQHDPLxsXwuJ9acSgAlu7hQAAqUE-c5ThMKEeKtwRh1WvTPQEmV5j=w1646-h791)
 
 ## Parametros enviados
 Agora vamos ver detalhadamente o que cada informação sigunifica.
@@ -331,7 +326,7 @@ $data['paymentWay'] = [
 ```
 
 ### Retorno
-O método `Moip::postOrder($data)` retorna o método `Moip::response()`
+O método `MoipApi::postOrder($data)` retorna o método `MoipApi::response()`
 ```
 stdClass Object
 (
@@ -344,15 +339,15 @@ stdClass Object
 
 Method | Response
 -------|----------
-Moip::response()->getXML | XML que  é enviado
-Moip::response()->replyXML | XML de resposta
-Moip::response()->token | Token do checkout
-$Moip::response()->url | URL do checkout
+MoipApi::response()->getXML | XML que  é enviado
+MoipApi::response()->replyXML | XML de resposta
+MoipApi::response()->token | Token do checkout
+MoipApi::response()->url | URL do checkout
 
 
 ### Gerando Parcelas
 ----------------------
-O método `Moip::parcel($parcel)` retorna um array contendo as informações de parcelas e seus respectivos valores cobrados por parcela e o valor total a ser pago referente a taxa de juros simulada
+O método `MoipApi::parcel($parcel)` retorna um array contendo as informações de parcelas e seus respectivos valores cobrados por parcela e o valor total a ser pago referente a taxa de juros simulada
 
 $parcel [ $login $maxParcel $rate $simulatedValue ]
 

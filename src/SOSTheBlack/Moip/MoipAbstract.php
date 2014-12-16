@@ -1,7 +1,7 @@
 <?php namespace SOSTheBlack\Moip;
 
 use App;
-use MoipModel;
+use Moip;
 use Exception;
 
 /**
@@ -41,7 +41,7 @@ abstract class MoipAbstract
 	*/
 	protected function initialize()
 	{
-		$this->moip = MoipModel::first();
+		$this->moip = Moip::first();
 		$this->api  = App::make('\SOSTheBlack\Moip\Api');
 		$this->api->setEnvironment(! $this->moip->environment);
 		$this->api->setCredential([
