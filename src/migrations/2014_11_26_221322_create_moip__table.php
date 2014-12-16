@@ -33,6 +33,8 @@ class CreateMoipTable extends Migration {
 			$table->boolean('debit')->default(1)->comment('Para disponibilizar a opção Debito em conta como forma de pagamento no checkout Moip');
 			$table->boolean('creditCard')->default(1)->comment('Para disponibilizar a opção Cartão de Crédito como forma de pagamento no checkout Moip');
 			$table->boolean('debitCard')->default(1)->comment('Para disponibilizar a opção Cartão de débito como forma de pagamento no checkout Moip');
+			$table->timestamps();
+			$table->softDeletes();
 		});
 
 		DB::table('moip')->insert([
