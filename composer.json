@@ -19,9 +19,11 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations",
             "src/controllers",
-            "src/models"
+            "src/migrations",
+            "src/commands",
+            "src/models",
+            "src/seeds"
         ],
         "psr-0": {
             "SOSTheBlack\\Moip\\": "src/"
