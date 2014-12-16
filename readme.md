@@ -136,7 +136,7 @@ $data = [
     'parcel' => [
         ['min' => '2', 'max' => '4'],
         ['min' => '5', 'max' => '7', 'rate' => '1.00'],
-        ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true]
+        ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true, 'receipt' => true]
     ]
 ];
 
@@ -227,11 +227,12 @@ Responsible for the installment which will be available to the paying options.
 2. $max : Quantidade máxima de parcelas disponíveis ao pagador.
 3. $rate : Valor de juros a.m por parcela.
 4. $transfer : Caso "true" define que o valor de juros padrão do Moip será pago pelo pagador.
+5. $receipt: Define o modo que o vendedor irá receber o pagamento do Moip - false = A Vista, true = Parcelado
 ```
 $data['parcel'] = [
     ['min' => '2', 'max' => '4'],
     ['min' => '5', 'max' => '7', 'rate' => '1.00'],
-    ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true]
+    ['min' => '8', 'max' => '12', 'rate' => null, 'transfer' => true, 'receipt' => true]
 ];
 ```
 

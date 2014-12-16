@@ -21,7 +21,7 @@ use SimpleXmlElement;
  * Class to use for all abstraction of Moip's API
  * @package Moip
  */
-class Api {
+class Api extends MoipAbstract {
 
 	/**
 	 * Encoding of the page
@@ -644,7 +644,7 @@ class Api {
      * @return Moip
      * @access public
      */
-    public function addParcel($min, $max, $rate=null, $transfer=false) {
+    public function addParcel($min, $max, $rate=null, $transfer=false, $receipt=false) {
         if (!isset($this->xml->InstrucaoUnica->Parcelamentos)) {
             $this->xml->InstrucaoUnica->addChild('Parcelamentos');
         }
@@ -660,7 +660,8 @@ class Api {
         else
             $this->setError('Error: Maximum amount can not be greater than 12.');
 
-        $parcela->addChild('Recebimento', 'AVista');
+        var_dump($receipt);
+        $parcela->addChild('Recebimento', $this->receipt($receipt));
 
         if ($transfer === false) {
             if (isset($rate)) {
@@ -677,6 +678,11 @@ class Api {
         }
 
         return $this;
+    }
+
+    private function receipt($receipt)
+    {
+        return $receipt === false ? 'AVista' : 'Parcelado';
     }
 
     /**

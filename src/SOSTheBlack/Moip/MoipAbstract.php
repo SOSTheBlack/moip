@@ -239,7 +239,8 @@ abstract class MoipAbstract
 					isset($valueParcel['min']) 		? $valueParcel['min'] 		: null,
 					isset($valueParcel['max']) 		? $valueParcel['max'] 		: null,
 					isset($valueParcel['rate']) 	? $valueParcel['rate'] 		: null,
-					isset($valueParcel['transfer']) ? $valueParcel['transfer'] 	: false
+					isset($valueParcel['transfer']) ? $valueParcel['transfer'] 	: false,
+					isset($valueParcel['receipt']) ? $valueParcel['receipt'] 	: false
 				);
 			}
 		}
