@@ -64,12 +64,7 @@ class MoipCommand extends Command {
 		$moip->receiver		= $this->data->receiver;
 		$moip->token		= $this->data->token;
 		$moip->key			= $this->data->key;
-		$moip->environment	= $this->data->environment;
-		$moip->billet		= $this->data->payment->billet;
-		$moip->financing	= $this->data->payment->financing;
-		$moip->debit		= $this->data->payment->debit;
-		$moip->creditCard	= $this->data->payment->creditCard;
-		$moip->debitCard	= $this->data->payment->debitCard;
+		$moip->environment	= $this->data->environment == 'Moip' ? 1 : 0;
 		$moip->save();
 
 		$this->call('db:seed', ['--class' => 'DatabaseMoipSeeder']);
@@ -85,17 +80,11 @@ class MoipCommand extends Command {
 	private function configureApi()
 	{
 		$this->data = new stdClass();
-		$this->data->environment = $this->confirm('Set the environment to be installed? [yes for production|no not for sandbox] ')? 'Moip' : 'Sandbox';
-		if ($this->confirm("Configure ".$this->data->environment."? [yes|no] \n")) {
-			$this->data->receiver 	= $this->ask("Enter your account in ". $this->data->environment." ");
-			$this->data->token 		= $this->ask("Enter your token in ".  $this->data->environment." ");
-			$this->data->key 		= $this->secret("Enter your key in ".  $this->data->environment." ");
-			$this->data->payment 	= new stdClass();
-			$this->data->payment->creditCard = $this->confirm('Accepted Credit Card? [yes|no] ');
-			$this->data->payment->debitCard = $this->confirm('Accepted Debit Card? [yes|no] ');
-			$this->data->payment->debit = $this->confirm('Accepted Debit Account? [yes|no] ');
-			$this->data->payment->financing = $this->confirm('Accepted Financing? [yes|no] ');
-			$this->data->payment->billet = $this->confirm('Accepted Billet? [yes|no] ');
+		$this->data->environment = $this->confirm('Set the environment to be installed? [yes for production|no not for sandbox]')? 'Moip' : 'Sandbox';
+		if ($this->confirm("Configure ".$this->data->environment."? [yes|no]")) {
+			$this->data->receiver 	= $this->ask("Enter your account in ". $this->data->environment);
+			$this->data->token 		= $this->ask("Enter your token in ".  $this->data->environment);
+			$this->data->key 		= $this->secret("Enter your key in ".  $this->data->environment);
 			return true;
 		} else {
 			return false;
