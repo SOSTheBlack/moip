@@ -27,6 +27,11 @@ class MoipServiceProvider extends ServiceProvider {
 	{
 		$this->package('sostheblack/moip', 'sostheblack');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipSeedsCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipPaymentCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipInstallCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipCredentialsCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipMigrationsCommand');
 	}
 
 	/**
