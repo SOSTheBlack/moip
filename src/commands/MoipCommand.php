@@ -13,14 +13,14 @@ class MoipCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'moip:install';
+	protected $name = 'moip';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Credentials and configuration of MoIP.';
+	protected $description = 'Install basic settings of MoIP';
 
 	/**
 	 * undocumented class variable
@@ -46,30 +46,8 @@ class MoipCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->configureApi()) {
+		if ($this->configureApi()) 
 			$this->runningMigrations();
-		}
-		$this->info('End');
-	}
-
-	/**
-	 * runningSeeds
-	 * 
-	 * @return void
-	 */
-	private function runningSeeds()
-	{
-		$this->comment('running seeds sostheblack/moip');
-		$moip = new Moip;
-		$moip->receiver		= $this->data->receiver;
-		$moip->token		= $this->data->token;
-		$moip->key			= $this->data->key;
-		$moip->environment	= $this->data->environment == 'Moip' ? 1 : 0;
-		$moip->save();
-
-		$this->call('db:seed', ['--class' => 'DatabaseMoipSeeder']);
-		
-		$this->comment('finalized migration');	
 	}
 
 	/**
@@ -92,7 +70,7 @@ class MoipCommand extends Command {
 	}
 
 	/**
-	 * migrations
+	 * Runing migrations
 	 * 
 	 * Running migrations of package sostheblack/moip
 	 * 
@@ -111,22 +89,23 @@ class MoipCommand extends Command {
 	}
 
 	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
+	 * runningSeeds
+	 * 
+	 * @return void
 	 */
-	protected function getArguments()
+	private function runningSeeds()
 	{
-		return [];
-	}
+		$this->comment('running seeds sostheblack/moip');
+		$moip = new Moip;
+		$moip->receiver		= $this->data->receiver;
+		$moip->token		= $this->data->token;
+		$moip->key			= $this->data->key;
+		$moip->environment	= $this->data->environment == 'Moip' ? 1 : 0;
+		$moip->save();
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return [];
+		$this->line('<info>Seeded: </info>MoipSeeder');
+		$this->call('db:seed', ['--class' => 'DatabaseMoipSeeder']);
+		
+		$this->comment('finalized migration');	
 	}
 }
