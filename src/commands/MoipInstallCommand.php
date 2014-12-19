@@ -18,7 +18,7 @@ class MoipInstallCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Install basic settings of MoIP';
+	protected $description = 'Full installation';
 
 	/**
 	 * Create a new command instance.
@@ -39,5 +39,6 @@ class MoipInstallCommand extends Command {
 	{
 		$this->call('moip:migrations');
 		$this->call('moip:seeds');
+		$this->call('moip:auth');
 	}
 }

@@ -46,8 +46,10 @@ class MoipCommand extends Command {
 	 */
 	public function fire()
 	{
+		$this->info('Installing basic settings');
 		if ($this->configureApi()) 
 			$this->runningMigrations();
+		$this->info('ending basic settings');
 	}
 
 	/**
@@ -60,7 +62,7 @@ class MoipCommand extends Command {
 		$this->data = new stdClass();
 		$this->data->environment = $this->confirm('Set the environment to be installed? [yes for production|no not for sandbox]')? 'Moip' : 'Sandbox';
 		if ($this->confirm("Configure ".$this->data->environment."? [yes|no]")) {
-			$this->data->receiver 	= $this->ask("Enter your account in ". $this->data->environment);
+			$this->data->receiver 	= $this->ask("Enter the primary receiver ". $this->data->environment);
 			$this->data->token 		= $this->ask("Enter your token in ".  $this->data->environment);
 			$this->data->key 		= $this->secret("Enter your key in ".  $this->data->environment);
 			return true;
@@ -80,7 +82,7 @@ class MoipCommand extends Command {
 	{
 		if ($this->confirm('Run migration package? [yes|no]')) {
 			$this->comment('running migrations sostheblack/moip');
-			$this->call('migrate', ['--bench'=> 'sostheblack/moip']);
+			$this->call('migrate', ['--package'=> 'sostheblack/moip']);
 			$this->comment('finalized migration');	
 			if ($this->confirm('Run seeds package? [yes|no]')) {
 				$this->runningSeeds();
