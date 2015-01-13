@@ -1,8 +1,6 @@
 <?php namespace SOSTheBlack\Moip\Commands;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 class MoipInstallCommand extends Command {
 
@@ -18,7 +16,7 @@ class MoipInstallCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Full installation';
+	protected $description = 'Complete installation and configuration';
 
 	/**
 	 * Create a new command instance.
