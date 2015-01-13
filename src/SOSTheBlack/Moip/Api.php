@@ -206,7 +206,7 @@ class Api extends MoipAbstract {
      * Define the payment's type between 'Basic' or 'Identification'
      *
      * @param string $tipo Can be 'Basic' or 'Identification'
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setPaymentType($tipo) {
@@ -225,7 +225,7 @@ class Api extends MoipAbstract {
      * Set the credentials(key,token) required for the API authentication.
      *
      * @param array $credential Array with the credentials token and key
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setCredential($credential) {
@@ -245,7 +245,7 @@ class Api extends MoipAbstract {
      * Define the environment for the API utilization.
      *
      * @param bool $testing If true, will use the sandbox environment
-	 * @return Moip
+	 * @return Api
      */
     public function setEnvironment($testing = false) {
 		if (empty($this->environment))
@@ -270,7 +270,7 @@ class Api extends MoipAbstract {
      * Make the data validation
 	 *
      * @param string $validateType Identification or Basic, defaults to Basic
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function validate($validateType = "Basic") {
@@ -327,7 +327,7 @@ class Api extends MoipAbstract {
      * Set the unique ID for the transaction
      *
      * @param int $id Unique ID for each transaction
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setUniqueID($id) {
@@ -342,7 +342,7 @@ class Api extends MoipAbstract {
      * Set the short description of transaction. eg. Order Number.
      *
      * @param string $reason The reason fo transaction
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setReason($reason) {
@@ -358,7 +358,7 @@ class Api extends MoipAbstract {
      * Add a payment's method
      *
      * @param string $way The payment method. Options: 'billet','financing','debit','creditCard','debitCard'.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function addPaymentWay($way) {
@@ -388,7 +388,7 @@ class Api extends MoipAbstract {
      * @param boolean $workingDays expiration should be counted in working days?
      * @param array $instructions Additional payment instructions can be array of message or a message in string
      * @param string $uriLogo URL of the image to be displayed on docket (75x40)
-     * @return void
+     * @return Api
      * @access public
      */
     public function setBilletConf($expiration, $workingDays=false, $instructions = null, $uriLogo = null) {
@@ -430,8 +430,8 @@ class Api extends MoipAbstract {
      *
      * Set contacts informations for the payer.
      *
-     * @param array $payer Contact information for the payer.
-     * @return Moip
+     * @param string $payer Contact information for the payer.
+     * @return Api
      * @access public
      */
     public function setPayer($payer) {
@@ -476,7 +476,7 @@ class Api extends MoipAbstract {
      * Set the transaction's value
      *
      * @param float $value The transaction's value
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setValue($value) {
@@ -498,7 +498,7 @@ class Api extends MoipAbstract {
      * Adds a value on payment. Can be used for collecting fines, shipping and other
      *
      * @param float $value The value to add.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setAdds($value) {
@@ -518,7 +518,7 @@ class Api extends MoipAbstract {
      * Deducts a payment amount. It is mainly used for discounts.
      *
      * @param float $value The value to deduct
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setDeduct($value) {
@@ -538,7 +538,7 @@ class Api extends MoipAbstract {
      * Add a message in the instruction to be displayed to the payer.
      *
      * @param string $msg Message to be displayed.
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function addMessage($msg) {
@@ -556,7 +556,7 @@ class Api extends MoipAbstract {
      * Set the return URL, which redirects the client after payment.
      *
      * @param string $url Return URL
-	 * @return Moip
+	 * @return Api
      * @access public
      */
     public function setReturnURL($url) {
@@ -586,7 +586,7 @@ class Api extends MoipAbstract {
      * Set Erroe alert
      *
      * @param String $error Error alert
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setError($error) {
@@ -605,7 +605,7 @@ class Api extends MoipAbstract {
      * @param number $value value of the division of payment
      * @param boolean $percentageValue percentage value should be
      * @param boolean $ratePayer this secondary recipient will pay the fee Moip
-	 * @return Moip
+	 * @return Api
      * @access public
      */
     public function addComission($reason, $receiver, $value, $percentageValue=false, $ratePayer=false) {
@@ -641,7 +641,7 @@ class Api extends MoipAbstract {
      * @param int $max The maximum number of parcels.
      * @param float $rate The percentual value of rates
      * @param boolean $transfer "true" defines the amount of interest charged by MoIP installment to be paid by the payer
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function addParcel($min, $max, $rate=null, $transfer=false, $receipt=false) {
@@ -680,6 +680,9 @@ class Api extends MoipAbstract {
         return $this;
     }
 
+    /**
+     * @param boolean $receipt
+     */
     private function receipt($receipt)
     {
         return $receipt === false ? 'AVista' : 'Parcelado';
@@ -691,7 +694,7 @@ class Api extends MoipAbstract {
      * Allows to add a order to parceling.
      *
      * @param string $receiver login Moip the secondary receiver
-     * @return Moip
+     * @return Api
      * @access public
      */
     public function setReceiver($receiver) {
@@ -726,7 +729,7 @@ class Api extends MoipAbstract {
      * Send the request to the server
      *
      * @param object $client The server's connection
-     * @return MoipResponse
+     * @return type|null
      * @access public
      */
     public function send($client=null) {
