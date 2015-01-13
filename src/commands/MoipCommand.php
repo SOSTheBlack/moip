@@ -1,7 +1,6 @@
 <?php namespace SOSTheBlack\Moip\Commands;
 
 use Moip;
-use stdClass;
 use Illuminate\Console\Command;
 
 class MoipCommand extends Command {

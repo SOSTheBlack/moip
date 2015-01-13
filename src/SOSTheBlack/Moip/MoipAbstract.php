@@ -77,7 +77,7 @@ abstract class MoipAbstract
 	 * 
 	 * adds unique id in the order
 	 * 
-	 * @return boolean|string
+	 * @return string|false
 	 */
 	protected function getUniqueId()
 	{
@@ -136,7 +136,7 @@ abstract class MoipAbstract
 	/**
 	 * getBilletInstructions
 	 * 
-	 * @return array
+	 * @return string[]
 	 */
 	private function getBilletInstructions()
 	{
@@ -163,7 +163,7 @@ abstract class MoipAbstract
 	 * 
 	 * Adds payment way in the order
 	 * 
-	 * @return false|\SOSTheBlack\Moip\Api\
+	 * @return false|null
 	 */
 	protected function getPaymentWay()
 	{
