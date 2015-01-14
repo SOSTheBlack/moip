@@ -1,22 +1,23 @@
 <?php namespace SOSTheBlack\Moip\Commands;
 
+use Moip;
 use Illuminate\Console\Command;
 
-class MoipInstallCommand extends Command {
+class MoipCreditCardCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'moip:install';
+	protected $name = 'moip:creditcard';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Complete installation and configuration';
+	protected $description = 'Cred Card settings.';
 
 	/**
 	 * Create a new command instance.
@@ -33,9 +34,8 @@ class MoipInstallCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('moip:migrations');
-		$this->call('moip:seeds');
-		$this->call('moip:auth');
-		$this->call('moip:payment');
+		$moip = Moip::first();
+		$moip->creditCard = $this->confirm('Cred Card activated? [yes|no]');
+		$moip->save();
 	}
 }

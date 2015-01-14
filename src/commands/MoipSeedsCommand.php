@@ -21,8 +21,6 @@ class MoipSeedsCommand extends Command {
 
 	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -32,7 +30,7 @@ class MoipSeedsCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	public function fire()
 	{

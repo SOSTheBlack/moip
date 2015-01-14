@@ -28,8 +28,6 @@ class MoipCommand extends Command {
 
 	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -39,16 +37,10 @@ class MoipCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	public function fire()
 	{
-//    _____ _____        __ 
-//   /  __  __   \___   /__/___
-//  /  / /  / /  / __ \___/    \
-// /  / /  / /  / /_/ /  / /_/ /
-// \_/  \_/  \_/\____/__/ .___/ 
-//                     /_/
 $this->info('   _____ _____        __ 
   /  __  __   \___   /__/___
  /  / /  / /  / __ \___/    \ ');

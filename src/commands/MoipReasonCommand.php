@@ -1,22 +1,23 @@
 <?php namespace SOSTheBlack\Moip\Commands;
 
+use Moip;
 use Illuminate\Console\Command;
 
-class MoipInstallCommand extends Command {
+class MoipReasonCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'moip:install';
+	protected $name = 'moip:reason';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Complete installation and configuration';
+	protected $description = 'New reason sales.';
 
 	/**
 	 * Create a new command instance.
@@ -29,13 +30,13 @@ class MoipInstallCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function fire()
 	{
-		$this->call('moip:migrations');
-		$this->call('moip:seeds');
-		$this->call('moip:auth');
-		$this->call('moip:payment');
+		$reason = $this->ask('New reason sales:');
+		$moip = Moip::fisrt();
+		$moip->reason = $reason;
+		$moip->save();
 	}
 }

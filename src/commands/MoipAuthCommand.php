@@ -21,8 +21,6 @@ class MoipAuthCommand extends Command {
 
 	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -32,7 +30,7 @@ class MoipAuthCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	public function fire()
 	{
@@ -47,7 +45,5 @@ class MoipAuthCommand extends Command {
 		$moip->token 	= $token;
 		$moip->key 		= $key;
 		$moip->save();
-		$this->line('<info>Seeded: </info>MoipCredentials');
-		$this->comment('sent settings');
 	}
 }

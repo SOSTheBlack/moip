@@ -1,22 +1,23 @@
 <?php namespace SOSTheBlack\Moip\Commands;
 
+use Moip;
 use Illuminate\Console\Command;
 
-class MoipInstallCommand extends Command {
+class MoipReceiverCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'moip:install';
+	protected $name = 'moip:receiver';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Complete installation and configuration';
+	protected $description = 'Setting the primary receiver.';
 
 	/**
 	 * Create a new command instance.
@@ -29,13 +30,13 @@ class MoipInstallCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function fire()
 	{
-		$this->call('moip:migrations');
-		$this->call('moip:seeds');
-		$this->call('moip:auth');
-		$this->call('moip:payment');
+		$receiver = $this->ask('Enter the new primary receiver:');
+		$moip = Moip::first();
+		$moip->receiver = $receiver;
+		$moip->save();
 	}
 }

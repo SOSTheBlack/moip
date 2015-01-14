@@ -1,25 +1,28 @@
 <?php namespace SOSTheBlack\Moip\Commands;
 
+use Moip;
 use Illuminate\Console\Command;
 
-class MoipInstallCommand extends Command {
+class MoipFinancingCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'moip:install';
+	protected $name = 'moip:financing';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Complete installation and configuration';
+	protected $description = 'Command description.';
 
 	/**
 	 * Create a new command instance.
+	 *
+	 * @return void
 	 */
 	public function __construct()
 	{
@@ -29,13 +32,12 @@ class MoipInstallCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function fire()
 	{
-		$this->call('moip:migrations');
-		$this->call('moip:seeds');
-		$this->call('moip:auth');
-		$this->call('moip:payment');
+		$moip = Moip::first();
+		$moip->financing = $this->confirm('Finacic activated? [yes|no]');
+		$moip->save();
 	}
 }

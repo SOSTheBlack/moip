@@ -21,8 +21,6 @@ class MoipPaymentCommand extends Command {
 
 	/**
 	 * Create a new command instance.
-	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -32,10 +30,14 @@ class MoipPaymentCommand extends Command {
 	/**
 	 * Execute the console command.
 	 *
-	 * @return mixed
+	 * @return void
 	 */
 	public function fire()
 	{
-		//
+		$this->call('moip:billet');
+		$this->call('moip:creditcard');
+		$this->call('moip:financing');
+		$this->call('moip:debit');
+		$this->call('moip:debitcard');
 	}
 }
