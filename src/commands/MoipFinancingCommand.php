@@ -17,7 +17,7 @@ class MoipFinancingCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Financing settings.';
 
 	/**
 	 * Create a new command instance.

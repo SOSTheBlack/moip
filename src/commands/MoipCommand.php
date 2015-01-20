@@ -53,9 +53,17 @@ $this->comment('\_/  \_/  \_/\____/__/ .___/
 		$this->comment('Available commands:');
 		$this->line('');
 		$this->comment('moip');
-		$this->line(' <info>moip:auth</info>			Sets environment and credentials');
-		$this->line(' <info>moip:install</info>			Complete installation and configuration');
-		$this->line(' <info>moip:migrations</info>		Running migrations of package');
-		$this->line(' <info>moip:seeds</info>			Running seeds of package');
+		$this->line(' <info>moip:install</info>			Complete installation and configuration.');
+		$this->line(' <info>moip:migrations</info>		Running migrations of package.');
+		$this->line(' <info>moip:seeds</info>			Running seeds of package.');
+		$this->line(' <info>moip:auth</info>			Sets environment and credentials.');
+		$this->line(' <info>moip:receiver</info>			Setting the primary receiver.');
+		$this->line(' <info>moip:reason</info>			New reason sales.');
+		$this->line(' <info>moip:payment</info>			Settings related to payment methods.');
+		$this->line(' <info>moip:billet</info>			Banking billet settings.');
+		$this->line(' <info>moip:creditcard</info>		Cred Card settings.');
+		$this->line(' <info>moip:financing</info>			Financing settings.');
+		$this->line(' <info>moip:debit</info>			Debit settings.');
+		$this->line(' <info>moip:debitcard</info>			Debit Card settings.');
 	}
 }

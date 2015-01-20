@@ -36,6 +36,7 @@ class MoipInstallCommand extends Command {
 		$this->call('moip:migrations');
 		$this->call('moip:seeds');
 		$this->call('moip:auth');
+		$this->call('moip:reason');
 		$this->call('moip:payment');
 	}
 }

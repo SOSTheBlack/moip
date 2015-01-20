@@ -17,7 +17,7 @@ class MoipDebitCommand extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Debit settings.';
 
 	/**
 	 * Create a new command instance.
