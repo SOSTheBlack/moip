@@ -35,7 +35,7 @@ class MoipReasonCommand extends Command {
 	public function fire()
 	{
 		$reason = $this->ask('New reason sales:');
-		$moip = Moip::fisrt();
+		$moip = Moip::first();
 		$moip->reason = $reason;
 		$moip->save();
 	}

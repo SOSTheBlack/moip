@@ -20,11 +20,11 @@ class MoipCommand extends Command {
 	protected $description = 'information on the commands';
 
 	/**
-	 * undocumented class variable
+	 * version od package
 	 *
 	 * @var string
 	 **/
-	private $data;
+	private $version = '1.1.0';
 
 	/**
 	 * Create a new command instance.
@@ -41,18 +41,18 @@ class MoipCommand extends Command {
 	 */
 	public function fire()
 	{
-$this->info('   _____ _____        __ 
-  /  __  __   \___   /__/___
- /  / /  / /  / __ \___/    \ ');
-$this->line('/  / /  / /  / /_/ /  / /_/ /');
-$this->comment('\_/  \_/  \_/\____/__/ .___/
-                    /_/
-');
-		$this->line('<info>Moip Package</info> version <comment>1.0.1</comment>');
-		$this->line('');
-		$this->comment('Available commands:');
-		$this->line('');
-		$this->comment('moip');
+		$this->logo();
+		$this->information();
+		$this->commands();
+	}
+
+	/**
+	 * Commands of package
+	 * 
+	 * @return void
+	 */
+	private function commands()
+	{
 		$this->line(' <info>moip:install</info>			Complete installation and configuration.');
 		$this->line(' <info>moip:migrations</info>		Running migrations of package.');
 		$this->line(' <info>moip:seeds</info>			Running seeds of package.');
@@ -65,5 +65,35 @@ $this->comment('\_/  \_/  \_/\____/__/ .___/
 		$this->line(' <info>moip:financing</info>			Financing settings.');
 		$this->line(' <info>moip:debit</info>			Debit settings.');
 		$this->line(' <info>moip:debitcard</info>			Debit Card settings.');
+	}
+
+	/**
+	 * information of package
+	 * 
+	 * @return void
+	 */
+	private function information()
+	{
+		$this->line('<info>Moip Package</info> version <comment>'.$this->version.'</comment>');
+		$this->line('');
+		$this->comment('Available commands:');
+		$this->line('');
+		$this->comment('moip');
+	}
+
+	/**
+	 * logo
+	 * 
+	 * @return void
+	 */
+	private function logo()
+	{
+$this->info('   _____ _____        __ 
+  /  __  __   \___   /__/___
+ /  / /  / /  / __ \___/    \ ');
+$this->line('/  / /  / /  / /_/ /  / /_/ /');
+$this->comment('\_/  \_/  \_/\____/__/ .___/
+                    /_/
+');	
 	}
 }

@@ -35,7 +35,6 @@ class MoipBilletCommand extends Command {
 	public function fire()
 	{
 		$moip = Moip::first();
-
 		if ($this->confirm('Banking billet activated? [yes|no]')) {
 			$expiration 	= $this->ask('Time after issuing the billet (in days):');
 			$working_days	= $this->confirm('count only days useful? [yes|no]');
@@ -44,8 +43,6 @@ class MoipBilletCommand extends Command {
 			$second_line	= $this->ask("Second line:");
 			$last_line		= $this->ask("Last line:");
 			$url_logo		= $this->ask("URL logo:");
-			
-			
 			$moip->billet = true;
 			$moip->expiration 	= $expiration;
 			$moip->workingDays 	= $working_days;
@@ -54,10 +51,8 @@ class MoipBilletCommand extends Command {
 			$moip->lastLine 	= $last_line;
 			$moip->uriLogo 		= $url_logo;
 		} else {
-			$moip = Moip::first();
 			$moip->billet = false;
 		}
-		
 		$moip->save();
 	}
 }
