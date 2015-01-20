@@ -393,23 +393,51 @@ $parcel = [
 php artisan asset:publish sostheblack/moip
 ```
 ```
-$pgto = [
-	"Forma" 		=> "CartaoCredito",
-	"Instituicao" 	=> "Visa",
-    "Parcelas"		=> "1",
-    "CartaoCredito" => [
-        "Numero" 		 => "4073020000000002",
-        "Expiracao" 	 => "12/15",
-        "Cofre"			 => "0b2118bc-fdca-4a57-9886-366326a8a647",
-        "CodigoSeguranca"=> "123",
-        "Portador" 		 => [
-        	"Nome" 			=> "Nome Sobrenome",
-            "DataNascimento"=> "30/12/1987",
-            "Telefone" 		=> "(11)3165-4020",
-            "Identidade" 	=> "222.222.222-22"
+Route::match(['get', 'post'], '/', function()
+{
+    $data = [
+        'prices'    => [
+            'value' => 100,
+        ],
+        'payer' => [
+        'name'      => 'Nome Sobrenome',
+        'email'     => 'email@cliente.com.br',
+        'payerId'   => 'id_usuario',
+        'billingAddress' => [
+            'address'       => 'Rua do Zézinho Coração',
+            'number'        => '45',
+            'complement'    => 'z',
+            'city'          => 'São Paulo',
+            'neighborhood'  => 'Palhaço Jão',
+            'state'         => 'SP',
+            'country'       => 'BRA',
+            'zipCode'       => '01230-000',
+            'phone'         => '(11)8888-8888'
+            ]
         ]
-    ]
-];
+    ];
 
-return MoipController::transparent($pgto);
+    MoipApi::postOrder($data);
+    var_dump(MoipApi::response());
+
+    $pgto = [
+        "Forma"         => "CartaoCredito",
+        "Instituicao"   => "Visa",
+        "Parcelas"      => "1",
+        "CartaoCredito" => [
+            "Numero"         => "4073020000000002",
+            "Expiracao"      => "12/15",
+            "CodigoSeguranca"=> "123",
+            "Portador"       => [
+                "Nome"          => "Nome Sobrenome",
+                "DataNascimento"=> "30/12/1987",
+                "Telefone"      => "(11)3165-4020",
+                "Identidade"    => "222.222.222-22"
+            ]
+        ]
+    ];
+
+    return MoipController::transparent($pgto);
+    var_dump(MoipController::response());
+});
 ```

@@ -1,10 +1,14 @@
 <?php namespace SOSTheBlack\Moip\Controllers;
 
+use Route;
 use View;
 use MoipApi;
 use Moip;
+use Input;
+use BaseController;
+use Request;
 
-class MoipController
+class MoipController extends BaseController
 {
 	/**
 	 * undocumented class variable
@@ -39,31 +43,60 @@ class MoipController
 	];
 
 	/**
+	 * undocumented class variable
+	 *
+	 * @var string
+	 **/
+	protected $response;
+
+	public function response()
+	{
+		if (Request::isMethod('post')) {
+			$this->response = (object) Input::except('_token');
+		}
+		return $this->response;
+	}
+
+	/**
 	 * initialize
 	 * 
 	 * @return void
 	 */
-	private function initialize(array $data)
+	private function initialize(array $data, $token)
 	{
 		$this->moip = Moip::firstOrFail();
 		$this->data = array_replace_recursive($this->data, $data);
 		if (empty($this->data['CartaoCredito']['Cofre'])) {
 			unset($this->data['CartaoCredito']['Cofre']);
 		}
-		$this->data['token'] 		= MoipApi::response()->token;
+		$this->data['token'] 		= $this->token($token);
 		$this->data['environment'] 	= $this->environment();
+	}
+
+	private function token($token)
+	{
+		return $token ? $token : MoipApi::response()->token;
 	}
 
 	/**
 	 * transparent
 	 * 
 	 * @param array $data 
+	 * @param string $token
 	 * @return Illuminate\View\Factory
 	 */
-	public function transparent(array $data)
+	public function transparent(array $data, $token = null)
 	{
-		$this->initialize($data);
-		return View::make('sostheblack::moip')->withMoip($this->data);
+		$this->initialize($data, $token);
+		if (Request::isMethod('post')) {
+			$this->response = Input::except('_token');
+			dd($this->response);
+			return $this->response;
+		} elseif (! empty($this->response)){
+			return $this->response;
+		} else {
+			return View::make('sostheblack::moip')->withMoip($this->data);
+		}
 	}
 
 	/**
