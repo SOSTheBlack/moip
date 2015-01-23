@@ -54,7 +54,7 @@ class MoipCommand extends Command {
 	private function commands()
 	{
 		$this->line(' <info>moip:install</info>			Instalacao e configuracao completa.');
-		$this->line(' <info>moip:migrations</info>		Executa as migrations do package.');
+		$this->line(' <info>moip:migrate</info>			Executa as migrations do package.');
 		$this->line(' <info>moip:seeds</info>			Executa os seeds do package.');
 		$this->line(' <info>moip:auth</info>			Configuracao referente a autenticacao e amboente.');
 		$this->line(' <info>moip:receiver</info>			Definando recebedor primario.');
