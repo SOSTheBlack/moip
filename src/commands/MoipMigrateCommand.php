@@ -2,14 +2,14 @@
 
 use Illuminate\Console\Command;
 
-class MoipMigrationsCommand extends Command {
+class MoipMigrateCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'moip:migrations';
+	protected $name = 'moip:migrate';
 
 	/**
 	 * The console command description.

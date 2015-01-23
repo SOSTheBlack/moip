@@ -33,7 +33,7 @@ class MoipInstallCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('moip:migrations');
+		$this->call('moip:migrate');
 		$this->call('moip:seeds');
 		$this->call('moip:auth');
 		$this->call('moip:reason');
