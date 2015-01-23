@@ -53,18 +53,18 @@ class MoipCommand extends Command {
 	 */
 	private function commands()
 	{
-		$this->line(' <info>moip:install</info>			Complete installation and configuration.');
-		$this->line(' <info>moip:migrations</info>		Running migrations of package.');
-		$this->line(' <info>moip:seeds</info>			Running seeds of package.');
-		$this->line(' <info>moip:auth</info>			Sets environment and credentials.');
-		$this->line(' <info>moip:receiver</info>			Setting the primary receiver.');
-		$this->line(' <info>moip:reason</info>			New reason sales.');
-		$this->line(' <info>moip:payment</info>			Settings related to payment methods.');
-		$this->line(' <info>moip:billet</info>			Banking billet settings.');
-		$this->line(' <info>moip:creditcard</info>		Cred Card settings.');
-		$this->line(' <info>moip:financing</info>			Financing settings.');
-		$this->line(' <info>moip:debit</info>			Debit settings.');
-		$this->line(' <info>moip:debitcard</info>			Debit Card settings.');
+		$this->line(' <info>moip:install</info>			Instalacao e configuracao completa.');
+		$this->line(' <info>moip:migrations</info>		Executa as migrations do package.');
+		$this->line(' <info>moip:seeds</info>			Executa os seeds do package.');
+		$this->line(' <info>moip:auth</info>			Configuracao referente a autenticacao e amboente.');
+		$this->line(' <info>moip:receiver</info>			Definando recebedor primario.');
+		$this->line(' <info>moip:reason</info>			Motivo da venda.');
+		$this->line(' <info>moip:payment</info>			Configuracao referente aos metodos de pagamentos.');
+		$this->line(' <info>moip:billet</info>			Configuracao do boleto bancario.');
+		$this->line(' <info>moip:creditcard</info>		Configuracao do cartao de credito.');
+		$this->line(' <info>moip:financing</info>			Configuracao do financiamento.');
+		$this->line(' <info>moip:debit</info>			Configuracao do debito.');
+		$this->line(' <info>moip:debitcard</info>			Configuracao do cartao de debito.');
 	}
 
 	/**

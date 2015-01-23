@@ -34,11 +34,10 @@ class MoipAuthCommand extends Command {
 	 */
 	public function fire()
 	{
-		$environment= $this->confirm('Sets environment [yes for production|no for Sandbox]') ? 'Moip' : 'Sandbox';
-		$receiver 	= $this->ask('Enter the primary recipient of the '.$environment);
-		$token 		= $this->ask('Enter the token of the '.$environment);
-		$key 		= $this->secret('Enter the key of the '.$environment);
-		$this->comment('Sending settings to the database');
+		$environment= $this->confirm('Ambiente [yes producao|no para Sandbox]') ? 'Moip' : 'Sandbox';
+		$receiver 	= $this->ask('Recebedor primario '.$environment);
+		$token 		= $this->ask('token '.$environment);
+		$key 		= $this->secret('Key '.$environment);
 		$moip = Moip::first();
 		$moip->environment = $environment === 'Moip' ? 1 : 0;
 		$moip->receiver = $receiver;

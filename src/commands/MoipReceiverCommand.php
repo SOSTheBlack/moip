@@ -34,7 +34,7 @@ class MoipReceiverCommand extends Command {
 	 */
 	public function fire()
 	{
-		$receiver = $this->ask('Enter the new primary receiver:');
+		$receiver = $this->ask('Recebidor primario: ');
 		$moip = Moip::first();
 		$moip->receiver = $receiver;
 		$moip->save();

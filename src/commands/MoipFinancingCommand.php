@@ -37,7 +37,7 @@ class MoipFinancingCommand extends Command {
 	public function fire()
 	{
 		$moip = Moip::first();
-		$moip->financing = $this->confirm('Finacic activated? [yes|no]');
+		$moip->financing = $this->confirm('Ficanciamento ativado? [yes|no]');
 		$moip->save();
 	}
 }

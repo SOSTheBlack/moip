@@ -37,7 +37,7 @@ class MoipDebitCommand extends Command {
 	public function fire()
 	{
 		$moip = Moip::first();
-		$moip->debitCard = $this->confirm('Debit Card activated? [yes|no]');
+		$moip->debitCard = $this->confirm('Debito ativado? [yes|no]');
 		$moip->save();
 	}
 }

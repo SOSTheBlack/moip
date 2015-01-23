@@ -34,14 +34,14 @@ class MoipSeedsCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->confirm('Run seeds package? [yes|no]')) {
+		if ($this->confirm('Executar seeds do package? [yes|no]')) {
 			$this->comment('running seeds sostheblack/moip');
 			if (Moip::all()->count() === 0) {
 				Moip::create([]);
 				$this->line('<info>Seeded: </info>MoipSeeder');
 			}
 			$this->call('db:seed', ['--class' => 'DatabaseMoipSeeder']);
-			$this->comment('finalized migration');
+			$this->comment('Seeds executados');
 		}
 	}
 }

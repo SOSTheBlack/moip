@@ -35,14 +35,14 @@ class MoipBilletCommand extends Command {
 	public function fire()
 	{
 		$moip = Moip::first();
-		if ($this->confirm('Banking billet activated? [yes|no]')) {
-			$expiration 	= $this->ask('Time after issuing the billet (in days):');
-			$working_days	= $this->confirm('count only days useful? [yes|no]');
-			$this->comment('Message in billet');
-			$first_line		= $this->ask("First line:");
-			$second_line	= $this->ask("Second line:");
-			$last_line		= $this->ask("Last line:");
-			$url_logo		= $this->ask("URL logo:");
+		if ($this->info('Boleto bamcario ativado? [yes|no]')) {
+			$expiration 	= $this->ask('Dia do vencimento apos emissao do boleto (in days):');
+			$working_days	= $this->confirm('Dias corridos? [yes corridos|no úteis]');
+			$this->comment('Mensagem no boleto');
+			$first_line		= $this->ask("Primeira linha:");
+			$second_line	= $this->ask("Segunda linha:");
+			$last_line		= $this->ask("Terceira linha:");
+			$url_logo		= $this->ask("URL do logo:");
 			$moip->billet = true;
 			$moip->expiration 	= $expiration;
 			$moip->workingDays 	= $working_days;
