@@ -7,24 +7,32 @@
 	    <script type="text/javascript">
 	        var callbackSuccess = function(data){
 	            console.log('Sucesso\n' + JSON.stringify(data));
+	            if (data) {
+	            	$.post("{{ route('sostheblack.moip') }}", {data: data}, function(result){
+		            	console.log(result);
+		            });
+	            };
 
-	            $("input[name='Status']").val(data.Status);
-	            $("input[name='Codigo']").val(data.Codigo);
-	            $("input[name='CodigoRetorno']").val(data.CodigoRetorno);
-	            $("input[name='TaxaMoIP']").val(data.TaxaMoIP);
-	            $("input[name='StatusPagamento']").val(data.StatusPagamento);
-	            $("input[name='ClassificacaoCodigo']").val(data.Classificacao.Codigo);
-	            $("input[name='ClassificacaoDescricao']").val(data.Classificacao.Descricao);
-	            $("input[name='CodigoMoIP']").val(data.CodigoMoIP);
-	            $("input[name='Mensagem']").val(data.Mensagem);
-	            $("input[name='TotalPago']").val(data.TotalPago);
-	            $("input[name='url']").val(data.url);
-	            $("input[name='submit']").val(data.submit);
-	            $( "form:first" ).trigger( "submit" );
+	            // $("input[name='Status']").val(data.Status);
+	            // $("input[name='Codigo']").val(data.Codigo);
+	            // $("input[name='CodigoRetorno']").val(data.CodigoRetorno);
+	            // $("input[name='TaxaMoIP']").val(data.TaxaMoIP);
+	            // $("input[name='StatusPagamento']").val(data.StatusPagamento);
+	            // $("input[name='ClassificacaoCodigo']").val(data.Classificacao.Codigo);
+	            // $("input[name='ClassificacaoDescricao']").val(data.Classificacao.Descricao);
+	            // $("input[name='CodigoMoIP']").val(data.CodigoMoIP);
+	            // $("input[name='Mensagem']").val(data.Mensagem);
+	            // $("input[name='TotalPago']").val(data.TotalPago);
+	            // $("input[name='url']").val(data.url);
+	            // $("input[name='submit']").val(data.submit);
+	            // $( "form:first" ).trigger( "submit" );
 	        };
 
 	        var callbackFaill = function(data) {
 	            console.log('Falha\n' + JSON.stringify(data));
+	            $.post("{{ route('sostheblack.moip') }}", {datas: data}, function(result){
+	            	console.log(result);
+	            });
 	        };
 
 	        payment = function() {
@@ -62,7 +70,7 @@
 	        callback-method-error="callbackFaill">
 	    </div>
 
-	    {{ Form::open(['method' => 'post']) }}
+	    <!-- {{ Form::open(['method' => 'post']) }}
 	    {{ Form::text('Status') }}
 	    {{ Form::text('Codigo') }}
 	    {{ Form::text('CodigoRetorno') }}
@@ -75,6 +83,6 @@
 	    {{ Form::text('TotalPago') }}
 	    {{ Form::text('url') }}
 	    {{ Form::submit('submit') }}
-	    <button id="pagarBoleto" onclick="pagarBoleto()"> Imprimir Boleto </button>
+	    <button id="pagarBoleto" onclick="pagarBoleto()"> Imprimir Boleto </button> -->
 	</body>
 </html>

@@ -49,12 +49,9 @@ class MoipController extends BaseController
 	 **/
 	protected $response;
 
-	public function response()
+	public function payment()
 	{
-		if (Request::isMethod('post')) {
-			$this->response = (object) Input::except('_token');
-		}
-		return $this->response;
+		print_r(Input::all());
 	}
 
 	/**
@@ -88,15 +85,17 @@ class MoipController extends BaseController
 	public function transparent(array $data, $token = null)
 	{
 		$this->initialize($data, $token);
-		if (Request::isMethod('post')) {
-			$this->response = Input::except('_token');
-			dd($this->response);
-			return $this->response;
-		} elseif (! empty($this->response)){
-			return $this->response;
-		} else {
-			return View::make('sostheblack::moip')->withMoip($this->data);
-		}
+		// if (Request::isMethod('post')) {
+		// 	$this->response = Input::except('_token');
+		// 	dd($this->response);
+		// 	return $this->response;
+		// } elseif (! empty($this->response)){
+		// 	return $this->response;
+		// } else {
+		// 	return View::make('sostheblack::moip')->withMoip($this->data);
+		// }
+
+		return View::make('sostheblack::moip')->withMoip($this->data);
 	}
 
 	/**
