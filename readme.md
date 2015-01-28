@@ -32,6 +32,7 @@ No seu código
 MoipApi::postOrder($data);
 ```
 
+### Retorno
 O método `MoipApi::postOrder($data)` retorna o método `MoipApi::response()`
 ```
 stdClass Object
@@ -49,5 +50,7 @@ MoipApi::response()->getXML | XML que  é enviado
 MoipApi::response()->replyXML | XML de resposta
 MoipApi::response()->token | Token do checkout
 MoipApi::response()->url | URL do checkout
+
+### Documentação
 
 Confira a documentação completa no nosso [Wiki](https://github.com/SOSTheBlack/moip/wiki)
