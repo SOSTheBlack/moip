@@ -8,24 +8,10 @@
 	        var callbackSuccess = function(data){
 	            console.log('Sucesso\n' + JSON.stringify(data));
 	            if (data) {
-	            	$.post("{{ route('sostheblack.moip') }}", {data: data}, function(result){
+	            	$.post("{{ route('sostheblack.moip') }}", {moip: data}, function(result){
 		            	console.log(result);
 		            });
 	            };
-
-	            // $("input[name='Status']").val(data.Status);
-	            // $("input[name='Codigo']").val(data.Codigo);
-	            // $("input[name='CodigoRetorno']").val(data.CodigoRetorno);
-	            // $("input[name='TaxaMoIP']").val(data.TaxaMoIP);
-	            // $("input[name='StatusPagamento']").val(data.StatusPagamento);
-	            // $("input[name='ClassificacaoCodigo']").val(data.Classificacao.Codigo);
-	            // $("input[name='ClassificacaoDescricao']").val(data.Classificacao.Descricao);
-	            // $("input[name='CodigoMoIP']").val(data.CodigoMoIP);
-	            // $("input[name='Mensagem']").val(data.Mensagem);
-	            // $("input[name='TotalPago']").val(data.TotalPago);
-	            // $("input[name='url']").val(data.url);
-	            // $("input[name='submit']").val(data.submit);
-	            // $( "form:first" ).trigger( "submit" );
 	        };
 
 	        var callbackFaill = function(data) {
@@ -69,20 +55,5 @@
 	        callback-method-success="callbackSuccess"
 	        callback-method-error="callbackFaill">
 	    </div>
-
-	    <!-- {{ Form::open(['method' => 'post']) }}
-	    {{ Form::text('Status') }}
-	    {{ Form::text('Codigo') }}
-	    {{ Form::text('CodigoRetorno') }}
-	    {{ Form::text('TaxaMoIP') }}
-	    {{ Form::text('StatusPagamento') }}
-	    {{ Form::text('ClassificacaoCodigo') }}
-	    {{ Form::text('ClassificacaoDescricao') }}
-	    {{ Form::text('CodigoMoIP') }}
-	    {{ Form::text('Mensagem') }}
-	    {{ Form::text('TotalPago') }}
-	    {{ Form::text('url') }}
-	    {{ Form::submit('submit') }}
-	    <button id="pagarBoleto" onclick="pagarBoleto()"> Imprimir Boleto </button> -->
 	</body>
 </html>

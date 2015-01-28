@@ -7,6 +7,7 @@ use Moip;
 use Input;
 use BaseController;
 use Request;
+use Session;
 
 class MoipController extends BaseController
 {
@@ -51,7 +52,7 @@ class MoipController extends BaseController
 
 	public function payment()
 	{
-		print_r(Input::all());
+		Session::put('moip', Input::all());
 	}
 
 	/**
@@ -85,15 +86,6 @@ class MoipController extends BaseController
 	public function transparent(array $data, $token = null)
 	{
 		$this->initialize($data, $token);
-		// if (Request::isMethod('post')) {
-		// 	$this->response = Input::except('_token');
-		// 	dd($this->response);
-		// 	return $this->response;
-		// } elseif (! empty($this->response)){
-		// 	return $this->response;
-		// } else {
-		// 	return View::make('sostheblack::moip')->withMoip($this->data);
-		// }
 
 		return View::make('sostheblack::moip')->withMoip($this->data);
 	}
