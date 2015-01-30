@@ -38,6 +38,8 @@ class MoipServiceProvider extends ServiceProvider {
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipReasonCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipReceiverCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipSeedsCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipUrlReturnCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipUrlNotificationCommand');
 		$path = $this->guessPackagePath();
         //load routes
         require_once $path.'/routes.php';

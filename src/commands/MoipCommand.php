@@ -24,7 +24,7 @@ class MoipCommand extends Command {
 	 *
 	 * @var string
 	 **/
-	private $version = '1.1.0';
+	private $version = '1.2.0';
 
 	/**
 	 * Create a new command instance.
@@ -65,6 +65,8 @@ class MoipCommand extends Command {
 		$this->line(' <info>moip:financing</info>			Configuracao do financiamento.');
 		$this->line(' <info>moip:debit</info>			Configuracao do debito.');
 		$this->line(' <info>moip:debitcard</info>			Configuracao do cartao de debito.');
+		$this->line(' <info>moip:moip:urlnotification</info>	URL de envio do NASP (callback).');
+		$this->line(' <info>moip:moip:urlreturn</info>		URL de redirecionado ao finalizar o pagamento no checkout.');
 	}
 
 	/**
