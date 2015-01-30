@@ -35,7 +35,7 @@ class MoipBilletCommand extends Command {
 	public function fire()
 	{
 		$moip = Moip::first();
-		if ($this->info('Boleto bamcario ativado? [yes|no]')) {
+		if ($this->confirm('Boleto bamcario ativado? [yes|no]')) {
 			$expiration 	= $this->ask('Dia do vencimento apos emissao do boleto (in days):');
 			$working_days	= $this->confirm('Dias corridos? [yes corridos|no úteis]');
 			$this->comment('Mensagem no boleto');
