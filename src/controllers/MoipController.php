@@ -3,6 +3,7 @@
 use View;
 use Moip;
 use Input;
+use Config;
 use MoipApi;
 use Session;
 use BaseController;
@@ -58,7 +59,7 @@ class MoipController extends BaseController
 	public function response()
 	{
 		$this->response = Input::all();
-		Session::put('callback', $this->response);
+		Session::put(Config::get('sostheblack::moip.array_session').'.callback', $this->response['moip']);
 		return $this->response;
 	}
 
@@ -87,7 +88,7 @@ class MoipController extends BaseController
 	 */
 	private function token($token)
 	{
-		return $token ? $token : MoipApi::response()->token;
+		return $token ? $token : Session::get('pagamento.response.token');
 	}
 
 	/**
