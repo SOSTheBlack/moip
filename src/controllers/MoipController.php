@@ -1,28 +1,26 @@
 <?php namespace SOSTheBlack\Moip\Controllers;
 
-use Route;
 use View;
-use MoipApi;
 use Moip;
 use Input;
-use BaseController;
-use Request;
+use MoipApi;
 use Session;
+use BaseController;
 
 class MoipController extends BaseController
 {
 	/**
-	 * undocumented class variable
+	 * data of configuration of the MoIP
 	 *
-	 * @var string
+	 * @var []
 	 **/
 
 	private $moip;
 
 	/**
-	 * undocumented class variable
+	 * array
 	 *
-	 * @var string
+	 * @var []
 	 **/
 
 	private $data = [
@@ -44,15 +42,24 @@ class MoipController extends BaseController
 	];
 
 	/**
-	 * undocumented class variable
+	 * callback do js de pagamento do moip
 	 *
-	 * @var string
+	 * @var array
 	 **/
 	protected $response;
 
-	public function payment()
+	/**
+	 * response
+	 * Recebe o callback do js de pagamento do moip
+	 * e grava os dados em uma session
+	 * 
+	 * @return type
+	 */
+	public function response()
 	{
-		Session::put('moip', Input::all());
+		$this->response = Input::all();
+		Session::put('callback', $this->response);
+		return $this->response;
 	}
 
 	/**
@@ -71,6 +78,13 @@ class MoipController extends BaseController
 		$this->data['environment'] 	= $this->environment();
 	}
 
+	/**
+	 * token
+	 * Define o token que será pago
+	 * 
+	 * @param  string $token
+	 * @return string
+	 */
 	private function token($token)
 	{
 		return $token ? $token : MoipApi::response()->token;
@@ -86,7 +100,6 @@ class MoipController extends BaseController
 	public function transparent(array $data, $token = null)
 	{
 		$this->initialize($data, $token);
-
 		return View::make('sostheblack::moip')->withMoip($this->data);
 	}
 

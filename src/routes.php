@@ -2,5 +2,5 @@
 
 Route::post('/sostheblack/moip', [
 	'as'	=> 'sostheblack.moip',
-	'uses'	=> 'SOSTheBlack\Moip\Controllers\MoipController@payment'
+	'uses'	=> 'SOSTheBlack\Moip\Controllers\MoipController@response'
 ]);

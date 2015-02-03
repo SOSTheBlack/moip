@@ -1,26 +1,42 @@
-{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.js") }}
-{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.min.js") }}
-{{ HTML::script($moip['environment'], ["charset" => "ISO-8859-1", "type" => "text/javascript"])}}
-{{ var_dump($moip) }}
 <html>
 	<head>
+		{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.js") }}
+		{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.min.js") }}
+		{{ HTML::script($moip['environment'], ["charset" => "ISO-8859-1", "type" => "text/javascript"])}}
+		
 	    <script type="text/javascript">
+
+	    	/**
+	    	 * callbackSuccess
+	    	 * Rescebe o retorno de sucesso do moip
+	    	 * 
+	    	 * @param  {[]} data callback de sucesso
+	    	 * @return {void}
+	    	 */
 	        var callbackSuccess = function(data){
-	            console.log('Sucesso\n' + JSON.stringify(data));
 	            if (data) {
-	            	$.post("{{ route('sostheblack.moip') }}", {moip: data}, function(result){
-		            	console.log(result);
-		            });
+	            	$.post("{{ route('sostheblack.moip') }}", {moip: data});
 	            };
 	        };
 
+	        /**
+	         * callbackFaill
+	         * Rescebe o retorno de falha do moip
+	    	 * 
+	    	 * @param  {[]} data callback de falha
+	    	 * @return {void}
+	         */
 	        var callbackFaill = function(data) {
-	            console.log('Falha\n' + JSON.stringify(data));
-	            $.post("{{ route('sostheblack.moip') }}", {datas: data}, function(result){
-	            	console.log(result);
-	            });
+	            $.post("{{ route('sostheblack.moip') }}", {moip: data});
 	        };
 
+	        /**
+	         * payment
+	         * Json que será evniado para o js de pagamento do moip
+	         * afim de validar as informações nele contido
+	         * 
+	         * @return {void}
+	         */
 	        payment = function() {
 	            var settings = {
 	                "Forma": "{{$moip['Forma']}}",
