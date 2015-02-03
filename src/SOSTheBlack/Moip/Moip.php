@@ -1,6 +1,7 @@
 <?php namespace SOSTheBlack\Moip;
 
 use App;
+use Session;
 use Exception;
 
 /**
@@ -67,6 +68,7 @@ class Moip extends MoipAbstract implements MoipInterface
 			$this->response->url 		= $answer->payment_url;
 		}
 		
+		Session::put('response', $this->response);
 		return $this->response;
 	}
 
