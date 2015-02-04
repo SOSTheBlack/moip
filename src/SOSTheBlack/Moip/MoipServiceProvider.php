@@ -26,6 +26,7 @@ class MoipServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('sostheblack/moip', 'sostheblack');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipAssetsCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipAuthCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipBilletCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipCommand');
