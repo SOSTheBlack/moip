@@ -26,6 +26,7 @@ class MoipServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('sostheblack/moip', 'sostheblack');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipAssetsCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipAuthCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipBilletCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipCommand');
@@ -42,7 +43,6 @@ class MoipServiceProvider extends ServiceProvider {
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipUrlReturnCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipUrlNotificationCommand');
 		$path = $this->guessPackagePath();
-        //load routes
         require_once $path.'/routes.php';
 	}
 
