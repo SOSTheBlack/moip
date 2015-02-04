@@ -1,0 +1,44 @@
+<?php namespace SOSTheBlack\Moip\Commands;
+
+use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
+
+class MoipConfigCommand extends Command {
+
+	/**
+	 * The console command name.
+	 *
+	 * @var string
+	 */
+	protected $name = 'moip:config';
+
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = 'Criar arquivo de configuracao';
+
+	/**
+	 * Create a new command instance.
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	/**
+	 * Execute the console command.
+	 *
+	 * @return mixed
+	 */
+	public function fire()
+	{
+		if ($this->confirm('Criar arquivo de configuracao? [yes|no]')) {
+			$this->call('config:publish', ['sostheblack/moip']);
+		}
+	}
+}

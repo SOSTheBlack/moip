@@ -29,6 +29,7 @@ class MoipServiceProvider extends ServiceProvider {
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipAuthCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipBilletCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipCommand');
+		$this->commands('\SOSTheBlack\Moip\Commands\MoipConfigCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipCreditCardCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipDebitCardCommand');
 		$this->commands('\SOSTheBlack\Moip\Commands\MoipFinancingCommand');

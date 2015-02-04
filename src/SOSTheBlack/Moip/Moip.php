@@ -17,9 +17,9 @@ use Exception;
 class Moip extends MoipAbstract implements MoipInterface
 {
 	/**
-	 * undocumented class variable
+	 * Retorno da API
 	 *
-	 * @var string
+	 * @var object
 	 **/
 	private $response;
 
