@@ -14,5 +14,17 @@ return [
 	|
 	*/
 
-	'array_session' => 'pagamento'
+	'array_session' => 'pagamento',
+
+	/*
+	|--------------------------------------------------------------------------
+	| URL do Checkout Transparente
+	|--------------------------------------------------------------------------
+	|
+	| URL que será utilizada para realizar o pagamento pelo java script de
+	| pagamento do moip.
+	|
+	*/
+
+	'url' => '/sostheblack/moip'
 ];

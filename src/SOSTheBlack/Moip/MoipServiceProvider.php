@@ -1,6 +1,5 @@
 <?php namespace SOSTheBlack\Moip;
 
-use Config;
 use Illuminate\Support\ServiceProvider;
 
 /**

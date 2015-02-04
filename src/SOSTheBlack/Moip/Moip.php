@@ -55,7 +55,7 @@ class Moip extends MoipAbstract implements MoipInterface
 	 * response
 	 * 
 	 * @param type $send 
-	 * @return string[]|Exception
+	 * @return string[]
 	 */
 	public function response($send = null)
 	{
