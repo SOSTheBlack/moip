@@ -36,12 +36,10 @@ class MoipUrlReturnCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->confirm('Configurar URL de retorno? [yes|no]')) {
-			$url = $this->ask('URL de retorno:');
-			$moip = Moip::first();	
-			$moip->url_return = $url;
-			$moip->save();
-		}
+		$url = $this->ask('URL de retorno:');
+		$moip = Moip::first();	
+		$moip->url_return = $url;
+		$moip->save();
 	}
 
 }

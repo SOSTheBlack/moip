@@ -33,10 +33,8 @@ class MoipMigrateCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->confirm('Executar migracoes? [yes|no]')) {
-			$this->comment('running migrations sostheblack/moip');
-			$this->call('migrate', ['--bench'=> 'sostheblack/moip']);
-			$this->comment('Migracoes executadas');	
-		}
+		$this->comment('running migrations sostheblack/moip');
+		$this->call('migrate', ['--bench'=> 'sostheblack/moip']);
+		$this->comment('Migracoes executadas');	
 	}
 }

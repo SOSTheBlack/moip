@@ -35,7 +35,7 @@ class MoipCreditCardCommand extends Command {
 	public function fire()
 	{
 		$moip = Moip::first();
-		$moip->creditCard = $this->confirm('Cartao de credido ativado? [yes|no]');
+		$moip->creditCard = $this->confirm('Cartao de credido ativo? [yes|no]');
 		$moip->save();
 	}
 }

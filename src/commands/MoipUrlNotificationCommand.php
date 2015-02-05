@@ -36,11 +36,9 @@ class MoipUrlNotificationCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->confirm('Configurar URL NASP? [yes|no]')) {
-			$url = $this->ask('URL de notificação NASP:');
-			$moip = Moip::first();	
-			$moip->url_notification = $url;
-			$moip->save();
-		}
+		$url = $this->ask('URL de notificação NASP:');
+		$moip = Moip::first();	
+		$moip->url_notification = $url;
+		$moip->save();
 	}
 }

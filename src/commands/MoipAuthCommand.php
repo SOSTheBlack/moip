@@ -43,6 +43,6 @@ class MoipAuthCommand extends Command {
 		$moip->receiver = $receiver;
 		$moip->token 	= $token;
 		$moip->key 		= $key;
-		$moip->save();
+		$moip->save();	
 	}
 }

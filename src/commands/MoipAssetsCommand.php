@@ -37,8 +37,6 @@ class MoipAssetsCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->confirm('Publicar Assets? [yes|no]')) {
-			$this->call('asset:publish', ['sostheblack/moip']);
-		}
+		$this->call('asset:publish', ['sostheblack/moip']);
 	}
 }

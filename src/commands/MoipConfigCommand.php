@@ -37,8 +37,6 @@ class MoipConfigCommand extends Command {
 	 */
 	public function fire()
 	{
-		if ($this->confirm('Criar arquivo de configuracao? [yes|no]')) {
-			$this->call('config:publish', ['sostheblack/moip']);
-		}
+		$this->call('config:publish', ['sostheblack/moip']);
 	}
 }
