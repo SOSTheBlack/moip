@@ -1,7 +1,7 @@
 <html>
 	<head>
-		{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.js") }}
-		{{ HTML::script("packages/sostheblack/moip/jquery-2.1.1.min.js") }}
+		{{ HTML::script("packages/sostheblack/moip/jquery-2.1.3.js") }}
+		{{ HTML::script("packages/sostheblack/moip/jquery-2.1.3.min.js") }}
 		{{ HTML::script($moip['environment'], ["charset" => "ISO-8859-1", "type" => "text/javascript"])}}
 		
 	    <script type="text/javascript">
@@ -14,9 +14,8 @@
 	    	 * @return {void}
 	    	 */
 	        var callbackSuccess = function(data){
-	            if (data) {
-	            	$.post("{{ route('sostheblack.moip') }}", {moip: data});
-	            };
+	        	console.log(data);
+	            $.post("{{ route('sostheblack.moip') }}", {moip: data});
 	        };
 
 	        /**
@@ -27,6 +26,7 @@
 	    	 * @return {void}
 	         */
 	        var callbackFaill = function(data) {
+	        	console.log(data);
 	            $.post("{{ route('sostheblack.moip') }}", {moip: data});
 	        };
 
@@ -54,6 +54,7 @@
 				        }
 				    }
 	            }
+
 	            MoipWidget(settings);
 	        }
 	    </script>
