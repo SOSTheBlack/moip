@@ -37,6 +37,6 @@ class MoipConfigCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('config:publish', ['sostheblack/moip']);
+		$this->call('config:publish', ["--path" => "vendor/sostheblack/moip/src/config", "sostheblack/moip"]);
 	}
 }
