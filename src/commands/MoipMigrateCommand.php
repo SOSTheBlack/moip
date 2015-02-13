@@ -34,7 +34,7 @@ class MoipMigrateCommand extends Command {
 	public function fire()
 	{
 		$this->comment('running migrations sostheblack/moip');
-		$this->call('migrate', ['--bench'=> 'sostheblack/moip']);
+		$this->call('migrate', ['--package'=> 'sostheblack/moip']);
 		$this->comment('Migracoes executadas');	
 	}
 }
