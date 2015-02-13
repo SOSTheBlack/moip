@@ -14,7 +14,6 @@
 	    	 * @return {void}
 	    	 */
 	        var callbackSuccess = function(data){
-	        	console.log(data);
 	            $.post("{{ route('sostheblack.moip') }}", {moip: data});
 	        };
 
@@ -26,7 +25,6 @@
 	    	 * @return {void}
 	         */
 	        var callbackFaill = function(data) {
-	        	console.log(data);
 	            $.post("{{ route('sostheblack.moip') }}", {moip: data});
 	        };
 
