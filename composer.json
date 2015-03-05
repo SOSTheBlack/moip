@@ -1,35 +1,31 @@
 {
     "name": "sostheblack/moip",
-    "description": "Laravel Package for Moip.",
+    "description": "Laravel Package for Moip Api v2.",
     "keywords": ["moip", "gateway", "payment", "laravel", "checkout"],
     "license": "MIT",
     "type": "libraries",
     "authors": [
         {
-            "name": "Jean C. Garcia",
+            "name": "Jean Cesar Garcia",
             "email": "jeancesargarcia@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.*|5.*",
-        "illuminate/html": "4.*|5.*"
+        "illuminate/config": "~5.0",
+        "illuminate/support": "~5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
     },
     "autoload": {
-        "classmap": [
-            "src/controllers",
-            "src/migrations",
-            "src/commands",
-            "src/models",
-            "src/seeds"
-        ],
-        "psr-0": {
-            "SOSTheBlack\\Moip\\": "src/"
+        "psr-4": {
+            "Sostheblack\\Moip\\": "src/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3-dev"
+            "dev-master": "2.0-dev"
         }
     },
     "minimum-stability": "stable"
