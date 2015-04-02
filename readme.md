@@ -1,5 +1,13 @@
-# MoIP package
+# Package para a API v2 do MoIP
 ----------------------
+
+> Estado Atual do Package
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SOSTheBlack/moip/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SOSTheBlack/moip/?branch=master)
+[![Code Climate](https://codeclimate.com/github/SOSTheBlack/moip/badges/gpa.svg)](https://codeclimate.com/github/SOSTheBlack/moip)
+[![Build Status](https://scrutinizer-ci.com/g/SOSTheBlack/moip/badges/build.png?b=master)](https://scrutinizer-ci.com/g/SOSTheBlack/moip/build-status/master)
+[![Project Status](http://stillmaintained.com/SOSTheBlack/moip.png)](https://stillmaintained.com/SOSTheBlack/moip)
+
 > Estatísticas
 
 [![Total Downloads](https://poser.pugx.org/sostheblack/moip/downloads.svg)](https://packagist.org/packages/sostheblack/moip)
@@ -8,15 +16,13 @@
 
 > Versionamento
 
-[![Latest Stable Version](https://poser.pugx.org/sostheblack/moip/v/stable.svg)](https://packagist.org/packages/sostheblack/moip) [![Latest Unstable Version](https://poser.pugx.org/sostheblack/moip/v/unstable.svg)](https://packagist.org/packages/sostheblack/moip)
-
-> Estado Atual do Package
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SOSTheBlack/moip/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/SOSTheBlack/moip/?branch=develop) [![Build Status](https://scrutinizer-ci.com/g/SOSTheBlack/moip/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/SOSTheBlack/moip/build-status/develop)
+[![Latest Stable Version](https://poser.pugx.org/sostheblack/moip/v/stable.svg)](https://packagist.org/packages/sostheblack/moip) 
+[![Latest Unstable Version](https://poser.pugx.org/sostheblack/moip/v/unstable.svg)](https://packagist.org/packages/sostheblack/moip)
 
 > Licença
 
 [![License](https://poser.pugx.org/sostheblack/moip/license.svg)](https://packagist.org/packages/sostheblack/moip)
+
 
 Package para integrar o seu sistema com o MoIP. 
 Neste Package está incluso:
