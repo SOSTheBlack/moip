@@ -1,4 +1,4 @@
-# Package para a API v2 do MoIP
+# Package para a API v1 do MoIP
 ----------------------
 
 > Estado Atual do Package
