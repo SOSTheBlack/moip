@@ -4,7 +4,6 @@ use View;
 use Moip;
 use Input;
 use Config;
-use MoipApi;
 use Session;
 use BaseController;
 
@@ -66,6 +65,7 @@ class MoipController extends BaseController
 	/**
 	 * initialize
 	 * 
+	 * @param string|null $token
 	 * @return void
 	 */
 	private function initialize(array $data, $token)

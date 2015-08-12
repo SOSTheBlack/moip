@@ -27,7 +27,7 @@ class Moip extends MoipAbstract implements MoipInterface
 	 * postOrder
 	 * 
 	 * @param string[] $order 
-	 * @return \SOSTheBlack\Moip\Moip\response
+	 * @return string[]
 	 */
 	public function postOrder(array $order)
 	{
