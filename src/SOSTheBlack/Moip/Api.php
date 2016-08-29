@@ -660,7 +660,6 @@ class Api extends MoipAbstract {
         else
             $this->setError('Error: Maximum amount can not be greater than 12.');
 
-        var_dump($receipt);
         $parcela->addChild('Recebimento', $this->receipt($receipt));
 
         if ($transfer === false) {
